@@ -72,7 +72,9 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.SkincareSteps VALUES(@StepId, @Step, @SkinType, @DayTime, 0)";
+                string query = @"INSERT INTO dbo.SkincareSteps VALUES(@SkinType, @Step1, @DayTime1, @Step2, @DayTime2, @Step3, @DayTime3,
+                                @Step4, @DayTime4, @Step5, @DayTime5, @Step6, @DayTime6, @Step7, @DayTime7, @Step8, @DayTime8,
+                                @Step9, @DayTime9, @Step10, @DayTime10,0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -82,10 +84,27 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@StepId", skincareSteps.StepId);
-                        myCommand.Parameters.AddWithValue("@Step", skincareSteps.Step);
                         myCommand.Parameters.AddWithValue("@SkinType", skincareSteps.SkinType);
-                        myCommand.Parameters.AddWithValue("@DayTime", skincareSteps.DayTime);
+                        myCommand.Parameters.AddWithValue("@Step1", skincareSteps.Step1);
+                        myCommand.Parameters.AddWithValue("@DayTime1", skincareSteps.DayTime1);
+                        myCommand.Parameters.AddWithValue("@Step2", skincareSteps.Step2);
+                        myCommand.Parameters.AddWithValue("@DayTime2", skincareSteps.DayTime2);
+                        myCommand.Parameters.AddWithValue("@Step3", skincareSteps.Step3);
+                        myCommand.Parameters.AddWithValue("@DayTime3", skincareSteps.DayTime3);
+                        myCommand.Parameters.AddWithValue("@Step4", skincareSteps.Step4);
+                        myCommand.Parameters.AddWithValue("@DayTime4", skincareSteps.DayTime4);
+                        myCommand.Parameters.AddWithValue("@Step5", skincareSteps.Step5);
+                        myCommand.Parameters.AddWithValue("@DayTime5", skincareSteps.DayTime5);
+                        myCommand.Parameters.AddWithValue("@Step6", skincareSteps.Step6);
+                        myCommand.Parameters.AddWithValue("@DayTime6", skincareSteps.DayTime6);
+                        myCommand.Parameters.AddWithValue("@Step7", skincareSteps.Step7);
+                        myCommand.Parameters.AddWithValue("@DayTime7", skincareSteps.DayTime7);
+                        myCommand.Parameters.AddWithValue("@Step8", skincareSteps.Step8);
+                        myCommand.Parameters.AddWithValue("@DayTime8", skincareSteps.DayTime8);
+                        myCommand.Parameters.AddWithValue("@Step9", skincareSteps.Step9);
+                        myCommand.Parameters.AddWithValue("@DayTime9", skincareSteps.DayTime9);
+                        myCommand.Parameters.AddWithValue("@Step10", skincareSteps.Step10);
+                        myCommand.Parameters.AddWithValue("@DayTime10", skincareSteps.DayTime10);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -117,8 +136,11 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.SkincareSteps SET StepId = @StepId, Step = @Step, DayTime = @DayTime
-                            WHERE Id = @Id";
+                string query = @"UPDATE dbo.SkincareSteps SET SkinType = @SkinType, Step1 = @Step1, DayTime1 = @DayTime1, Step2 = @Step2, DayTime2 = @DayTime2,
+                                Step3 = @Step3, DayTime3 = @DayTime3, Step4 = @Step4, DayTime4 = @DayTime4, Step5 = @Step5, DayTime5 = @DayTime5,
+                                Step6 = @Step6, DayTime6 = @DayTime6, Step7 = @Step7, DayTime7 = @DayTime7, Step8 = @Step8, DayTime8 = @DayTime8,
+                                Step9 = @Step9, DayTime9 = @DayTime9, Step10 = @Step10, DayTime10 = @DayTime10,
+                                WHERE Id = @Id";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -129,9 +151,27 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@Id", skincareSteps.Id);
-                        myCommand.Parameters.AddWithValue("@StepId", skincareSteps.StepId);
-                        myCommand.Parameters.AddWithValue("@Step", skincareSteps.Step);
-                        myCommand.Parameters.AddWithValue("@DayTime", skincareSteps.DayTime);
+                        myCommand.Parameters.AddWithValue("@SkinType", skincareSteps.SkinType);
+                        myCommand.Parameters.AddWithValue("@Step1", skincareSteps.Step1);
+                        myCommand.Parameters.AddWithValue("@DayTime1", skincareSteps.DayTime1);
+                        myCommand.Parameters.AddWithValue("@Step2", skincareSteps.Step2);
+                        myCommand.Parameters.AddWithValue("@DayTime2", skincareSteps.DayTime2);
+                        myCommand.Parameters.AddWithValue("@Step3", skincareSteps.Step3);
+                        myCommand.Parameters.AddWithValue("@DayTime3", skincareSteps.DayTime3);
+                        myCommand.Parameters.AddWithValue("@Step4", skincareSteps.Step4);
+                        myCommand.Parameters.AddWithValue("@DayTime4", skincareSteps.DayTime4);
+                        myCommand.Parameters.AddWithValue("@Step5", skincareSteps.Step5);
+                        myCommand.Parameters.AddWithValue("@DayTime5", skincareSteps.DayTime5);
+                        myCommand.Parameters.AddWithValue("@Step6", skincareSteps.Step6);
+                        myCommand.Parameters.AddWithValue("@DayTime6", skincareSteps.DayTime6);
+                        myCommand.Parameters.AddWithValue("@Step7", skincareSteps.Step7);
+                        myCommand.Parameters.AddWithValue("@DayTime7", skincareSteps.DayTime7);
+                        myCommand.Parameters.AddWithValue("@Step8", skincareSteps.Step8);
+                        myCommand.Parameters.AddWithValue("@DayTime8", skincareSteps.DayTime8);
+                        myCommand.Parameters.AddWithValue("@Step9", skincareSteps.Step9);
+                        myCommand.Parameters.AddWithValue("@DayTime9", skincareSteps.DayTime9);
+                        myCommand.Parameters.AddWithValue("@Step10", skincareSteps.Step10);
+                        myCommand.Parameters.AddWithValue("@DayTime10", skincareSteps.DayTime10);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
