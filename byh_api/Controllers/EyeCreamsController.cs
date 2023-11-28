@@ -1,27 +1,26 @@
 ﻿using byh_api.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
+using System;
+using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace byh_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class EyeCreamsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public UserController(IConfiguration configuration)
+        public EyeCreamsController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
 
         [HttpGet]
@@ -31,9 +30,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT Id, Name, Email, IsActive, IsDeleted, IsAdmin, 
-                            convert(varchar(10), CreatedAt) as CreatedAt, convert(varchar(10), DeletedAt) as DeletedAt 
-                            FROM dbo.Registration";
+                string query = @"SELECT * from dbo.EyeCreams";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -67,17 +64,15 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpGet("GetUser/{Id}")]
-        public JsonResult GetUser(int Id)
+        [HttpPost]
+        public JsonResult Post(EyeCreams eyeCreams)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"SELECT Id, Name, Email, IsActive, IsDeleted, IsAdmin, 
-                            convert(varchar(10), CreatedAt) as CreatedAt, convert(varchar(10), DeletedAt) as DeletedAt 
-                            FROM dbo.Registration
-                            WHERE Id = @Id";
+                string query = @"INSERT INTO dbo.EyeCreams VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
+                                @Frequency, @minAge, @isPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -87,7 +82,13 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
+                        myCommand.Parameters.AddWithValue("@ProductName", eyeCreams.ProductName);
+                        myCommand.Parameters.AddWithValue("@ProductType", eyeCreams.ProductType);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", eyeCreams.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@DayTime", eyeCreams.DayTime);
+                        myCommand.Parameters.AddWithValue("@Frequency", eyeCreams.Frequency);
+                        myCommand.Parameters.AddWithValue("@minAge", eyeCreams.minAge);
+                        myCommand.Parameters.AddWithValue("@isPregnant", eyeCreams.isPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -95,7 +96,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Data Fetched Successfully";
+                    response.StatusMessage = "Data Inserted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -105,21 +106,22 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Fetching Data Failed";
+                response.StatusMessage = "Inserting Data Failed";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [HttpPut]
-        public JsonResult Put(Registration registration)
+        [HttpPut("UpdateEyeCream/{Id}")]
+        public JsonResult UpdateEyeCream(EyeCreams eyeCreams, int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Registration SET IsActive = @IsActive, IsDeleted = @IsDeleted, IsAdmin = @IsAdmin
+                string query = @"UPDATE dbo.EyeCreams SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
+                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -130,10 +132,14 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", registration.Id);
-                        myCommand.Parameters.AddWithValue("@IsActive", registration.IsActive);
-                        myCommand.Parameters.AddWithValue("@IsDeleted", registration.IsDeleted);
-                        myCommand.Parameters.AddWithValue("@IsAdmin", registration.IsAdmin);
+                        myCommand.Parameters.AddWithValue("@Id", eyeCreams.Id);
+                        myCommand.Parameters.AddWithValue("@ProductName", eyeCreams.ProductName);
+                        myCommand.Parameters.AddWithValue("@ProductType", eyeCreams.ProductType);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", eyeCreams.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@DayTime", eyeCreams.DayTime);
+                        myCommand.Parameters.AddWithValue("@Frequency", eyeCreams.Frequency);
+                        myCommand.Parameters.AddWithValue("@minAge", eyeCreams.minAge);
+                        myCommand.Parameters.AddWithValue("@isPregnant", eyeCreams.isPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -151,168 +157,21 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Update Data";
-                HttpContext.Response.StatusCode = response.StatusCode;
-            }    
-
-            return new JsonResult(response);
-        }
-
-        [HttpPut("SetActive/{Id}")]
-        public JsonResult SetActive(int Id)
-        {
-            Response response = new Response();
-
-            try
-            {
-                string query = @"UPDATE dbo.Registration 
-                                SET IsActive = CASE 
-                                                WHEN IsActive = 1 THEN 0
-                                                WHEN IsActive = 0 THEN 1
-                                                END
-                                WHERE Id = @Id;";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                SqlDataReader myReader;
-                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                {
-                    myConn.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                    {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myConn.Close();
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "IsActive Updated Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    response.Data = table;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Update IsActive";
-                HttpContext.Response.StatusCode = response.StatusCode;
-            }
-
-
-            return new JsonResult(response);
-        }
-
-        //[Route("SetAdmin")]
-        [HttpPut("SetAdmin/{Id}")]
-        public JsonResult SetAdmin(int Id)
-        {
-            Response response = new Response();
-
-            try
-            {
-                string query = @"UPDATE dbo.Registration 
-                                SET IsAdmin = CASE 
-                                                WHEN IsAdmin = 1 THEN 0
-                                                WHEN IsAdmin = 0 THEN 1
-                                                END
-                                WHERE Id = @Id;";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                SqlDataReader myReader;
-                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                {
-                    myConn.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                    {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myConn.Close();
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "IsAdmin Updated Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    response.Data = table;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Update IsAdmin";
+                response.StatusMessage = "Updating Data Failed";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [HttpPut("SetDelete/{Id}")]
-        public JsonResult SetDelete(int Id)
+        [HttpPut("DelEyeCream/{Id}")]
+        public JsonResult DelEyeCream(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Registration 
-                                SET IsDeleted = CASE 
-                                                WHEN IsDeleted = 1 THEN 0
-                                                WHEN IsDeleted = 0 THEN 1
-                                                END,
-                                    DeletedAt = CASE 
-                                                WHEN IsDeleted = 0 THEN GETDATE()
-                                                WHEN IsDeleted = 1 THEN NULL
-                                                END
-                                WHERE Id = @Id;";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                SqlDataReader myReader;
-                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                {
-                    myConn.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                    {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myConn.Close();
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "IsDeleted Updated Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    response.Data = table;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Update IsDeleted";
-                HttpContext.Response.StatusCode = response.StatusCode;
-            }           
-
-            return new JsonResult(response);
-        }
-
-        [HttpDelete("{Id}")]
-        public JsonResult Delete(int Id)
-        {
-            Response response = new Response();
-
-            try
-            {
-                string query = @"DELETE FROM dbo.Registration 
+                string query = @"UPDATE dbo.EyeCreams SET IsDeleted = 1
                             WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -331,8 +190,9 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "User Deleted Successfully";
+                    response.StatusMessage = "EyeCream Deleted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
                 }
             }
             catch (Exception ex)
@@ -340,11 +200,99 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Delete User";
+                response.StatusMessage = "Failed to Delete EyeCream";
                 HttpContext.Response.StatusCode = response.StatusCode;
-            }        
+            }
 
             return new JsonResult(response);
+        }
+
+        [HttpPut("RevEyeCream/{Id}")]
+        public JsonResult RevEyeCream(int Id)
+        {
+            Response response = new Response();
+
+            try
+            {
+                string query = @"UPDATE dbo.EyeCreams SET IsDeleted = 1
+                            WHERE Id = @Id AND IsDeleted = 0";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+                SqlDataReader myReader;
+                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                {
+                    myConn.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                    {
+                        myCommand.Parameters.AddWithValue("@Id", Id);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myConn.Close();
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "EyeCream Reverted Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Failed to Revert EyeCream";
+                HttpContext.Response.StatusCode = response.StatusCode;
+            }
+
+            return new JsonResult(response);
+        }
+
+        [Route("SaveFile")]
+        [HttpPost]
+        public JsonResult SaveFile()
+        {
+            Response response = new Response();
+
+            try
+            {
+                var httpRequest = Request.Form;
+                var postedFile = httpRequest.Files[0];
+
+                if (postedFile != null && postedFile.Length > 0)
+                {
+                    string filename = Path.GetFileName(postedFile.FileName);
+                    var physicalPath = Path.Combine(_env.ContentRootPath, "Photos/EyeCreams", filename);
+
+                    using (var stream = new FileStream(physicalPath, FileMode.Create))
+                    {
+                        postedFile.CopyTo(stream);
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "Photo Saved Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    return new JsonResult(filename);
+                }
+                else
+                {
+                    response.StatusCode = 100;
+                    response.StatusMessage = "No file provided.";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    return new JsonResult(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Failed to Save Photo";
+                HttpContext.Response.StatusCode = 500;
+                return new JsonResult(response);
+            }
         }
     }
 }

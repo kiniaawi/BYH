@@ -52,6 +52,7 @@ namespace byh_api.Controllers
 
                     response.StatusCode = 200;
                     response.StatusMessage = "Data Fetched Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }              
             }
@@ -61,6 +62,7 @@ namespace byh_api.Controllers
 
                 response.StatusCode = 100;
                 response.StatusMessage = "Fetching Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
@@ -94,6 +96,7 @@ namespace byh_api.Controllers
 
                     response.StatusCode = 200;
                     response.StatusMessage = "Data Inserted Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
             }
@@ -103,14 +106,14 @@ namespace byh_api.Controllers
 
                 response.StatusCode = 100;
                 response.StatusMessage = "Inserting Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
             }
-
 
             return new JsonResult(response);
         }
 
-        [HttpPut]
-        public JsonResult Put(SkinIssues skinIssues)
+        [HttpPut("UpdateIssue/{Id}")]
+        public JsonResult Put(SkinIssues skinIssues, int Id)
         {
             Response response = new Response();
 
@@ -140,6 +143,7 @@ namespace byh_api.Controllers
 
                     response.StatusCode = 200;
                     response.StatusMessage = "Data Updated Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
             }
@@ -149,8 +153,8 @@ namespace byh_api.Controllers
 
                 response.StatusCode = 100;
                 response.StatusMessage = "Updating Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
             }
-
 
             return new JsonResult(response);
         }
@@ -183,6 +187,7 @@ namespace byh_api.Controllers
 
                     response.StatusCode = 200;
                     response.StatusMessage = "Issue Deleted Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
             }
@@ -192,8 +197,51 @@ namespace byh_api.Controllers
 
                 response.StatusCode = 100;
                 response.StatusMessage = "Failed to Delete Issue";
+                HttpContext.Response.StatusCode = response.StatusCode;
             }
 
+            return new JsonResult(response);
+        }
+
+        [HttpPut("RevIssue/{Id}")]
+        public JsonResult RevIssue(int Id)
+        {
+            Response response = new Response();
+
+            try
+            {
+                string query = @"UPDATE dbo.SkinIssues SET IsDeleted = 0
+                            WHERE Id = @Id AND IsDeleted = 1";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+                SqlDataReader myReader;
+                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                {
+                    myConn.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                    {
+                        myCommand.Parameters.AddWithValue("@Id", Id);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myConn.Close();
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "Issue Deleted Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Failed to Delete Issue";
+                HttpContext.Response.StatusCode = response.StatusCode;
+            }
 
             return new JsonResult(response);
         }
@@ -246,12 +294,14 @@ namespace byh_api.Controllers
 
                     response.StatusCode = 200;
                     response.StatusMessage = "Photo Saved Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     return new JsonResult(filename);
                 }
                 else
                 {
                     response.StatusCode = 100;
                     response.StatusMessage = "No file provided.";
+                    HttpContext.Response.StatusCode = response.StatusCode;
                     return new JsonResult(response);
                 }
             }
@@ -261,6 +311,7 @@ namespace byh_api.Controllers
 
                 response.StatusCode = 100;
                 response.StatusMessage = "Failed to Save Photo";
+                HttpContext.Response.StatusCode = 500;
                 return new JsonResult(response);
             }
         }

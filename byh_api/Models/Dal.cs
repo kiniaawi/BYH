@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
@@ -92,76 +90,7 @@ namespace byh_api.Models
             return response;
         }
 
-        /*public Response Login(Registration registration, SqlConnection connection)
-        {
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Registration WHERE Email = '" + registration.Email + "';", connection);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            Response response = new Response();
-
-            if (dt.Rows.Count > 0)
-            {
-                string hashedPasswordFromDatabase = Convert.ToString(dt.Rows[0]["Password"]);
-                string userEnteredPassword = registration.Password;
-
-                // Porównanie haszy
-                if (BCrypt.Net.BCrypt.Verify(userEnteredPassword, hashedPasswordFromDatabase))
-                {
-                    response.StatusCode = 200;
-                    response.StatusMessage = "Login successful";
-                    Registration reg = new Registration();
-                    reg.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
-                    reg.Name = Convert.ToString(dt.Rows[0]["Name"]);
-                    reg.Email = Convert.ToString(dt.Rows[0]["Email"]);
-                    reg.IsAdmin = Convert.ToInt32(dt.Rows[0]["IsAdmin"]);
-                    response.Registration = reg;
-                }
-                else
-                {
-                    response.StatusCode = 100;
-                    response.StatusMessage = "Login failed";
-                    response.Registration = null;
-                }
-            }
-            else
-            {
-                response.StatusCode = 100;
-                response.StatusMessage = "Login failed";
-                response.Registration = null;
-            }
-
-            return response;
-        }*/
-
-        /*public Response Login(Registration registration, SqlConnection connection) 
-        {
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Registration WHERE Email = '"+registration.Email+"' AND Password = '"+registration.Password+"';", connection);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            Response response = new Response();
-
-            if (dt.Rows.Count > 0) 
-            {
-                response.StatusCode = 200;
-                response.StatusMessage = "Login successful";
-                Registration reg = new Registration();
-                reg.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
-                reg.Name = Convert.ToString(dt.Rows[0]["Name"]);
-                reg.Email = Convert.ToString(dt.Rows[0]["Email"]);
-                reg.IsAdmin = Convert.ToInt32(dt.Rows[0]["IsAdmin"]);
-                response.Registration = reg;
-            }
-            else
-            {
-                response.StatusCode = 100;
-                response.StatusMessage = "Login failed";
-                response.Registration = null;
-            }
-
-            return response;
-        }*/
-
-        public Response GetUsers(SqlConnection connection)
+ /*       public Response GetUsers(SqlConnection connection)
         {
             Response response = new Response();
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Registration WHERE IsActive = 1;", connection);
@@ -207,28 +136,6 @@ namespace byh_api.Models
             return response;
         }
 
-        public Response DeleteUser(Registration registration, SqlConnection connection)
-        {
-            Response response = new Response();
-            SqlCommand cmd = new SqlCommand("DELETE FROM dbo.Registration WHERE Id = '"+registration.Id+"';", connection);
-            connection.Open();
-            int i = cmd.ExecuteNonQuery();
-            connection.Close();
-
-            if (i > 0)
-            {
-                response.StatusCode = 200;
-                response.StatusMessage = "User deleted successfully";
-            }
-            else
-            {
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to delete user";
-            }
-
-
-            return response;
-        }
 
         public Response AddSkinIssues(SkinIssues skinIssues, SqlConnection connection)
         {
@@ -294,30 +201,7 @@ namespace byh_api.Models
 
             return response;
         }
-
-        public Response StaffRegistration(Staff staff, SqlConnection connection)
-        {
-            Response response = new Response();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Staff(Name, Email, Password, IsActive, CreatedAt) VALUES('" + staff.Name + "', '" + staff.Email + "', '" + staff.Password + "', 1, GETDATE());", connection);
-            connection.Open();
-            int i = cmd.ExecuteNonQuery();
-            connection.Close();
-
-            if (i > 0)
-            {
-                response.StatusCode = 200;
-                response.StatusMessage = "Staff registration successful";
-            }
-            else
-            {
-                response.StatusCode = 100;
-                response.StatusMessage = "Staff registration failed";
-            }
-
-
-            return response;
-        }
-
+*/
         
     }
 }

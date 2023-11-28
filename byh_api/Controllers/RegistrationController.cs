@@ -46,7 +46,7 @@ namespace byh_api.Controllers
             return response;
         }
 
-        [HttpGet]
+       /* [HttpGet]
         [Route("GetUsers")]
         public Response GetUsers()
         {
@@ -56,7 +56,7 @@ namespace byh_api.Controllers
             response = dal.GetUsers(connection);
 
             return response;
-        }
+        }*/
 
     }
 }
