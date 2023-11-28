@@ -1,14 +1,15 @@
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import UserHome from "../../pages/logged/user/UserHome";
-import AdminHome from "../../pages/logged/admin/AdminHome";
-import Skincare from "../../pages/logged/admin/Skincare";
-import Haircare from "../../pages/logged/admin/Haircare";
-import Prevention from "../../pages/logged/admin/Prevention";
-import SkinIssuesFace from "../../pages/logged/admin/SkinIssues";
-import Supplementation from "../../pages/logged/admin/Supplementation";
+import AdminHome from "../../pages/logged/admin/skin/AdminHome";
+import Skincare from "../../pages/logged/admin/skin/Skincare";
+import Haircare from "../../pages/logged/admin/hair/Haircare";
+import Prevention from "../../pages/logged/admin/prevention/Prevention";
+//import SkinIssuesFace from "../../pages/logged/admin/SkinIssues";
+import Supplementation from "../../pages/logged/admin/supplementation/Supplementation";
 import Navbar from "./Navbar";
 import BlankBar from "./BlankBar";
+import StepsSkincare from "../../pages/logged/admin/skin/StepsSkincare";
 
 const Feed = ({ currentContent }) => {
   return (
@@ -16,7 +17,7 @@ const Feed = ({ currentContent }) => {
       bgcolor={"background.default"}
       color={"text.primary"}
       sx={{ margin: 0, p: 0 }}
-      overflow={"auto"}
+      //overflow={"auto"}
     >
       <Navbar />
       <Stack
@@ -31,9 +32,10 @@ const Feed = ({ currentContent }) => {
             {currentContent === "homepage" && <UserHome />}
             {currentContent === "admin-home" && <AdminHome />}
             {currentContent === "admin-skincare" && <Skincare />}
+            {currentContent === "skincare-steps" && <StepsSkincare />}
             {currentContent === "admin-haircare" && <Haircare />}
             {currentContent === "admin-prevention" && <Prevention />}
-            {currentContent === "admin-skinissues" && <SkinIssuesFace />}
+            {/* {currentContent === "admin-skinissues" && <SkinIssuesFace />} */}
             {currentContent === "admin-supplementation" && <Supplementation />}
           </div>
         </Box>

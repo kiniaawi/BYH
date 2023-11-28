@@ -15,29 +15,23 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const SkinIssues = ({ handleSkinIssueClick }) => {
-  const [newIssue, setNewIssue] = useState();
-  const [newIssueUrl, setNewIssueUrl] = useState();
   const [issuesData, setIssuesData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState("");
-  const [selectedEditPlace, setSelectedEditPlace] = useState();
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [editIssue, setEditIssue] = useState({
-    id: 0,
-    issue: "",
-    place: "",
-    issue_photo_url: "",
+    Id: 0,
+    IssueName: "",
+    Placement: "",
+    ImageURL: "",
   });
-
-  const [issueName, setIssueName] = useState("");
-  const [placement, setPlacement] = useState("");
   const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
 
@@ -66,84 +60,134 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
       });
   };
 
-  const handleAddIssue = () => {
-    const data = {
-      IssueName: issueName,
-      Placement: placement,
-      ImageURL: imageName,
-    };
+  //   const handleAddFile = () => {
+  //     console.log(editIssue.ImageURL);
+  //     setImageName(editIssue.ImageURL.name);
+  //     console.log("ImageName: ", imageName);
+  //     axios
+  //       .post("/api/SkinIssues/SaveFile", editIssue.ImageURL)
+  //       .then((response) => {
+  //         //fetchIssues();
+  //         alert(response.data.StatusMessage);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
 
-    axios
-      .post("/api/SkinIssues", data)
-      .then((response) => {
-        //fetchIssues();
-        alert(response.data.StatusMessage);
-        clearTextArea();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  //     setImage("");
+  //     setImageName("");
+  //   };
 
   const handleAddFile = () => {
     console.log(image);
     setImageName(image.name);
     console.log("ImageName: ", imageName);
+
+    const formData = new FormData();
+    formData.append("file", image);
+
     axios
-      .post("/api/SkinIssues/SaveFile", image)
+      .post("/api/SkinIssues/SaveFile", formData)
       .then((response) => {
         //fetchIssues();
         alert(response.data.StatusMessage);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error uploading file:", error);
+        if (error.response) {
+          // Błąd odpowiedzi z serwera
+          console.log("Response data:", error.response.data);
+          console.log("Response status:", error.response.status);
+          console.log("Response headers:", error.response.headers);
+        } else if (error.request) {
+          // Błąd żądania
+          console.log("Request data:", error.request);
+        } else {
+          // Inny błąd
+          console.error("Error:", error.message);
+        }
       });
 
     setImage("");
   };
 
-  const clearTextArea = () => {
-    setIssueName("");
-    setPlacement("");
-    setImageName("");
-  };
-
   const handleEditModalOpen = (issue) => {
     setSelectedIssue(issue);
+    console.log(issue);
     setEditModalOpen(true);
 
     setEditIssue({
-      id: issue.id,
-      issue: issue.issue,
-      place: selectedEditPlace,
-      issue_photo_url: issue.issue_photo_url,
+      Id: issue.Id,
+      IssueName: issue.IssueName,
+      Placement: issue.Placement,
+      ImageURL: issue.ImageURL,
     });
 
-    console.log(editIssue.id);
-    //setSelectedEditPlace(issue.place);
+    console.log(editIssue.Id);
   };
 
   const handleEditModalClose = () => {
     setSelectedIssue(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
+    setImageName("");
+    setImage("");
   };
 
-  //   const handleEdit = () => {
-  //     console.log("id", editIssue.id);
-  //     console.log("editIssue: ", editIssue);
+  const handleEdit = () => {
+    console.log("id", editIssue.Id);
+    console.log("editIssue: ", editIssue);
 
-  //     axios
-  //       .post(EDIT_ISSUE_UEL, editIssue)
-  //       .then((response) => {
-  //         fetchIssues();
-  //         console.log("User has been edited", response.data);
-  //         handleEditModalClose();
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error during editing user", error);
-  //       });
-  //   };
+    if (imageName === undefined) {
+      setImageName("none.png");
+    }
+
+    const data = {
+      Id: editIssue.Id,
+      IssueName: editIssue.IssueName,
+      Placement: editIssue.Placement,
+      ImageURL: imageName,
+    };
+
+    axios
+      .put(`/api/SkinIssues/UpdateIssue/${editIssue.Id}`, data)
+      .then((response) => {
+        fetchIssues();
+        console.log("Issue has been edited", response.data);
+        handleEditModalClose();
+      })
+      .catch((error) => {
+        console.error("Error during editing issue", error);
+      });
+
+    setImageName("");
+  };
+
+  const handleRevertModalOpen = (issue) => {
+    setSelectedIssue(issue);
+    setRevertModalOpen(true);
+  };
+
+  const handleRevertModalClose = () => {
+    setSelectedIssue(null);
+    setRevertModalOpen(false);
+  };
+
+  const handleRevert = () => {
+    console.log(selectedIssue);
+    axios
+      .put(`/api/SkinIssues/RevIssue/${selectedIssue}`)
+      .then((response) => {
+        console.log(selectedIssue);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    fetchIssues();
+    setSelectedIssue(null);
+    setRevertModalOpen(false);
+  };
 
   const handleDeleteModalOpen = (issue) => {
     setSelectedIssue(issue);
@@ -155,32 +199,27 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
     setDeleteModalOpen(false);
   };
 
-  //   const handleDelete = () => {
-  //     console.log(selectedIssue);
-  //     axios
-  //       .delete(DEL_ISSUE_URL, { data: { id: selectedIssue } })
-  //       .then((response) => {
-  //         setIssuesData(issuesData.filter((issue) => issue.id !== selectedIssue));
-  //         console.log(selectedIssue);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
+  const handleDelete = () => {
+    console.log(selectedIssue);
+    axios
+      .put(`/api/SkinIssues/DelIssue/${selectedIssue}`)
+      .then((response) => {
+        console.log(selectedIssue);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-  //     fetchIssues();
-  //     setSelectedIssue(null);
-  //     setDeleteModalOpen(false);
-  //   };
-
-  const handleFlagClose = () => {
-    handleSkinIssueClick();
+    fetchIssues();
+    setSelectedIssue(null);
+    setDeleteModalOpen(false);
   };
 
   const IssuesColumns = [
     {
       field: "Id",
       headerName: "ID",
-      width: 100,
+      width: 50,
     },
     {
       field: "IssueName",
@@ -190,7 +229,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
     {
       field: "Placement",
       headerName: "Placement",
-      width: 150,
+      width: 100,
     },
     {
       field: "ImageURL",
@@ -210,7 +249,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
     {
       field: "IsDeleted",
       headerName: "Is Deleted",
-      width: 50,
+      width: 90,
     },
     {
       field: "action-edit",
@@ -235,16 +274,22 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
       sortable: false,
       width: 150,
       renderCell: (params) => {
+        const isDeleted = params.row.IsDeleted === 1;
+
         return (
           <Button
-            sx={{ color: "red" }}
+            sx={{ color: isDeleted ? "blue" : "red" }}
             size="small"
             onClick={() => {
-              console.log("Clicked contact:", params.row.id);
-              handleDeleteModalOpen(params.row.id);
+              console.log("Clicked issue:", params.row.Id);
+              if (isDeleted) {
+                handleRevertModalOpen(params.row.Id);
+              } else {
+                handleDeleteModalOpen(params.row.Id);
+              }
             }}
           >
-            <DeleteIcon />
+            {isDeleted ? <AddIcon /> : <DeleteIcon />}
           </Button>
         );
       },
@@ -252,7 +297,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
   ];
 
   return (
-    <Box flex={12} p={2} overflow={"auto"}>
+    <Box flex={12} p={2}>
       {/* Edit Issue Modal */}
       <Modal
         sx={{
@@ -292,35 +337,63 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
                     name="issue"
                     label="Skin Issue"
                     fullWidth
-                    value={editIssue.issue}
+                    value={editIssue.IssueName}
                   />
                   <FormControl fullWidth required sx={{ marginBottom: 2 }}>
                     <InputLabel id="place-label">Placement</InputLabel>
-                    <Select
-                      labelId="place-label"
-                      id="place-select"
-                      value={editIssue.place}
-                      onChange={(e) =>
-                        setEditIssue({
-                          ...editIssue,
-                          place: e.target.value,
-                        })
-                      }
-                    >
-                      <MenuItem value="face">Face</MenuItem>
-                      <MenuItem value="neck">Neck</MenuItem>
-                      <MenuItem value="back">Back</MenuItem>
-                      <MenuItem value="arms">Arms</MenuItem>
-                      <MenuItem value="legs">Legs</MenuItem>
-                    </Select>
+                    {editIssue.Placement !== undefined && (
+                      <Select
+                        labelId="place-label"
+                        id="place-select"
+                        value={editIssue.Placement}
+                        onChange={(e) =>
+                          setEditIssue({
+                            ...editIssue,
+                            Placement: e.target.value,
+                          })
+                        }
+                      >
+                        <MenuItem value="face">Face</MenuItem>
+                        <MenuItem value="neck">Neck</MenuItem>
+                        <MenuItem value="back">Back</MenuItem>
+                        <MenuItem value="arms">Arms</MenuItem>
+                        <MenuItem value="legs">Legs</MenuItem>
+                      </Select>
+                    )}
                   </FormControl>
                   <TextField
                     sx={{ marginBottom: 2 }}
                     name="issue_photo_url"
-                    label="Skin Picture Src"
+                    label="Picture"
                     fullWidth
-                    value={editIssue.issue_photo_url}
+                    value={imageName}
+                    disabled
                   />
+                  <Grid item xs={12} margin={2}>
+                    <input
+                      type="file"
+                      //   onChange={(e) =>
+                      //     setEditIssue({
+                      //       ...editIssue,
+                      //       ImageURL: e.target.files[0],
+                      //     })
+                      //   }
+                      onChange={(e) => handleImageChange(e)}
+                    />
+                    <Button onClick={() => handleAddFile()}>Add File</Button>
+                    {/* <TextField
+                        type="text"
+                        label="Skin Picture Src"
+                        value={image}
+                        onChange={(e) =>
+                          setImage(
+                            '"/skin_issues_pictures/' + e.target.value + '"'
+                          )
+                        }
+                        required
+                        fullWidth
+                      /> */}
+                  </Grid>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -345,7 +418,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
                               marginRight: 0.5,
                               textAlign: "center",
                             }}
-                            //onClick={handleEdit}
+                            onClick={handleEdit}
                           >
                             Submit
                           </Button>
@@ -427,7 +500,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
                           marginRight: 0.5,
                           textAlign: "center",
                         }}
-                        //onClick={handleDelete}
+                        onClick={handleDelete}
                       >
                         Yes
                       </Button>
@@ -451,94 +524,87 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      <div style={{ overflow: "auto" }}>
-        <Card>
-          <CardContent>
-            <Box sx={{ textAlign: "right" }}>
-              <Button onClick={() => handleFlagClose()}>
-                <CloseIcon />
-                Close
-              </Button>
-            </Box>
-            <Typography variant="h6" textAlign={"center"}>
-              <b>Add Skin Issue</b>
-            </Typography>
-            <Box>
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={1} margin="auto">
-                  <Grid item xs={12} margin={2}>
-                    <TextField
-                      type="text"
-                      label="Skin Issue"
-                      value={issueName}
-                      onChange={(e) => setIssueName(e.target.value)}
-                      required
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12} margin={2}>
-                    <FormControl fullWidth required>
-                      <InputLabel id="place-label">Placement</InputLabel>
-                      <Select
-                        labelId="place-label"
-                        id="place-select"
-                        value={placement}
-                        onChange={(e) => setPlacement(e.target.value)}
-                      >
-                        <MenuItem key="face" value="face">
-                          Face
-                        </MenuItem>
-                        <MenuItem key="neck" value="neck">
-                          Neck
-                        </MenuItem>
-                        <MenuItem key="back" value="back">
-                          Back
-                        </MenuItem>
-                        <MenuItem key="arms" value="arms">
-                          Arms
-                        </MenuItem>
-                        <MenuItem key="legs" value="legs">
-                          Legs
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} margin={2}>
-                    <input
-                      type="file"
-                      onChange={(e) => setImage(e.target.files[0])}
-                    />
-                    <Button onClick={() => handleAddFile()}>Add File</Button>
-                    {/* <TextField
-                      type="text"
-                      label="Skin Picture Src"
-                      value={image}
-                      onChange={(e) =>
-                        setImage(
-                          '"/skin_issues_pictures/' + e.target.value + '"'
-                        )
-                      }
-                      required
-                      fullWidth
-                    /> */}
-                  </Grid>
-                  <Grid item xs={12} margin={2}>
-                    <Box textAlign={"center"}>
+      {/* Delete Issue Modal */}
+      <Modal
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginLeft: "auto",
+          marginRight: "auto",
+          maxWidth: "50%",
+        }}
+        overflow={"auto"}
+        open={isRevertModalOpen}
+        onClose={() => handleRevertModalClose()}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          width="200vw"
+          maxWidth="550vw"
+          p={3}
+          borderRadius={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+          padding={3}
+        >
+          <Grid container spacing={2}>
+            <Card>
+              <CardContent>
+                <Typography>
+                  Are you sure you want to revert this skin issue?
+                </Typography>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box
+                    width={"30vw"}
+                    sx={{
+                      textAlign: "center",
+                      justifyContent: "center",
+                      margin: "auto",
+                    }}
+                  >
+                    <Stack direction="row" justifyContent={"space-between"}>
                       <Button
-                        type="submit"
                         variant="contained"
-                        color="primary"
-                        onClick={() => handleAddIssue()}
+                        color="success"
+                        sx={{
+                          marginTop: 2,
+                          marginRight: 0.5,
+                          textAlign: "center",
+                        }}
+                        onClick={handleRevert}
                       >
-                        Save
+                        Yes
                       </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </form>
-            </Box>
-          </CardContent>
-        </Card>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          marginTop: 2,
+                          marginLeft: 0.5,
+                          textAlign: "center",
+                        }}
+                        onClick={handleRevertModalClose}
+                      >
+                        No
+                      </Button>
+                    </Stack>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Box>
+      </Modal>
+
+      <div style={{ overflow: "auto" }}>
         {issuesData && issuesData.length !== 0 ? (
           <Card>
             <CardContent>

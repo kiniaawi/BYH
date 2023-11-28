@@ -164,6 +164,7 @@ const AdminHome = ({}) => {
     {
       field: "Id",
       headerName: "ID",
+      width: 50,
       hideable: true,
     },
     {
@@ -178,34 +179,34 @@ const AdminHome = ({}) => {
     },
     {
       field: "CreatedAt",
-      headerName: "Creation Date",
-      width: 150,
+      headerName: "Created At",
+      width: 100,
     },
     {
       field: "DeletedAt",
-      headerName: "DeletedAt",
+      headerName: "Deleted At",
       width: 100,
     },
     {
       field: "IsActive",
       headerName: "IsActive",
-      width: 100,
+      width: 75,
     },
     {
       field: "IsDeleted",
       headerName: "IsDeleted",
-      width: 100,
+      width: 75,
     },
     {
       field: "IsAdmin",
       headerName: "Admin",
-      width: 100,
+      width: 75,
     },
     {
       field: "action-edit",
       headerName: "Edit",
       sortable: false,
-      width: 100,
+      width: 75,
       renderCell: (params) => {
         return (
           <Button
@@ -222,7 +223,7 @@ const AdminHome = ({}) => {
       field: "action-delete",
       headerName: "Delete",
       sortable: false,
-      width: 100,
+      width: 75,
       renderCell: (params) => {
         return (
           <Button
