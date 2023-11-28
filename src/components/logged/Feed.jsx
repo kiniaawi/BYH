@@ -16,7 +16,7 @@ const Feed = ({ currentContent }) => {
     <Box
       bgcolor={"background.default"}
       color={"text.primary"}
-      sx={{ margin: 0, p: 0 }}
+      sx={{ margin: 0, p: 0, height: "100vh" }}
       //overflow={"auto"}
     >
       <Navbar />

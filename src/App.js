@@ -49,7 +49,7 @@ function App() {
   });
 
   return (
-    <div overflow={"auto"}>
+    <div>
       <Router>
         <ThemeProvider theme={theme}>
           <Routes>
