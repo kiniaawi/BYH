@@ -174,8 +174,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.OilCleaners SET IsDeleted = 1
-                            WHERE Id = @Id AND IsDeleted = 0";
+                string query = @"UPDATE dbo.OilCleaners SET isDeleted = 1
+                            WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -217,8 +217,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.OilCleaners SET IsDeleted = 1
-                            WHERE Id = @Id AND IsDeleted = 0";
+                string query = @"UPDATE dbo.OilCleaners SET isDeleted = 1
+                            WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");

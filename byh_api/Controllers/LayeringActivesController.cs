@@ -1,26 +1,24 @@
 ﻿using byh_api.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
-using System;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System;
 
 namespace byh_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExfoliantsController : ControllerBase
+    public class LayeringActivesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _env;
 
-        public ExfoliantsController(IConfiguration configuration, IWebHostEnvironment env)
+        public LayeringActivesController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _env = env;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT * from dbo.Exfoliants";
+                string query = @"SELECT * from dbo.LayeringActives";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -65,14 +63,13 @@ namespace byh_api.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Exfoliants exfoliants)
+        public JsonResult Post(LayeringActives layering)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"INSERT INTO dbo.Exfoliants VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                string query = @"INSERT INTO dbo.LayeringActives VALUES(@Active1, @Active2, @isSafe, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -82,13 +79,9 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@ProductName", exfoliants.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", exfoliants.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", exfoliants.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@DayTime", exfoliants.DayTime);
-                        myCommand.Parameters.AddWithValue("@Frequency", exfoliants.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", exfoliants.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", exfoliants.isPregnant);
+                        myCommand.Parameters.AddWithValue("@Active1", layering.Active1);
+                        myCommand.Parameters.AddWithValue("@Active2", layering.Active2);
+                        myCommand.Parameters.AddWithValue("@isSafe", layering.isSafe);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -113,15 +106,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("UpdateExfoliant/{Id}")]
-        public JsonResult UpdateExfoliant(Exfoliants exfoliants, int Id)
+        [HttpPut("UpdateLayering/{Id}")]
+        public JsonResult UpdateLayering(LayeringActives layering, int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                string query = @"UPDATE dbo.LayeringActives SET Active1 = @Active1, Active2 = @Active2, isSafe = @isSafe,
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -132,14 +124,10 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", exfoliants.Id);
-                        myCommand.Parameters.AddWithValue("@ProductName", exfoliants.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", exfoliants.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", exfoliants.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@DayTime", exfoliants.DayTime);
-                        myCommand.Parameters.AddWithValue("@Frequency", exfoliants.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", exfoliants.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", exfoliants.isPregnant);
+                        myCommand.Parameters.AddWithValue("@Id", layering.Id);
+                        myCommand.Parameters.AddWithValue("@Active1", layering.Active1);
+                        myCommand.Parameters.AddWithValue("@Active2", layering.Active2);
+                        myCommand.Parameters.AddWithValue("@isSafe", layering.isSafe);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -164,14 +152,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("DelExfoliant/{Id}")]
-        public JsonResult DelExfoliant(int Id)
+        [HttpPut("DelLay/{Id}")]
+        public JsonResult DelLay(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET isDeleted = 1
+                string query = @"UPDATE dbo.LayeringActives SET isDeleted = 1
                             WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -190,7 +178,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Exfoliant Deleted Successfully";
+                    response.StatusMessage = "Mask Deleted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -200,21 +188,21 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Delete Exfoliant";
+                response.StatusMessage = "Failed to Delete Mask";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [HttpPut("RevExfoliant/{Id}")]
-        public JsonResult RevExfoliant(int Id)
+        [HttpPut("RevLay/{Id}")]
+        public JsonResult RevLay(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET isDeleted = 1
+                string query = @"UPDATE dbo.LayeringActives SET isDeleted = 1
                             WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -233,7 +221,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Exfoliant Reverted Successfully";
+                    response.StatusMessage = "Mask Reverted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -243,56 +231,14 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Revert Exfoliant";
+                response.StatusMessage = "Failed to Revert Mask";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [Route("SaveFile")]
-        [HttpPost]
-        public JsonResult SaveFile()
-        {
-            Response response = new Response();
-
-            try
-            {
-                var httpRequest = Request.Form;
-                var postedFile = httpRequest.Files[0];
-
-                if (postedFile != null && postedFile.Length > 0)
-                {
-                    string filename = Path.GetFileName(postedFile.FileName);
-                    var physicalPath = Path.Combine(_env.ContentRootPath, "Photos/Exfoliants", filename);
-
-                    using (var stream = new FileStream(physicalPath, FileMode.Create))
-                    {
-                        postedFile.CopyTo(stream);
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "Photo Saved Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(filename);
-                }
-                else
-                {
-                    response.StatusCode = 100;
-                    response.StatusMessage = "No file provided.";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Save Photo";
-                HttpContext.Response.StatusCode = 500;
-                return new JsonResult(response);
-            }
-        }
+        
+        
     }
 }

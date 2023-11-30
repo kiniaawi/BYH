@@ -30,7 +30,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT * from dbo.FoamCleanser";
+                string query = @"SELECT * from dbo.FoamCleansers";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -71,7 +71,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.FoamCleanser VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
+                string query = @"INSERT INTO dbo.FoamCleansers VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
                                 @Frequency, @minAge, @isPregnant, 0)";
 
                 DataTable table = new DataTable();
@@ -120,7 +120,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleanser SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
+                string query = @"UPDATE dbo.FoamCleansers SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
                             DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
                             WHERE Id = @Id";
 
@@ -171,8 +171,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleanser SET IsDeleted = 1
-                            WHERE Id = @Id AND IsDeleted = 0";
+                string query = @"UPDATE dbo.FoamCleansers SET isDeleted = 1
+                            WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -214,8 +214,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleanser SET IsDeleted = 1
-                            WHERE Id = @Id AND IsDeleted = 0";
+                string query = @"UPDATE dbo.FoamCleansers SET isDeleted = 1
+                            WHERE Id = @Id AND isDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
