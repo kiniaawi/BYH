@@ -8,10 +8,12 @@ import {
   MenuItem,
   Menu,
   Avatar,
+  IconButton,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Flag from "react-world-flags";
+import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import LanguageIcon from "@mui/icons-material/Language";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -31,7 +33,7 @@ const Icons = styled(Box)(({ theme }) => ({
   gap: "20px",
 }));
 
-const Navbar = ({ setLang }) => {
+const Navbar = ({ setLang, onSidebarToggle }) => {
   const [open, setOpen] = useState(false);
   const [openLang, setOpenLang] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -106,12 +108,22 @@ const Navbar = ({ setLang }) => {
           >
             {initial}
           </Avatar>
-          <Icons onClick={(e) => setOpenLang(true)}>
+          <IconButton
+            onClick={onSidebarToggle}
+            size="large"
+            edge="start"
+            //color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          {/* <Icons onClick={(e) => setOpenLang(true)}>
             <Typography marginTop={1}>
               <LanguageIcon sx={{ width: 37, height: 37, color: "black" }} />
               <ArrowDropDownIcon sx={{ color: "black" }} />
             </Typography>
-          </Icons>
+          </Icons> */}
         </Stack>
       </StyledToolbar>
       <Menu
@@ -133,6 +145,7 @@ const Navbar = ({ setLang }) => {
           <LogoutIcon />
         </MenuItem>
       </Menu>
+
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"

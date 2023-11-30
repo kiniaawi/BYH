@@ -20,26 +20,22 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const StepsSkincareTable = () => {
-  const [stepsData, setStepsData] = useState([]);
+const FoamCleansersTable = () => {
+  const [productsData, setProductsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedStep, setSelectedStep] = useState(null);
-  const [editStep, setEditStep] = useState({
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState({
     Id: 0,
+    ProductName: "",
+    ProductType: "",
     SkinType: "",
+    SkinIssue: "",
     DayTime: "",
-    Step1: "",
-    Step2: "",
-    Step3: "",
-    Step4: "",
-    Step5: "",
-    Step6: "",
-    Step7: "",
-    Step8: "",
-    Step9: "",
-    Step10: "",
+    Frequency: "",
+    minAge: "",
+    isPregnant: "",
   });
 
   const handleSubmit = (event) => {
@@ -47,76 +43,68 @@ const StepsSkincareTable = () => {
   };
 
   useEffect(() => {
-    fetchSteps();
+    fetchFoamCleansers();
   }, []);
 
-  const fetchSteps = () => {
+  const fetchFoamCleansers = () => {
     axios
-      .get("/api/SkincareSteps")
+      .get("/api/FoamCleansers")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
-        setStepsData(response.data.Data);
+        setProductsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleEditModalOpen = (step) => {
-    setSelectedStep(step);
-    console.log(step);
+  const handleEditModalOpen = (prod) => {
+    setSelectedProduct(prod);
+    console.log(prod);
     setEditModalOpen(true);
 
-    setEditStep({
-      Id: step.Id,
-      SkinType: step.SkinType,
-      DayTime: step.DayTime,
-      Step1: step.Step1,
-      Step2: step.Step2,
-      Step3: step.Step3,
-      Step4: step.Step4,
-      Step5: step.Step5,
-      Step6: step.Step6,
-      Step7: step.Step7,
-      Step8: step.Step8,
-      Step9: step.Step9,
-      Step10: step.Step10,
+    setEditProduct({
+      Id: prod.Id,
+      ProductName: prod.ProductName,
+      ProductType: prod.ProductType,
+      SkinType: prod.SkinType,
+      SkinIssue: prod.SkinIssue,
+      DayTime: prod.DayTime,
+      Frequency: prod.Frequency,
+      minAge: prod.minAge,
+      isPregnant: prod.isPregnant,
     });
 
-    console.log(editStep.Id);
+    console.log(editProduct.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedStep(null);
+    setSelectedProduct(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log("id", editStep.Id);
-    console.log("editStep: ", editStep);
+    console.log("id", editProduct.Id);
+    console.log("editStep: ", editProduct);
 
     const data = {
-      Id: editStep.Id,
-      SkinType: editStep.SkinType,
-      DayTime: editStep.DayTime,
-      Step1: editStep.Step1,
-      Step2: editStep.Step2,
-      Step3: editStep.Step3,
-      Step4: editStep.Step4,
-      Step5: editStep.Step5,
-      Step6: editStep.Step6,
-      Step7: editStep.Step7,
-      Step8: editStep.Step8,
-      Step9: editStep.Step9,
-      Step10: editStep.Step10,
+      Id: editProduct.Id,
+      ProductName: editProduct.ProductName,
+      ProductType: editProduct.ProductType,
+      SkinType: editProduct.SkinType,
+      SkinIssue: editProduct.SkinIssue,
+      DayTime: editProduct.DayTime,
+      Frequency: editProduct.Frequency,
+      minAge: editProduct.minAge,
+      isPregnant: editProduct.isPregnant,
     };
 
     axios
-      .put(`/api/SkincareSteps/UpdateStep/${editStep.Id}`, data)
+      .put(`/api/FoamCleansers/UpdateFoamCl/${editProduct.Id}`, data)
       .then((response) => {
-        fetchSteps();
+        fetchFoamCleansers();
         console.log("Step has been edited", response.data);
         handleEditModalClose();
       })
@@ -125,63 +113,73 @@ const StepsSkincareTable = () => {
       });
   };
 
-  const handleRevertModalOpen = (step) => {
-    setSelectedStep(step);
+  const handleRevertModalOpen = (prod) => {
+    setSelectedProduct(prod);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedStep(null);
+    setSelectedProduct(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedStep);
+    console.log(selectedProduct);
     axios
-      .put(`/api/SkincareSteps/RevStep/${selectedStep}`)
+      .put(`/api/FoamCleansers/RevFoamCl/${selectedProduct}`)
       .then((response) => {
-        console.log(selectedStep);
+        console.log(selectedProduct);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    fetchSteps();
-    setSelectedStep(null);
+    fetchFoamCleansers();
+    setSelectedProduct(null);
     setRevertModalOpen(false);
   };
 
-  const handleDeleteModalOpen = (step) => {
-    setSelectedStep(step);
+  const handleDeleteModalOpen = (prod) => {
+    setSelectedProduct(prod);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedStep(null);
+    setSelectedProduct(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedStep);
+    console.log(selectedProduct);
     axios
-      .put(`/api/SkincareSteps/DelStep/${selectedStep}`)
+      .put(`/api/FoamCleansers/DelFoamCl/${selectedProduct}`)
       .then((response) => {
-        console.log(selectedStep);
+        console.log(selectedProduct);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    fetchSteps();
-    setSelectedStep(null);
+    fetchFoamCleansers();
+    setSelectedProduct(null);
     setDeleteModalOpen(false);
   };
 
-  const StepsColumns = [
+  const FoamCleansersColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
+    },
+    {
+      field: "ProductName",
+      headerName: "Product Name",
+      width: 150,
+    },
+    {
+      field: "ProductType",
+      headerName: "Product Type",
+      width: 150,
     },
     {
       field: "SkinType",
@@ -189,58 +187,28 @@ const StepsSkincareTable = () => {
       width: 150,
     },
     {
+      field: "SkinIssue",
+      headerName: "Skin Issue",
+      width: 150,
+    },
+    {
       field: "DayTime",
-      headerName: "DayTime",
+      headerName: "Day Time",
       width: 100,
     },
     {
-      field: "Step1",
-      headerName: "Step 1",
+      field: "Frequency",
+      headerName: "Frequency",
       width: 100,
     },
     {
-      field: "Step2",
-      headerName: "Step 2",
+      field: "minAge",
+      headerName: "Minimum Age",
       width: 100,
     },
     {
-      field: "Step3",
-      headerName: "Step 3",
-      width: 100,
-    },
-    {
-      field: "Step4",
-      headerName: "Step 4",
-      width: 100,
-    },
-    {
-      field: "Step5",
-      headerName: "Step 5",
-      width: 100,
-    },
-    {
-      field: "Step6",
-      headerName: "Step 6",
-      width: 100,
-    },
-    {
-      field: "Step7",
-      headerName: "Step 7",
-      width: 100,
-    },
-    {
-      field: "Step8",
-      headerName: "Step 8",
-      width: 100,
-    },
-    {
-      field: "Step9",
-      headerName: "Step 9",
-      width: 100,
-    },
-    {
-      field: "Step10",
-      headerName: "Step 10",
+      field: "isPregnant",
+      headerName: "Is Safe For Pregnancy",
       width: 100,
     },
     {
@@ -297,137 +265,137 @@ const StepsSkincareTable = () => {
     <Box flex={12} p={2}>
       {/* Edit Issue Modal */}
       {/* <Modal
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginLeft: "auto",
-            marginRight: "auto",
-            maxWidth: "50%",
-          }}
-          overflow={"auto"}
-          open={isEditModalOpen}
-          onClose={() => handleEditModalClose()}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box
-            width="200vw"
-            maxWidth="550vw"
-            p={3}
-            borderRadius={2}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-            padding={3}
-          >
-            <Grid container spacing={2}>
-              <Card>
-                <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                  <b>Edit Skin Issue</b>
-                </Typography>
-                <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
-                  <form onSubmit={handleSubmit}>
-                    <TextField
-                      sx={{ marginBottom: 2 }}
-                      name="issue"
-                      label="Skin Issue"
-                      fullWidth
-                      value={editIssue.IssueName}
-                    />
-                    <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-                      <InputLabel id="place-label">Placement</InputLabel>
-                      {editIssue.Placement !== undefined && (
-                        <Select
-                          labelId="place-label"
-                          id="place-select"
-                          value={editIssue.Placement}
-                          onChange={(e) =>
-                            setEditIssue({
-                              ...editIssue,
-                              Placement: e.target.value,
-                            })
-                          }
-                        >
-                          <MenuItem value="face">Face</MenuItem>
-                          <MenuItem value="neck">Neck</MenuItem>
-                          <MenuItem value="back">Back</MenuItem>
-                          <MenuItem value="arms">Arms</MenuItem>
-                          <MenuItem value="legs">Legs</MenuItem>
-                        </Select>
-                      )}
-                    </FormControl>
-                    <TextField
-                      sx={{ marginBottom: 2 }}
-                      name="issue_photo_url"
-                      label="Picture"
-                      fullWidth
-                      value={imageName}
-                      disabled
-                    />
-                    <Grid item xs={12} margin={2}>
-                      <input
-                        type="file"
-                        //   onChange={(e) =>
-                        //     setEditIssue({
-                        //       ...editIssue,
-                        //       ImageURL: e.target.files[0],
-                        //     })
-                        //   }
-                        onChange={(e) => handleImageChange(e)}
-                      />
-                      <Button onClick={() => handleAddFile()}>Add File</Button>
-                    </Grid>
-                    <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
-                      <Box
-                        sx={{
-                          textAlign: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Box
-                          width={"30vw"}
-                          sx={{
-                            textAlign: "center",
-                            justifyContent: "center",
-                            margin: "auto",
-                          }}
-                        >
-                          <Stack direction="row" justifyContent={"space-between"}>
-                            <Button
-                              variant="contained"
-                              color="success"
-                              sx={{
-                                marginTop: 2,
-                                marginRight: 0.5,
-                                textAlign: "center",
-                              }}
-                              onClick={handleEdit}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: "auto",
+                marginRight: "auto",
+                maxWidth: "50%",
+              }}
+              overflow={"auto"}
+              open={isEditModalOpen}
+              onClose={() => handleEditModalClose()}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                width="200vw"
+                maxWidth="550vw"
+                p={3}
+                borderRadius={2}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                padding={3}
+              >
+                <Grid container spacing={2}>
+                  <Card>
+                    <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
+                      <b>Edit Skin Issue</b>
+                    </Typography>
+                    <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
+                      <form onSubmit={handleSubmit}>
+                        <TextField
+                          sx={{ marginBottom: 2 }}
+                          name="issue"
+                          label="Skin Issue"
+                          fullWidth
+                          value={editIssue.IssueName}
+                        />
+                        <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                          <InputLabel id="place-label">Placement</InputLabel>
+                          {editIssue.Placement !== undefined && (
+                            <Select
+                              labelId="place-label"
+                              id="place-select"
+                              value={editIssue.Placement}
+                              onChange={(e) =>
+                                setEditIssue({
+                                  ...editIssue,
+                                  Placement: e.target.value,
+                                })
+                              }
                             >
-                              Submit
-                            </Button>
-                            <Button
-                              variant="contained"
+                              <MenuItem value="face">Face</MenuItem>
+                              <MenuItem value="neck">Neck</MenuItem>
+                              <MenuItem value="back">Back</MenuItem>
+                              <MenuItem value="arms">Arms</MenuItem>
+                              <MenuItem value="legs">Legs</MenuItem>
+                            </Select>
+                          )}
+                        </FormControl>
+                        <TextField
+                          sx={{ marginBottom: 2 }}
+                          name="issue_photo_url"
+                          label="Picture"
+                          fullWidth
+                          value={imageName}
+                          disabled
+                        />
+                        <Grid item xs={12} margin={2}>
+                          <input
+                            type="file"
+                            //   onChange={(e) =>
+                            //     setEditIssue({
+                            //       ...editIssue,
+                            //       ImageURL: e.target.files[0],
+                            //     })
+                            //   }
+                            onChange={(e) => handleImageChange(e)}
+                          />
+                          <Button onClick={() => handleAddFile()}>Add File</Button>
+                        </Grid>
+                        <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
+                          <Box
+                            sx={{
+                              textAlign: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Box
+                              width={"30vw"}
                               sx={{
-                                marginTop: 2,
-                                marginLeft: 0.5,
                                 textAlign: "center",
+                                justifyContent: "center",
+                                margin: "auto",
                               }}
-                              onClick={handleEditModalClose}
                             >
-                              Close
-                            </Button>
-                          </Stack>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  </form>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Box>
-        </Modal> */}
+                              <Stack direction="row" justifyContent={"space-between"}>
+                                <Button
+                                  variant="contained"
+                                  color="success"
+                                  sx={{
+                                    marginTop: 2,
+                                    marginRight: 0.5,
+                                    textAlign: "center",
+                                  }}
+                                  onClick={handleEdit}
+                                >
+                                  Submit
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  sx={{
+                                    marginTop: 2,
+                                    marginLeft: 0.5,
+                                    textAlign: "center",
+                                  }}
+                                  onClick={handleEditModalClose}
+                                >
+                                  Close
+                                </Button>
+                              </Stack>
+                            </Box>
+                          </Box>
+                        </Grid>
+                      </form>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Box>
+            </Modal> */}
 
       {/* Delete Issue Modal */}
       <Modal
@@ -460,7 +428,7 @@ const StepsSkincareTable = () => {
             <Card>
               <CardContent>
                 <Typography sx={{ textAlign: "center" }}>
-                  Are you sure you want to delete this skincare routine?
+                  Are you sure you want to delete this Foam Cleanser?
                 </Typography>
                 <Box
                   sx={{
@@ -540,7 +508,7 @@ const StepsSkincareTable = () => {
             <Card>
               <CardContent>
                 <Typography>
-                  Are you sure you want to revert this skincare routine?
+                  Are you sure you want to revert this Foam Cleanser?
                 </Typography>
                 <Box
                   sx={{
@@ -590,33 +558,29 @@ const StepsSkincareTable = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {stepsData && stepsData.length !== 0 ? (
+        {productsData && productsData.length !== 0 ? (
           <Card>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Skincare Routines Table</b>
+                  <b>Foam Cleansers Table</b>
                 </Typography>
               </Box>
               <div style={{ height: "80vh" }}>
                 <DataGrid
-                  columns={StepsColumns}
-                  rows={stepsData.map((step, index) => ({
+                  columns={FoamCleansersColumns}
+                  rows={productsData.map((prod, index) => ({
                     id: index,
-                    Id: step.Id,
-                    SkinType: step.SkinType,
-                    DayTime: step.DayTime,
-                    Step1: step.Step1,
-                    Step2: step.Step2,
-                    Step3: step.Step3,
-                    Step4: step.Step4,
-                    Step5: step.Step5,
-                    Step6: step.Step6,
-                    Step7: step.Step7,
-                    Step8: step.Step8,
-                    Step9: step.Step9,
-                    Step10: step.Step10,
-                    isDeleted: step.isDeleted,
+                    Id: prod.Id,
+                    ProductName: prod.ProductName,
+                    ProductType: prod.ProductType,
+                    SkinType: prod.SkinType,
+                    SkinIssue: prod.SkinIssue,
+                    DayTime: prod.DayTime,
+                    Frequency: prod.Frequency,
+                    minAge: prod.minAge,
+                    isPregnant: prod.isPregnant,
+                    isDeleted: prod.isDeleted,
                   }))}
                   initialState={{
                     pagination: {
@@ -631,7 +595,7 @@ const StepsSkincareTable = () => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>No Skincare Routines Found in the Database</Typography>
+            <Typography>No Foam Cleansers Found in the Database</Typography>
           </Box>
         )}
       </div>
@@ -639,4 +603,4 @@ const StepsSkincareTable = () => {
   );
 };
 
-export default StepsSkincareTable;
+export default FoamCleansersTable;

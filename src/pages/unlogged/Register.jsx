@@ -17,14 +17,7 @@ import Rightbar from "../../components/unlogged/Rightbar";
 import Footer from "../../components/unlogged/Footer";
 import Navbar from "../../components/unlogged/Navbar";
 
-const Register = ({
-  lang,
-  currentContent,
-  currentLang,
-  setCurrentContent,
-  handleLangChange,
-  onChangeContent,
-}) => {
+const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +62,7 @@ const Register = ({
   return (
     <>
       <Box bgcolor={"background.default"} color={"text.primary"}>
-        <Navbar title="BYH" lang={currentLang} setLang={handleLangChange} />
+        <Navbar title="BYH" />
         <Stack
           direction="row"
           spacing={2}

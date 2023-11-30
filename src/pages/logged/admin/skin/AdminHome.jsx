@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 
-const AdminHome = ({}) => {
+const AdminHome = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
@@ -478,7 +478,7 @@ const AdminHome = ({}) => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-prevention">
-              <ListItemText>Disease prevention</ListItemText>
+              <ListItemText>Diseases and Prevention</ListItemText>
             </ListItemButton>
           </ListItem>
         </List>

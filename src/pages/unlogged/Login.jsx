@@ -19,19 +19,11 @@ import Rightbar from "../../components/unlogged/Rightbar";
 import Navbar from "../../components/unlogged/Navbar";
 axios.defaults.withCredentials = true;
 
-const Login = ({
-  lang,
-  currentContent,
-  currentLang,
-  setCurrentContent,
-  handleLangChange,
-  onChangeContent,
-}) => {
+const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "isAdminCookie",
   ]);
-  console.log(lang);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -86,7 +78,7 @@ const Login = ({
   return (
     <>
       <Box bgcolor={"background.default"} color={"text.primary"}>
-        <Navbar title="BYH" lang={currentLang} setLang={handleLangChange} />
+        <Navbar title="BYH" />
         <Stack
           direction="row"
           spacing={2}
@@ -142,7 +134,7 @@ const Login = ({
                             <Grid item xs={12} margin={2}>
                               <TextField
                                 type="text"
-                                label={lang === "English" ? "Email" : "Email"}
+                                label="Email"
                                 className="input-field"
                                 autoComplete="off"
                                 value={email}
@@ -154,9 +146,7 @@ const Login = ({
                             <Grid item xs={12} margin={2}>
                               <TextField
                                 type="password"
-                                label={
-                                  lang === "English" ? "Password" : "Hasło"
-                                }
+                                label="Password"
                                 className="input-field"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -173,17 +163,13 @@ const Login = ({
                                   fullWidth
                                   onClick={(e) => handleLogin(e)}
                                 >
-                                  {lang === "English" ? "Login" : "Zaloguj"}
+                                  Login
                                 </Button>
                               </div>
                             </Grid>
                           </Grid>
                         </form>
-                        <Typography>
-                          {lang === "English"
-                            ? "Don't have an account?"
-                            : "Nie masz jeszcze konta?"}
-                        </Typography>
+                        <Typography>Don't have an account?</Typography>
                         <Link
                           component="button"
                           onClick={() => {
@@ -191,7 +177,7 @@ const Login = ({
                             navigate("/register");
                           }}
                         >
-                          {lang === "English" ? "Register" : "Zarejestruj się"}
+                          Register
                         </Link>
                       </Stack>
                     </Box>

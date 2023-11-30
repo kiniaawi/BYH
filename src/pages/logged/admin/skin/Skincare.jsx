@@ -5,14 +5,16 @@ import AddSkinIssue from "./AddSkinIssue";
 import SkinIssuesTable from "./SkinIssuesTable";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Skincare = ({}) => {
+const Skincare = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
   setCookie("currentPageCookie", "admin-skincare", { path: "/" });
   const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSkinIssueClick = () => {
     setAddModalOpen(true);
@@ -69,12 +71,46 @@ const Skincare = ({}) => {
           <b>Face</b>
         </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
-          <Button component={Link} to="/skincare-steps">
+          <Button
+            component={Link}
+            to="/skincare-steps"
+            onClick={() => {
+              onChangeContent("skincare-steps");
+              navigate("/skincare-steps");
+            }}
+          >
             Skincare Steps
           </Button>
-          <Button>Oil Cleaners</Button>
-          <Button>Foam Cleansers</Button>
-          <Button>Exfoliants</Button>
+          <Button
+            component={Link}
+            to="/oil-cleaners"
+            onClick={() => {
+              onChangeContent("oil-cleaners");
+              navigate("/oil-cleaners");
+            }}
+          >
+            Oil Cleaners
+          </Button>
+          <Button
+            component={Link}
+            to="/foam-cleansers"
+            onClick={() => {
+              onChangeContent("foam-cleansers");
+              navigate("/foam-cleansers");
+            }}
+          >
+            Foam Cleansers
+          </Button>
+          <Button
+            component={Link}
+            to="/exfoliants"
+            onClick={() => {
+              onChangeContent("exfoliants");
+              navigate("/exfoliants");
+            }}
+          >
+            Exfoliants
+          </Button>
           <Button>Toners</Button>
         </Stack>
         <Stack direction="row" justifyContent={"space-evenly"}>

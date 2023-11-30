@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import {
@@ -8,21 +8,17 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import "./style.css";
 import Register from "./pages/unlogged/Register";
 import Login from "./pages/unlogged/Login";
 import Feed from "./components/logged/Feed";
 
 function App() {
-  const [currentLang, setCurrentLang] = useState("English"); // State for language
-
-  const handleLangChange = (newLang) => {
-    setCurrentLang(newLang);
-    {
-      /* setting new language */
-    }
-  };
-
   const [currentContent, setCurrentContent] = useState("loginPg");
+
+  useEffect(() => {
+    handleChangeContent(currentContent);
+  }, [currentContent]);
 
   const handleChangeContent = (currentContent) => {
     setCurrentContent(currentContent);
@@ -59,7 +55,6 @@ function App() {
                 <Login
                   currentContent="loginPg"
                   onChangeContent={handleChangeContent}
-                  lang={currentLang}
                   setCurrentContent={setCurrentContent}
                 />
               }
@@ -70,42 +65,118 @@ function App() {
                 <Register
                   currentContent="registerPg"
                   onChangeContent={handleChangeContent}
-                  lang={currentLang}
                   setCurrentContent={setCurrentContent}
                 />
               }
             />
             <Route
               path="/homepage"
-              element={<Feed currentContent="homepage" />}
+              element={
+                <Feed
+                  currentContent="homepage"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-home"
-              element={<Feed currentContent="admin-home" />}
+              element={
+                <Feed
+                  currentContent="admin-home"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-skincare"
-              element={<Feed currentContent="admin-skincare" />}
+              element={
+                <Feed
+                  currentContent="admin-skincare"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/skincare-steps"
-              element={<Feed currentContent="skincare-steps" />}
+              element={
+                <Feed
+                  currentContent="skincare-steps"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/oil-cleaners"
+              element={
+                <Feed
+                  currentContent="oil-cleaners"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/foam-cleansers"
+              element={
+                <Feed
+                  currentContent="foam-cleansers"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/exfoliants"
+              element={
+                <Feed
+                  currentContent="exfoliants"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-haircare"
-              element={<Feed currentContent="admin-haircare" />}
+              element={
+                <Feed
+                  currentContent="admin-haircare"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-prevention"
-              element={<Feed currentContent="admin-prevention" />}
+              element={
+                <Feed
+                  currentContent="admin-prevention"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-supplementation"
-              element={<Feed currentContent="admin-supplementation" />}
+              element={
+                <Feed
+                  currentContent="admin-supplementation"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
             />
             <Route
               path="/admin-skinisues"
-              element={<Feed currentContent="admin-skinisues" />}
+              element={
+                <Feed
+                  currentContent="admin-skinisues"
+                  onChangeContent={handleChangeContent}
+                />
+              }
             />
             <Route path="/" element={<Navigate to="/login" />} />
           </Routes>
