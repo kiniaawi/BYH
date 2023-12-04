@@ -72,7 +72,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.FoamCleansers VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -88,7 +88,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", foamCleansers.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", foamCleansers.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", foamCleansers.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", foamCleansers.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,7 +122,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.FoamCleansers SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -139,7 +140,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", foamCleansers.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", foamCleansers.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", foamCleansers.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", foamCleansers.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

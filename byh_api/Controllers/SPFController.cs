@@ -72,7 +72,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.SPF VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -88,7 +88,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", spf.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", spf.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", spf.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", spf.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", spf.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", spf.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,7 +122,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.SPF SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -139,7 +140,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", spf.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", spf.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", spf.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", spf.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", spf.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", spf.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

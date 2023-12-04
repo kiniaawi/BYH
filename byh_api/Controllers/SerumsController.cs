@@ -72,7 +72,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.Serums VALUES(@ProductName, @ProductType, @SkinIssue, @Application, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -89,7 +89,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", serums.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", serums.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", serums.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", serums.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", serums.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", serums.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -122,7 +123,8 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.Serums SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            Application = @Application, DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            Application = @Application, DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, 
+                            ImageURL = @ImageURL, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -141,7 +143,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", serums.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", serums.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", serums.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", serums.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", serums.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", serums.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

@@ -7,6 +7,7 @@ using System.Data;
 using System;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace byh_api.Controllers
 {
@@ -72,7 +73,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.Moisturizers VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -88,7 +89,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", moisturizers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", moisturizers.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", moisturizers.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", moisturizers.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", moisturizers.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", moisturizers.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,7 +123,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.Moisturizers SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -139,7 +141,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", moisturizers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", moisturizers.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", moisturizers.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", moisturizers.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", moisturizers.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", moisturizers.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

@@ -72,7 +72,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.Essences VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -88,7 +88,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", essences.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", essences.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", essences.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", essences.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", essences.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", essences.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,7 +122,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.Essences SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -139,7 +140,8 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@DayTime", essences.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", essences.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", essences.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", essences.isPregnant);
+                        myCommand.Parameters.AddWithValue("@ImageURL", essences.ImageURL);
+                        myCommand.Parameters.AddWithValue("@forPregnant", essences.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

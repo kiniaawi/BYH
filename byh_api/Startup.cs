@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace byh_api
 {
@@ -30,6 +31,11 @@ namespace byh_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CorsSettings>(Configuration.GetSection("CorsSettings"));
+
+            services.AddMvc(options =>
+            {
+                options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+            });
 
 
 

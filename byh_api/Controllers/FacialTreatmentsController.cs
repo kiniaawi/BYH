@@ -68,7 +68,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.FacialTreatments VALUES(@Treatmant, @SkinType, @SkinIssue,
-                                @Frequency, @minAge, @isPregnant, 0)";
+                                @Frequency, @minAge, @forPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -83,7 +83,7 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@SkinIssue", facial.SkinIssue);
                         myCommand.Parameters.AddWithValue("@Frequency", facial.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", facial.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", facial.isPregnant);
+                        myCommand.Parameters.AddWithValue("@forPregnant", facial.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -116,7 +116,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.FacialTreatments SET Treatmant = @Treatmant, SkinType = @SkinType, SkinIssue = @SkinIssue,
-                            Frequency = @Frequency, minAge = @minAge, isPregnant = @isPregnant
+                            Frequency = @Frequency, minAge = @minAge, forPregnant = @forPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -133,7 +133,7 @@ namespace byh_api.Controllers
                         myCommand.Parameters.AddWithValue("@SkinIssue", facial.SkinIssue);
                         myCommand.Parameters.AddWithValue("@Frequency", facial.Frequency);
                         myCommand.Parameters.AddWithValue("@minAge", facial.minAge);
-                        myCommand.Parameters.AddWithValue("@isPregnant", facial.isPregnant);
+                        myCommand.Parameters.AddWithValue("@forPregnant", facial.forPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
