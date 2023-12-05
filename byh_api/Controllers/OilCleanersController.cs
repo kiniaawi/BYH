@@ -70,9 +70,9 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [Route("InsertingData")]
+        [Route("InsertData")]
         [HttpPost]
-        public JsonResult InsertingData(OilCleaners oilCleaners)
+        public JsonResult InsertData(OilCleaners oilCleaner)
         {
             Response response = new Response();
 
@@ -83,31 +83,25 @@ namespace byh_api.Controllers
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                SqlDataReader myReader; 
+                SqlDataReader myReader;
                 using (SqlConnection myConn = new SqlConnection(sqlDataSource))
                 {
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@ProductName", oilCleaners.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", oilCleaners.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinType", oilCleaners.SkinType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaners.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@DayTime", oilCleaners.DayTime);
-                        myCommand.Parameters.AddWithValue("@Frequency", oilCleaners.Frequency);
-                        myCommand.Parameters.AddWithValue("@MinAge", oilCleaners.MinAge);
-                        myCommand.Parameters.AddWithValue("@ImageURL", oilCleaners.ImageURL);
-                        myCommand.Parameters.AddWithValue("@ForPregnant", oilCleaners.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@ProductName", oilCleaner.ProductName);
+                        myCommand.Parameters.AddWithValue("@ProductType", oilCleaner.ProductType);
+                        myCommand.Parameters.AddWithValue("@SkinType", oilCleaner.SkinType);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaner.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@DayTime", oilCleaner.DayTime);
+                        myCommand.Parameters.AddWithValue("@Frequency", oilCleaner.Frequency);
+                        myCommand.Parameters.AddWithValue("@MinAge", oilCleaner.MinAge);
+                        myCommand.Parameters.AddWithValue("@ImageURL", oilCleaner.ImageURL);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", oilCleaner.ForPregnant);
                         myReader = myCommand.ExecuteReader();
-                        while (myReader.Read())
-                        {
-                            ReadSingleRow((IDataRecord)myReader);
-                            table.Load(myReader);
-                        }
-                        
+                        table.Load(myReader);
                         myReader.Close();
                         myConn.Close();
-                        //myReader.Close();
                     }
 
                     response.StatusCode = 200;
@@ -128,10 +122,63 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        private static void ReadSingleRow(IDataRecord dataRecord)
+        /*        //[Route("InsertingData")]
+                [HttpPost("InsertingData")]
+                public JsonResult InsertingData(OilCleaners oilCleaners)
+                {
+                    Response response = new Response();
+
+                    try
+                    {
+                        string query = @"INSERT INTO dbo.OilCleaners VALUES(@ProductName, @ProductType, @SkinType, @SkinIssue, @DayTime,
+                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
+
+                        string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+
+                        using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                        {
+                            myConn.Open();
+                            using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                            {
+                                myCommand.Parameters.AddWithValue("@ProductName", oilCleaners.ProductName);
+                                myCommand.Parameters.AddWithValue("@ProductType", oilCleaners.ProductType);
+                                myCommand.Parameters.AddWithValue("@SkinType", oilCleaners.SkinType);
+                                myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaners.SkinIssue);
+                                myCommand.Parameters.AddWithValue("@DayTime", oilCleaners.DayTime);
+                                myCommand.Parameters.AddWithValue("@Frequency", oilCleaners.Frequency);
+                                myCommand.Parameters.AddWithValue("@MinAge", oilCleaners.MinAge);
+                                myCommand.Parameters.AddWithValue("@ImageURL", oilCleaners.ImageURL);
+                                myCommand.Parameters.AddWithValue("@ForPregnant", oilCleaners.ForPregnant);
+
+                                int rowsAffected = myCommand.ExecuteNonQuery();
+                                if (rowsAffected > 0)
+                                {
+                                    response.StatusCode = 200;
+                                    response.StatusMessage = "Data Inserted Successfully";
+                                }
+                                else
+                                {
+                                    response.StatusCode = 100;
+                                    response.StatusMessage = "Inserting Data Failed";
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        response.StatusCode = 100;
+                        response.StatusMessage = "Inserting Data Failed";
+                    }
+
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    return new JsonResult(response);
+                }*/
+
+        /*private static void ReadSingleRow(IDataRecord dataRecord)
         {
             Console.WriteLine(String.Format("{0}, {1}", dataRecord[0], dataRecord[1]));
-        }
+        }*/
 
         [HttpPut("UpdateOilCl/{Id}")]
         public JsonResult UpdateOilCl(OilCleaners oilCleaners, int Id)
