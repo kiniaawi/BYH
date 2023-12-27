@@ -18,6 +18,7 @@
     <Folder Include="Photos\FoamCleansers\" />
     <Folder Include="Photos\Masks\" />
     <Folder Include="Photos\Moisturizers\" />
+    <Folder Include="Photos\DefSupplIssues\" />
     <Folder Include="Photos\Toners\" />
     <Folder Include="Photos\SPF\" />
     <Folder Include="Photos\Serums\" />
