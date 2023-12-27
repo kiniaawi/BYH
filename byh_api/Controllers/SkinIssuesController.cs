@@ -34,7 +34,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT Id, IssueName, Placement, ImageURL, IsDeleted from dbo.SkinIssues";
+                string query = @"SELECT Id, SkinIssue, Placement, ImageURL, IsDeleted from dbo.SkinIssues";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -75,7 +75,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.SkinIssues VALUES(@IssueName, @Placement, @ImageURL, 0)";
+                string query = @"INSERT INTO dbo.SkinIssues VALUES(@SkinIssue, @Placement, @ImageURL, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -85,7 +85,7 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@IssueName", skinIssues.IssueName);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", skinIssues.SkinIssue);
                         myCommand.Parameters.AddWithValue("@Placement", skinIssues.Placement);
                         myCommand.Parameters.AddWithValue("@ImageURL", skinIssues.ImageURL);
                         myReader = myCommand.ExecuteReader();
@@ -119,7 +119,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.SkinIssues SET IssueName = @IssueName, Placement = @Placement, ImageURL = @ImageURL, IsDeleted = @IsDeleted 
+                string query = @"UPDATE dbo.SkinIssues SET SkinIssue = @SkinIssue, Placement = @Placement, ImageURL = @ImageURL, IsDeleted = @IsDeleted 
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -131,7 +131,7 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@Id", skinIssues.Id);
-                        myCommand.Parameters.AddWithValue("@IssueName", skinIssues.IssueName);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", skinIssues.SkinIssue);
                         myCommand.Parameters.AddWithValue("@Placement", skinIssues.Placement);
                         myCommand.Parameters.AddWithValue("@ImageURL", skinIssues.ImageURL);
                         myCommand.Parameters.AddWithValue("@IsDeleted", skinIssues.IsDeleted);

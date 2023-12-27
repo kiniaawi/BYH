@@ -5,22 +5,18 @@ using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using System;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 
 namespace byh_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoamCleansersController : ControllerBase
+    public class DefSupplDealingController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _env;
 
-        public FoamCleansersController(IConfiguration configuration, IWebHostEnvironment env)
+        public DefSupplDealingController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _env = env;
         }
 
         [HttpGet]
@@ -30,7 +26,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT * from dbo.FoamCleansers";
+                string query = @"SELECT * from dbo.DefSupplDealing";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -65,14 +61,13 @@ namespace byh_api.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(FoamCleansers foamCleansers)
+        public JsonResult Post(DefSupplDealing defSuppl)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"INSERT INTO dbo.FoamCleansers VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
+                string query = @"INSERT INTO dbo.DefSupplDealing VALUES(@IssueId, @SupplementId, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -82,14 +77,8 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@ProductName", foamCleansers.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", foamCleansers.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", foamCleansers.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
-                        myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
-                        myCommand.Parameters.AddWithValue("@MinAge", foamCleansers.MinAge);
-                        myCommand.Parameters.AddWithValue("@ImageURL", foamCleansers.ImageURL);
-                        myCommand.Parameters.AddWithValue("@ForPregnant", foamCleansers.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@IssueId", defSuppl.IssueId);
+                        myCommand.Parameters.AddWithValue("@SupplementId", defSuppl.SupplementId);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -114,15 +103,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("UpdateFoamCl/{Id}")]
-        public JsonResult UpdateFoamCl(FoamCleansers foamCleansers, int Id)
+        [HttpPut("UpdateDefSupplDealing/{Id}")]
+        public JsonResult UpdateDefSupplDealing(DefSupplDealing defSuppl, int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleansers SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
+                string query = @"UPDATE dbo.DefSupplDealing SET IssueId = @IssueId, SupplementId = @SupplementId
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -133,15 +121,9 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", foamCleansers.Id);
-                        myCommand.Parameters.AddWithValue("@ProductName", foamCleansers.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", foamCleansers.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", foamCleansers.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
-                        myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
-                        myCommand.Parameters.AddWithValue("@MinAge", foamCleansers.MinAge);
-                        myCommand.Parameters.AddWithValue("@ImageURL", foamCleansers.ImageURL);
-                        myCommand.Parameters.AddWithValue("@ForPregnant", foamCleansers.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@Id", defSuppl.Id);
+                        myCommand.Parameters.AddWithValue("@IssueId", defSuppl.IssueId);
+                        myCommand.Parameters.AddWithValue("@SupplementId", defSuppl.SupplementId);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -166,14 +148,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("DelFoamCl/{Id}")]
-        public JsonResult DelFoamCl(int Id)
+        [HttpPut("DelDefSupplDealing/{Id}")]
+        public JsonResult DelDefSupplDealing(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleansers SET IsDeleted = 1
+                string query = @"UPDATE dbo.DefSupplDealing SET IsDeleted = 1
                             WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -209,14 +191,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("RevFoamCl/{Id}")]
-        public JsonResult RevFoamCl(int Id)
+        [HttpPut("RevDefSupplDealing/{Id}")]
+        public JsonResult RevDefSupplDealing(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleansers SET IsDeleted = 0
+                string query = @"UPDATE dbo.DefSupplDealing SET IsDeleted = 0
                             WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
@@ -250,51 +232,6 @@ namespace byh_api.Controllers
             }
 
             return new JsonResult(response);
-        }
-
-        [Route("SaveFile")]
-        [HttpPost]
-        public JsonResult SaveFile()
-        {
-            Response response = new Response();
-
-            try
-            {
-                var httpRequest = Request.Form;
-                var postedFile = httpRequest.Files[0];
-
-                if (postedFile != null && postedFile.Length > 0)
-                {
-                    string filename = Path.GetFileName(postedFile.FileName);
-                    var physicalPath = Path.Combine(_env.ContentRootPath, "Photos/FoamCleansers", filename);
-
-                    using (var stream = new FileStream(physicalPath, FileMode.Create))
-                    {
-                        postedFile.CopyTo(stream);
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "Photo Saved Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(filename);
-                }
-                else
-                {
-                    response.StatusCode = 100;
-                    response.StatusMessage = "No file provided.";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Save Photo";
-                HttpContext.Response.StatusCode = 500;
-                return new JsonResult(response);
-            }
         }
     }
 }
