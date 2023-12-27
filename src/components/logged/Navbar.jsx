@@ -101,7 +101,14 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
           justifyContent={"center"}
         >
           <Avatar
-            sx={{ bgcolor: "#000", width: 35, height: 35, fontSize: 15 }}
+            sx={{
+              bgcolor: "#f2efe6",
+              width: 35,
+              height: 35,
+              fontSize: 20,
+              color: "black",
+              fontWeight: "bold",
+            }}
             alt=""
             src=""
             onClick={(e) => setOpen(true)}

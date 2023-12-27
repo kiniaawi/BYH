@@ -11,14 +11,18 @@ import {
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TableDefSupplIssues from "./TableDefSupplIssues";
 
-const DefSupplIssues = () => {
+const DefSupplIssues = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
   setCookie("currentPageCookie", "def-suppl-issues", { path: "/" });
+  const navigate = useNavigate();
   const [defSupplIssue, setDefSupplIssue] = useState("");
 
   const handleSubmit = (event) => {
@@ -31,7 +35,7 @@ const DefSupplIssues = () => {
     };
 
     axios
-      .post("api/DefSupplDealing", data)
+      .post("/api/DefSupplIssues", data)
       .then((response) => {
         alert(response.data.StatusMessage);
       })
@@ -44,8 +48,20 @@ const DefSupplIssues = () => {
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
-      <Typography variant="h5" sx={{ textAlign: "center" }}>
-        <b>Panel Objawów Deficytów Suplementów</b>
+      <Button
+        component={Link}
+        to="/admin-supplementation"
+        onClick={() => {
+          onChangeContent("admin-supplementation");
+          navigate("/admin-supplementation");
+        }}
+        size="small"
+      >
+        <ArrowBackIcon />
+        Panel Suplementacji
+      </Button>
+      <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
+        <b>Panel Objawów Deficytu Suplementów</b>
       </Typography>
       <Card>
         <CardHeader
@@ -67,9 +83,10 @@ const DefSupplIssues = () => {
                 </Typography>
                 <TextField
                   type="text"
-                  label="Typ Skóry"
+                  label="Objaw"
                   value={defSupplIssue}
                   onChange={(e) => setDefSupplIssue(e.target.value)}
+                  required
                 />
               </Stack>
               <Button

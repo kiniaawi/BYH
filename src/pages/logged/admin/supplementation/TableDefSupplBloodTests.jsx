@@ -20,15 +20,16 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableDefSupplIssues = () => {
-  const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
+const TableDefSupplBloodTests = () => {
+  const [bloodTestsData, setBloodTestsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [editIssue, setEditIssue] = useState({
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [editTest, setEditTest] = useState({
     Id: 0,
-    Issue: "",
+    Supplement: "",
+    BloodTest: "",
   });
 
   const handleSubmit = (event) => {
@@ -36,16 +37,16 @@ const TableDefSupplIssues = () => {
   };
 
   useEffect(() => {
-    fetchDefSupplIssues();
+    fetchDefSupplBlTests();
   }, []);
 
-  const fetchDefSupplIssues = () => {
+  const fetchDefSupplBlTests = () => {
     axios
-      .get("/api/DefSupplIssues")
+      .get("/api/DefSupplBloodTests")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplIssuesData(response.data.Data);
+        setBloodTestsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -53,37 +54,39 @@ const TableDefSupplIssues = () => {
   };
 
   const handleEditModalOpen = (prod) => {
-    setSelectedIssue(prod);
+    setSelectedTest(prod);
     console.log(prod);
     setEditModalOpen(true);
 
-    setEditIssue({
+    setEditTest({
       Id: prod.Id,
-      Issue: prod.Issue,
+      Supplement: prod.Supplement,
+      BloodTest: prod.BloodTest,
     });
 
-    console.log(editIssue.Id);
+    console.log(editTest.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedTest(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log("id", editIssue.Id);
-    console.log("editIssue: ", editIssue);
+    console.log("id", editTest.Id);
+    console.log("editTest: ", editTest);
 
     const data = {
-      Id: editIssue.Id,
-      Issue: editIssue.Issue,
+      Id: editTest.Id,
+      Supplement: editTest.Supplement,
+      BloodTest: editTest.BloodTest,
     };
 
     axios
-      .put(`/api/DefSupplIssues/UpdateDefSupplIssue/${editIssue.Id}`, data)
+      .put(`/api/DefSupplBloodTests/UpdateDefSupplBlood/${editTest.Id}`, data)
       .then((response) => {
-        fetchDefSupplIssues();
+        fetchDefSupplBlTests();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -93,67 +96,72 @@ const TableDefSupplIssues = () => {
   };
 
   const handleRevertModalOpen = (prod) => {
-    setSelectedIssue(prod);
+    setSelectedTest(prod);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedTest(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedIssue);
+    console.log(selectedTest);
     axios
-      .put(`/api/DefSupplIssues/RevDefSupplIssue/${selectedIssue.Id}`)
+      .put(`/api/DefSupplBloodTests/RevDefSupplBlood/${selectedTest.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchDefSupplIssues();
+        console.log(selectedTest);
+        fetchDefSupplBlTests();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedTest(null);
     setRevertModalOpen(false);
   };
 
   const handleDeleteModalOpen = (prod) => {
-    setSelectedIssue(prod);
-    console.log("Delete: ", selectedIssue);
+    setSelectedTest(prod);
+    console.log("Delete: ", selectedTest);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedTest(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedIssue);
+    console.log(selectedTest);
     axios
-      .put(`/api/DefSupplIssues/DelDefSupplIssue/${selectedIssue.Id}`)
+      .put(`/api/DefSupplBloodTests/DelDefSupplBlood/${selectedTest.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchDefSupplIssues();
+        console.log(selectedTest);
+        fetchDefSupplBlTests();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedTest(null);
     setDeleteModalOpen(false);
   };
 
-  const DefSupplIssuesColumns = [
+  const BloodTestsColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "Issue",
-      headerName: "Objaw",
+      field: "Supplement",
+      headerName: "Suplement",
+      width: 150,
+    },
+    {
+      field: "BloodTest",
+      headerName: "Badanie Krwi",
       width: 150,
     },
     {
@@ -237,20 +245,33 @@ const TableDefSupplIssues = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Objaw</b>
+                <b>Edytuj Badainie do Suplementacji</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
                   <TextField
                     sx={{ marginBottom: 2 }}
-                    name="Issue"
-                    label="Objaw"
+                    name="Supplement"
+                    label="Suplement"
                     fullWidth
-                    value={editIssue.Issue}
+                    value={editTest.Supplement}
                     onChange={(e) =>
-                      setEditIssue({
-                        ...editIssue,
-                        Issue: e.target.value,
+                      setEditTest({
+                        ...editTest,
+                        Supplement: e.target.value,
+                      })
+                    }
+                  />
+                  <TextField
+                    sx={{ marginBottom: 2 }}
+                    name="BloodTest"
+                    label="Badanie Krwi"
+                    fullWidth
+                    value={editTest.BloodTest}
+                    onChange={(e) =>
+                      setEditTest({
+                        ...editTest,
+                        BloodTest: e.target.value,
                       })
                     }
                   />
@@ -334,13 +355,14 @@ const TableDefSupplIssues = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
+                {selectedTest && selectedTest.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć objaw: {selectedIssue.Issue}?
+                    Czy na pewno chcesz usunąć badanie dla suplementu:{" "}
+                    {selectedTest.Supplement}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc ten objaw?
+                    Czy na pewno chcesz usunąc to badanie?
                   </Typography>
                 )}
 
@@ -421,13 +443,14 @@ const TableDefSupplIssues = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
+                {selectedTest && selectedTest.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić objaw: {selectedIssue.Issue}?
+                    Czy na pewno chcesz przywrócić badanie dla suplementu:{" "}
+                    {selectedTest.Supplement}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić ten objaw?
+                    Czy na pewno chcesz przywrócić to badanie?
                   </Typography>
                 )}
 
@@ -479,21 +502,22 @@ const TableDefSupplIssues = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {defsupplIssuesData && defsupplIssuesData.length !== 0 ? (
+        {bloodTestsData && bloodTestsData.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Objawy Deficytu Suplementów</b>
+                  <b>Badania do Suplementacji</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={DefSupplIssuesColumns}
-                  rows={defsupplIssuesData.map((prod, index) => ({
+                  columns={BloodTestsColumns}
+                  rows={bloodTestsData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
-                    Issue: prod.Issue,
+                    Supplement: prod.Supplement,
+                    BloodTest: prod.BloodTest,
                     IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
@@ -510,7 +534,7 @@ const TableDefSupplIssues = () => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie znaleziono Objawów Deficutów Suplementacji w Bazie danych
+              Nie znaleziono Badań Do Suplementacji w Bazie danych
             </Typography>
           </Box>
         )}
@@ -519,4 +543,4 @@ const TableDefSupplIssues = () => {
   );
 };
 
-export default TableDefSupplIssues;
+export default TableDefSupplBloodTests;

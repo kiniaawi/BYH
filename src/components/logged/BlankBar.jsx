@@ -12,7 +12,7 @@ const BlankBar = () => {
       }}
       sx={{
         display: { xs: "none", sm: "block" },
-        backgroundColor: "pink",
+        backgroundColor: "#f2efe6",
       }}
     >
       <Box position="fixed"></Box>
