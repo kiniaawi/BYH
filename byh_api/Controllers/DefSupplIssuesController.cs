@@ -71,7 +71,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.DefSupplIssues VALUES(@Issue, @ImageURL, 0)";
+                string query = @"INSERT INTO dbo.DefSupplIssues VALUES(@Issue, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -82,7 +82,6 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@Issue", defSuppl.Issue);
-                        myCommand.Parameters.AddWithValue("@ImageURL", defSuppl.ImageURL);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -114,7 +113,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.DefSupplIssues SET Issue = @Issue, ImageURL = @ImageURL
+                string query = @"UPDATE dbo.DefSupplIssues SET Issue = @Issue
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -127,7 +126,6 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", defSuppl.Id);
                         myCommand.Parameters.AddWithValue("@Issue", defSuppl.Issue);
-                        myCommand.Parameters.AddWithValue("@ImageURL", defSuppl.ImageURL);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -195,7 +193,7 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("RevDefSupplIssues/{Id}")]
+        [HttpPut("RevDefSupplIssue/{Id}")]
         public JsonResult RevDefSupplIssues(int Id)
         {
             Response response = new Response();

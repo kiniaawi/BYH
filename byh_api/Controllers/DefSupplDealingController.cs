@@ -67,7 +67,14 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.DefSupplDealing VALUES(@IssueId, @SupplementId, 0)";
+                string query = @"INSERT INTO dbo.DefSupplDealing (IssueId, SupplementId, Issue, Supplement, IsDeleted)
+                                    VALUES 
+                                        (@IssueId, 
+                                         @SupplementId, 
+                                         (SELECT Issue FROM dbo.DefSupplIssues WHERE Id = @IssueId), 
+                                         (SELECT Supplement FROM dbo.DefSupplBloodTests WHERE Id = @SupplementId), 
+                                         0);
+                ";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
