@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const OilCleansersTable = () => {
-  const [oilCleanersData, setOilCleanersData] = useState([]);
+  const [productsData, setProductsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -35,28 +35,68 @@ const OilCleansersTable = () => {
     DayTime: "",
     Frequency: "",
     minAge: "",
-    isPregnant: "",
+    ImageURL: "",
+    forPregnant: "",
   });
+  const [image, setImage] = useState("");
+  const [imageName, setImageName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   useEffect(() => {
-    fetchOilCleaners();
+    fetchProducts();
   }, []);
 
-  const fetchOilCleaners = () => {
+  const fetchProducts = () => {
     axios
       .get("/api/OilCleaners")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
-        setOilCleanersData(response.data.Data);
+        setProductsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleAddFile = () => {
+    console.log(image);
+    setImageName(image.name);
+    console.log("ImageName: ", imageName);
+
+    const formData = new FormData();
+    formData.append("file", image);
+
+    axios
+      .post("/api/OilCleaners/SaveFile", formData)
+      .then((response) => {
+        //fetchIssues();
+        alert(response.data.StatusMessage);
+      })
+      .catch((error) => {
+        console.log("Error uploading file:", error);
+        if (error.response) {
+          // Błąd odpowiedzi z serwera
+          console.log("Response data:", error.response.data);
+          console.log("Response status:", error.response.status);
+          console.log("Response headers:", error.response.headers);
+        } else if (error.request) {
+          // Błąd żądania
+          console.log("Request data:", error.request);
+        } else {
+          // Inny błąd
+          console.error("Error:", error.message);
+        }
+      });
+
+    setImage("");
   };
 
   const handleEditModalOpen = (prod) => {
@@ -73,7 +113,8 @@ const OilCleansersTable = () => {
       DayTime: prod.DayTime,
       Frequency: prod.Frequency,
       minAge: prod.minAge,
-      isPregnant: prod.isPregnant,
+      ImageURL: prod.ImageURL,
+      forPregnant: prod.isPregnant,
     });
 
     console.log(editProduct.Id);
@@ -98,13 +139,14 @@ const OilCleansersTable = () => {
       DayTime: editProduct.DayTime,
       Frequency: editProduct.Frequency,
       minAge: editProduct.minAge,
-      isPregnant: editProduct.isPregnant,
+      ImageURL: imageName,
+      forPregnant: editProduct.forPregnant,
     };
 
     axios
       .put(`/api/OilCleaners/UpdateOilCl/${editProduct.Id}`, data)
       .then((response) => {
-        fetchOilCleaners();
+        fetchProducts();
         console.log("Step has been edited", response.data);
         handleEditModalClose();
       })
@@ -134,7 +176,7 @@ const OilCleansersTable = () => {
         console.log(error);
       });
 
-    fetchOilCleaners();
+    fetchProducts();
     setSelectedProduct(null);
     setRevertModalOpen(false);
   };
@@ -160,12 +202,12 @@ const OilCleansersTable = () => {
         console.log(error);
       });
 
-    fetchOilCleaners();
+    fetchProducts();
     setSelectedProduct(null);
     setDeleteModalOpen(false);
   };
 
-  const OilCleanersColumns = [
+  const ProductsColumns = [
     {
       field: "Id",
       headerName: "ID",
@@ -263,7 +305,7 @@ const OilCleansersTable = () => {
 
   return (
     <Box flex={12} p={2}>
-      {/* Edit Issue Modal */}
+      {/* Edit Modal */}
       {/* <Modal
             sx={{
               display: "flex",
@@ -397,7 +439,7 @@ const OilCleansersTable = () => {
             </Box>
           </Modal> */}
 
-      {/* Delete Issue Modal */}
+      {/* Delete Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -427,9 +469,15 @@ const OilCleansersTable = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                <Typography sx={{ textAlign: "center" }}>
-                  Are you sure you want to delete this Oil Cleaner?
-                </Typography>
+                {selectedProduct &&
+                  (selectedProduct.length !== 0) &
+                  (
+                    <Typography sx={{ textAlign: "center" }}>
+                      Are you sure you want to delete product:{" "}
+                      {selectedProduct.ProductName}?
+                    </Typography>
+                  )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -477,7 +525,7 @@ const OilCleansersTable = () => {
         </Box>
       </Modal>
 
-      {/* Delete Issue Modal */}
+      {/* Revert Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -507,9 +555,15 @@ const OilCleansersTable = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                <Typography>
-                  Are you sure you want to revert this Oil Cleaner?
-                </Typography>
+                {selectedProduct &&
+                  (selectedProduct.length !== 0) &
+                  (
+                    <Typography>
+                      Are you sure you want to revert product:{" "}
+                      {selectedProduct.ProductName}?
+                    </Typography>
+                  )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -558,7 +612,7 @@ const OilCleansersTable = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {oilCleanersData && oilCleanersData.length !== 0 ? (
+        {productsData && productsData.length !== 0 ? (
           <Card>
             <CardContent>
               <Box>
@@ -568,8 +622,8 @@ const OilCleansersTable = () => {
               </Box>
               <div style={{ height: "80vh" }}>
                 <DataGrid
-                  columns={OilCleanersColumns}
-                  rows={oilCleanersData.map((prod, index) => ({
+                  columns={ProductsColumns}
+                  rows={productsData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
                     ProductName: prod.ProductName,

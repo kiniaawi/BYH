@@ -6,6 +6,7 @@ import SkinIssuesTable from "./SkinIssuesTable";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../../../components/unlogged/Footer";
 
 const Skincare = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -25,7 +26,7 @@ const Skincare = ({ onChangeContent }) => {
   };
 
   return (
-    <Box flex={12} p={2} height={"100vh"}>
+    <Box flex={12} p={2} height={"200vh"}>
       <Modal
         sx={{
           display: "flex",
@@ -58,19 +59,39 @@ const Skincare = ({ onChangeContent }) => {
         </Box>
       </Modal>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Skincare Panel</b>
+        <b>Panel Pielęgnacji Skóry</b>
       </Typography>
       <Box sx={{ textAlign: "right", marginBottom: 3 }}>
         <Button onClick={() => handleSkinIssueClick()}>
           <AddIcon />
-          Add Skin Issue
+          Dodaj Problem Skórny
         </Button>
       </Box>
       <Box>
         <Typography variant="h6">
-          <b>Face</b>
+          <b>Twarz</b>
         </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
+          <Button
+            component={Link}
+            to="/skin-types"
+            onClick={() => {
+              onChangeContent("skin-types");
+              navigate("/skin-types");
+            }}
+          >
+            Typy Skóry
+          </Button>
+          <Button
+            component={Link}
+            to="/dealing-skinissues"
+            onClick={() => {
+              onChangeContent("dealing-skinissues");
+              navigate("/dealing-skinissues");
+            }}
+          >
+            Rozwiązania Problemów Skórnych
+          </Button>
           <Button
             component={Link}
             to="/skincare-steps"
@@ -79,8 +100,10 @@ const Skincare = ({ onChangeContent }) => {
               navigate("/skincare-steps");
             }}
           >
-            Skincare Steps
+            Kroki Pielęgnacyjne
           </Button>
+        </Stack>
+        <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
             to="/oil-cleaners"
@@ -89,7 +112,7 @@ const Skincare = ({ onChangeContent }) => {
               navigate("/oil-cleaners");
             }}
           >
-            Oil Cleaners
+            Oczyszczanie
           </Button>
           <Button
             component={Link}
@@ -99,7 +122,7 @@ const Skincare = ({ onChangeContent }) => {
               navigate("/foam-cleansers");
             }}
           >
-            Foam Cleansers
+            Mycie
           </Button>
           <Button
             component={Link}
@@ -109,22 +132,22 @@ const Skincare = ({ onChangeContent }) => {
               navigate("/exfoliants");
             }}
           >
-            Exfoliants
+            Złuszczanie
           </Button>
-          <Button>Toners</Button>
+          <Button>Tonizacja</Button>
+          <Button>Esencja</Button>
         </Stack>
         <Stack direction="row" justifyContent={"space-evenly"}>
-          <Button>Essences</Button>
-          <Button>Serums</Button>
-          <Button>Masks</Button>
-          <Button>Eye Creams</Button>
-          <Button>Moisturizers</Button>
+          <Button>Serum</Button>
+          <Button>Maska</Button>
+          <Button>Krem pod oczy</Button>
+          <Button>Nawilżanie</Button>
           <Button>SPF</Button>
         </Stack>
       </Box>
       <Box sx={{ marginBottom: 5, marginTop: 2 }}>
         <Typography variant="h6">
-          <b>Body</b>
+          <b>Ciało</b>
         </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
           <Button>Add Skin Issue</Button>

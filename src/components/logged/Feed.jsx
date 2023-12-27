@@ -15,6 +15,12 @@ import OilCleaners from "../../pages/logged/admin/skin/OilCleaners";
 import Sidebar from "./Sidebar";
 import FoamCleansers from "../../pages/logged/admin/skin/FoamCleansers";
 import Exfoliants from "../../pages/logged/admin/skin/Exfoliants";
+import SkinTypes from "../../pages/logged/admin/skin/SkinTypes";
+import Footer from "../unlogged/Footer";
+import DealingSkinIssues from "../../pages/logged/admin/skin/DealingSkinIssues";
+import DefSupplIssues from "../../pages/logged/admin/supplementation/DefSupplIssues";
+import DefSupplBloodTests from "../../pages/logged/admin/supplementation/DefSupplBloodTests";
+import DefSupplDealing from "../../pages/logged/admin/supplementation/DefSupplDealing";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,6 +60,12 @@ const Feed = ({ currentContent, onChangeContent }) => {
             {currentContent === "skincare-steps" && (
               <StepsSkincare onChangeContent={onChangeContent} />
             )}
+            {currentContent === "dealing-skinissues" && (
+              <DealingSkinIssues onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "skin-types" && (
+              <SkinTypes onChangeContent={onChangeContent} />
+            )}
             {currentContent === "oil-cleaners" && (
               <OilCleaners onChangeContent={onChangeContent} />
             )}
@@ -73,6 +85,15 @@ const Feed = ({ currentContent, onChangeContent }) => {
             {currentContent === "admin-supplementation" && (
               <Supplementation onChangeContent={onChangeContent} />
             )}
+            {currentContent === "def-suppl-issues" && (
+              <DefSupplIssues onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "def-suppl-tests" && (
+              <DefSupplBloodTests onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "dealing-def-suppl" && (
+              <DefSupplDealing onChangeContent={onChangeContent} />
+            )}
           </div>
         </Box>
         <BlankBar />
@@ -84,6 +105,7 @@ const Feed = ({ currentContent, onChangeContent }) => {
           />
         </div>
       </Stack>
+      <Footer />
     </Box>
   );
 };

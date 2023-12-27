@@ -146,7 +146,7 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
                             <Grid item xs={12} margin={2}>
                               <TextField
                                 type="password"
-                                label="Password"
+                                label="Hasło"
                                 className="input-field"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -163,13 +163,13 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
                                   fullWidth
                                   onClick={(e) => handleLogin(e)}
                                 >
-                                  Login
+                                  Zaloguj
                                 </Button>
                               </div>
                             </Grid>
                           </Grid>
                         </form>
-                        <Typography>Don't have an account?</Typography>
+                        <Typography>Nie posiadasz konta?</Typography>
                         <Link
                           component="button"
                           onClick={() => {
@@ -177,7 +177,7 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
                             navigate("/register");
                           }}
                         >
-                          Register
+                          Zarejestruj się
                         </Link>
                       </Stack>
                     </Box>

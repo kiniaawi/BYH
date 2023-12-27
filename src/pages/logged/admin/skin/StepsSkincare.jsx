@@ -4,11 +4,13 @@ import {
   Card,
   CardContent,
   CardHeader,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import StepsSkincareTable from "./StepsSkincareTable";
@@ -31,14 +33,32 @@ const StepsSkincare = () => {
   const [step8, setStep8] = useState("");
   const [step9, setStep9] = useState("");
   const [step10, setStep10] = useState("");
+  const [skinTypesData, setSkinTypesData] = useState([]);
+  const [selectedSkinType, setSelectedSkinType] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
+  useEffect(() => {
+    fetchSkinTypes();
+  }, []);
+
+  const fetchSkinTypes = () => {
+    axios
+      .get("api/SkinTypesTable/GetOnlyTypes")
+      .then((response) => {
+        setSkinTypesData(response.data.Data);
+        console.log("Skin Types: ", response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleAddRoutine = () => {
     const data = {
-      SkinType: skinType,
+      SkinType: selectedSkinType,
       DayTime: dayTime,
       Step1: step1,
       Step2: step2,
@@ -65,6 +85,7 @@ const StepsSkincare = () => {
 
   const clearTextArea = () => {
     setSkinType("");
+    setSelectedSkinType("");
     setDayTime("");
     setStep1("");
     setStep2("");
@@ -81,13 +102,13 @@ const StepsSkincare = () => {
   return (
     <Box p={2} sx={{ height: "300vh" }}>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Skincare Steps Panel</b>
+        <b>Panel Kroków Pielęgnacyjnych</b>
       </Typography>
       <Card>
         <CardHeader
           title={
             <Typography variant="h6" textAlign={"center"}>
-              <b>Add Skincare Routine</b>
+              <b>Dodaj Rutynę Pielęgnacyjną</b>
             </Typography>
           }
         />
@@ -95,41 +116,50 @@ const StepsSkincare = () => {
           <form onSubmit={handleSubmit}>
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
               <Typography>
-                <b>Skin Type</b>
+                <b>Typ Skóry</b>
               </Typography>
-              <TextField
-                type="text"
-                label="Skin Type"
-                value={skinType}
-                onChange={(e) => setSkinType(e.target.value)}
+              <Select
+                label="Typ Skóry"
+                value={selectedSkinType}
+                onChange={(e) => setSelectedSkinType(e.target.value)}
                 required
-              />
+                sx={{ width: "25%" }}
+              >
+                {skinTypesData.map((skinTypeSel) => (
+                  <MenuItem key={skinTypeSel.Id} value={skinTypeSel.SkinType}>
+                    {skinTypeSel.SkinType}
+                  </MenuItem>
+                ))}
+              </Select>
               <Typography>
-                <b>Day Time</b>
+                <b>Pora Dnia</b>
               </Typography>
-              <TextField
-                type="text"
-                label="Day Time"
+              <Select
+                label="Pora Dnia"
                 value={dayTime}
                 onChange={(e) => setDayTime(e.target.value)}
                 required
-              />
+                sx={{ width: "25%" }}
+              >
+                <MenuItem value="Morning">Rano</MenuItem>
+                <MenuItem value="Evening">Wieczór</MenuItem>
+              </Select>
             </Stack>
             <Stack
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 4 }}
             >
-              <Typography>Step 1</Typography>
+              <Typography>Krok 1</Typography>
               <TextField
                 type="text"
-                label="Step 1"
+                label="Krok 1"
                 value={step1}
                 onChange={(e) => setStep1(e.target.value)}
               />
-              <Typography>Step 2</Typography>
+              <Typography>Krok 2</Typography>
               <TextField
                 type="text"
-                label="Step 2"
+                label="Krok 2"
                 value={step2}
                 onChange={(e) => setStep2(e.target.value)}
               />
@@ -138,17 +168,17 @@ const StepsSkincare = () => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Step 3</Typography>
+              <Typography>Krok 3</Typography>
               <TextField
                 type="text"
-                label="Step 3"
+                label="Krok 3"
                 value={step3}
                 onChange={(e) => setStep3(e.target.value)}
               />
-              <Typography>Step 4</Typography>
+              <Typography>Krok 4</Typography>
               <TextField
                 type="text"
-                label="Step 4"
+                label="Krok 4"
                 value={step4}
                 onChange={(e) => setStep4(e.target.value)}
               />
@@ -157,17 +187,17 @@ const StepsSkincare = () => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Step 5</Typography>
+              <Typography>Krok 5</Typography>
               <TextField
                 type="text"
-                label="Step 5"
+                label="Krok 5"
                 value={step5}
                 onChange={(e) => setStep5(e.target.value)}
               />
-              <Typography>Step 6</Typography>
+              <Typography>Krok 6</Typography>
               <TextField
                 type="text"
-                label="Step 6"
+                label="Krok 6"
                 value={step6}
                 onChange={(e) => setStep6(e.target.value)}
               />
@@ -176,17 +206,17 @@ const StepsSkincare = () => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Step 7</Typography>
+              <Typography>Krok 7</Typography>
               <TextField
                 type="text"
-                label="Step 7"
+                label="Krok 7"
                 value={step7}
                 onChange={(e) => setStep7(e.target.value)}
               />
-              <Typography>Step 8</Typography>
+              <Typography>Krok 8</Typography>
               <TextField
                 type="text"
-                label="Step 8"
+                label="Krok 8"
                 value={step8}
                 onChange={(e) => setStep8(e.target.value)}
               />
@@ -195,17 +225,17 @@ const StepsSkincare = () => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Step 9</Typography>
+              <Typography>Krok 9</Typography>
               <TextField
                 type="text"
-                label="Step 9"
+                label="Krok 9"
                 value={step9}
                 onChange={(e) => setStep9(e.target.value)}
               />
-              <Typography>Step 10</Typography>
+              <Typography>Krok 10</Typography>
               <TextField
                 type="text"
-                label="Step 10"
+                label="Krok 10"
                 value={step10}
                 onChange={(e) => setStep10(e.target.value)}
               />
@@ -217,7 +247,7 @@ const StepsSkincare = () => {
                 color="primary"
                 onClick={() => handleAddRoutine()}
               >
-                Add Routine
+                Dodaj
               </Button>
             </Box>
           </form>

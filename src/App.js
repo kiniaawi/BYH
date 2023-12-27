@@ -110,6 +110,26 @@ function App() {
               }
             />
             <Route
+              path="/skin-types"
+              element={
+                <Feed
+                  currentContent="skin-types"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/dealing-skinissues"
+              element={
+                <Feed
+                  currentContent="dealing-skinissues"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/oil-cleaners"
               element={
                 <Feed
@@ -164,6 +184,36 @@ function App() {
               element={
                 <Feed
                   currentContent="admin-supplementation"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/def-suppl-issues"
+              element={
+                <Feed
+                  currentContent="def-suppl-issues"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/def-suppl-tests"
+              element={
+                <Feed
+                  currentContent="def-suppl-tests"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/dealing-def-suppl"
+              element={
+                <Feed
+                  currentContent="dealing-def-suppl"
                   onChangeContent={handleChangeContent}
                   setCurrentContent={setCurrentContent}
                 />

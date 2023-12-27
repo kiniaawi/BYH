@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const SkinIssues = () => {
-  const [issueName, setIssueName] = useState("");
+  const [skinIssue, setSkinIssue] = useState("");
   const [placement, setPlacement] = useState("");
   const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
@@ -30,9 +30,9 @@ const SkinIssues = () => {
 
   const handleAddIssue = () => {
     const data = {
-      IssueName: issueName,
+      SkinIssue: skinIssue,
       Placement: placement,
-      ImageURL: imageName,
+      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
     };
 
     axios
@@ -79,7 +79,7 @@ const SkinIssues = () => {
   };
 
   const clearTextArea = () => {
-    setIssueName("");
+    setSkinIssue("");
     setPlacement("");
     setImageName("");
   };
@@ -89,7 +89,7 @@ const SkinIssues = () => {
       <Card>
         <CardContent>
           <Typography variant="h6" textAlign={"center"}>
-            <b>Add Skin Issue</b>
+            <b>Dodaj Problem Skórny</b>
           </Typography>
           <Box>
             <form onSubmit={handleSubmit}>
@@ -97,43 +97,40 @@ const SkinIssues = () => {
                 <Grid item xs={12} margin={2}>
                   <TextField
                     type="text"
-                    label="Skin Issue"
-                    value={issueName}
-                    onChange={(e) => setIssueName(e.target.value)}
+                    label="Problem Skórny"
+                    value={skinIssue}
+                    onChange={(e) => setSkinIssue(e.target.value)}
                     required
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} margin={2}>
                   <FormControl fullWidth required>
-                    <InputLabel id="place-label">Placement</InputLabel>
+                    <InputLabel id="place-label">Umiejscowienie</InputLabel>
                     <Select
                       labelId="place-label"
                       id="place-select"
                       value={placement}
                       onChange={(e) => setPlacement(e.target.value)}
                     >
-                      <MenuItem key="face" value="face">
-                        Face
+                      <MenuItem key="Twarz" value="Twarz">
+                        Twarz
                       </MenuItem>
-                      <MenuItem key="neck" value="neck">
-                        Neck
+                      <MenuItem key="Plecy" value="Plecy">
+                        Plecy
                       </MenuItem>
-                      <MenuItem key="back" value="back">
-                        Back
-                      </MenuItem>
-                      <MenuItem key="arms" value="arms">
+                      <MenuItem key="Ramiona" value="Ramiona">
                         Arms
                       </MenuItem>
-                      <MenuItem key="legs" value="legs">
-                        Legs
+                      <MenuItem key="Nogi" value="Nogi">
+                        Nogi
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} margin={2}>
                   <input type="file" onChange={(e) => handleImageChange(e)} />
-                  <Button onClick={() => handleAddFile()}>Add File</Button>
+                  <Button onClick={() => handleAddFile()}>Dodaj Plik</Button>
                   {/* <TextField
                       type="text"
                       label="Skin Picture Src"
@@ -155,7 +152,7 @@ const SkinIssues = () => {
                       color="primary"
                       onClick={() => handleAddIssue()}
                     >
-                      Save
+                      Dodaj
                     </Button>
                   </Box>
                 </Grid>

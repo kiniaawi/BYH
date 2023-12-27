@@ -20,231 +20,141 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const SkinIssues = ({ handleSkinIssueClick }) => {
-  const [issuesData, setIssuesData] = useState([]);
+const SkinTypesTable = () => {
+  const [skinTypesData, setSkinTypesData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [editIssue, setEditIssue] = useState({
+  const [selectedSkinType, setSelectedSkinType] = useState(null);
+  const [editSkinType, setEditSkinType] = useState({
     Id: 0,
-    SkinIssue: "",
-    Placement: "",
-    ImageURL: "",
+    SkinType: "",
   });
-  const [image, setImage] = useState("");
-  const [imageName, setImageName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   useEffect(() => {
-    fetchIssues();
+    fetchSkinTypes();
   }, []);
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-  const fetchIssues = () => {
+  const fetchSkinTypes = () => {
     axios
-      .get("/api/SkinIssues")
+      .get("/api/SkinTypesTable")
       .then((response) => {
         console.log(response.data);
-        console.log(response.data.Data);
-        setIssuesData(response.data.Data);
+        console.log(response.data.Data[0]);
+        setSkinTypesData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  //   const handleAddFile = () => {
-  //     console.log(editIssue.ImageURL);
-  //     setImageName(editIssue.ImageURL.name);
-  //     console.log("ImageName: ", imageName);
-  //     axios
-  //       .post("/api/SkinIssues/SaveFile", editIssue.ImageURL)
-  //       .then((response) => {
-  //         //fetchIssues();
-  //         alert(response.data.StatusMessage);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-
-  //     setImage("");
-  //     setImageName("");
-  //   };
-
-  const handleAddFile = () => {
-    console.log(image);
-    setImageName(image.name);
-    console.log("ImageName: ", imageName);
-
-    const formData = new FormData();
-    formData.append("file", image);
-
-    axios
-      .post("/api/SkinIssues/SaveFile", formData)
-      .then((response) => {
-        //fetchIssues();
-        alert(response.data.StatusMessage);
-      })
-      .catch((error) => {
-        console.log("Error uploading file:", error);
-        if (error.response) {
-          // Błąd odpowiedzi z serwera
-          console.log("Response data:", error.response.data);
-          console.log("Response status:", error.response.status);
-          console.log("Response headers:", error.response.headers);
-        } else if (error.request) {
-          // Błąd żądania
-          console.log("Request data:", error.request);
-        } else {
-          // Inny błąd
-          console.error("Error:", error.message);
-        }
-      });
-
-    setImage("");
-  };
-
-  const handleEditModalOpen = (issue) => {
-    setSelectedIssue(issue);
-    console.log(issue);
+  const handleEditModalOpen = (prod) => {
+    setSelectedSkinType(prod);
+    console.log(prod);
     setEditModalOpen(true);
 
-    setEditIssue({
-      Id: issue.Id,
-      SkinIssue: issue.SkinIssue,
-      Placement: issue.Placement,
-      ImageURL: issue.ImageURL,
+    setEditSkinType({
+      Id: prod.Id,
+      SkinType: prod.SkinType,
     });
 
-    console.log(editIssue.Id);
+    console.log(editSkinType.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedSkinType(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
-    setImageName("");
-    setImage("");
   };
 
   const handleEdit = () => {
-    console.log("id", editIssue.Id);
-    console.log("editIssue: ", editIssue);
-
-    if (imageName === undefined) {
-      setImageName("none.png");
-    }
+    console.log("id", editSkinType.Id);
+    console.log("editStep: ", editSkinType);
 
     const data = {
-      Id: editIssue.Id,
-      SkinIssue: editIssue.SkinIssue,
-      Placement: editIssue.Placement,
-      ImageURL: imageName,
+      Id: editSkinType.Id,
+      SkinType: editSkinType.SkinType,
     };
 
     axios
-      .put(`/api/SkinIssues/UpdateIssue/${editIssue.Id}`, data)
+      .put(`/api/SkinTypesTable/Update/${editSkinType.Id}`, data)
       .then((response) => {
-        fetchIssues();
-        console.log("Issue has been edited", response.data);
+        fetchSkinTypes();
+        console.log("Skin Type has been edited", response.data);
         handleEditModalClose();
       })
       .catch((error) => {
-        console.error("Error during editing issue", error);
+        console.error("Error during editing step", error);
       });
-
-    setImageName("");
   };
 
-  const handleRevertModalOpen = (issue) => {
-    setSelectedIssue(issue);
+  const handleRevertModalOpen = (prod) => {
+    setSelectedSkinType(prod);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedSkinType(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedIssue);
+    console.log(selectedSkinType);
     axios
-      .put(`/api/SkinIssues/RevIssue/${selectedIssue.Id}`)
+      .put(`/api/SkinTypesTable/Revert/${selectedSkinType.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
+        console.log(selectedSkinType);
+        fetchSkinTypes();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    fetchIssues();
-    setSelectedIssue(null);
+    setSelectedSkinType(null);
     setRevertModalOpen(false);
   };
 
-  const handleDeleteModalOpen = (issue) => {
-    setSelectedIssue(issue);
+  const handleDeleteModalOpen = (prod) => {
+    setSelectedSkinType(prod);
+    console.log("Delete: ", selectedSkinType);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedSkinType(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedIssue);
+    console.log(selectedSkinType);
     axios
-      .put(`/api/SkinIssues/DelIssue/${selectedIssue.Id}`)
+      .put(`/api/SkinTypesTable/Delete/${selectedSkinType.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
+        console.log(selectedSkinType);
+        fetchSkinTypes();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    fetchIssues();
-    setSelectedIssue(null);
+    setSelectedSkinType(null);
     setDeleteModalOpen(false);
   };
 
-  const IssuesColumns = [
+  const SkinTypesColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "SkinIssue",
-      headerName: "Problem Skórny",
-      width: 200,
-    },
-    {
-      field: "Placement",
-      headerName: "Umiejscowienie",
-      width: 100,
-    },
-    {
-      field: "ImageURL",
-      headerName: "Obraz",
+      field: "SkinType",
+      headerName: "Typ Skóry",
       width: 150,
-      renderCell: (params) => {
-        console.log(params.row.ImageURL);
-        return (
-          <img
-            src={`https://localhost:44313/Photos/${params.row.ImageURL}`}
-            alt="Issue"
-            style={{ width: "auto", height: 100 }}
-          />
-        );
-      },
     },
     {
       field: "IsDeleted",
@@ -255,7 +165,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 100,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -270,7 +180,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
     },
     {
       field: "action-delete",
-      headerName: "Usuń / Przywróc",
+      headerName: "Usuń / Przywróć",
       sortable: false,
       width: 150,
       renderCell: (params) => {
@@ -281,7 +191,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
             sx={{ color: isDeleted ? "blue" : "red" }}
             size="small"
             onClick={() => {
-              console.log("Clicked issue:", params.row.Id);
+              console.log("Clicked skin type:", params.row.Id);
               if (isDeleted) {
                 handleRevertModalOpen(params.row);
               } else {
@@ -298,7 +208,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
 
   return (
     <Box flex={12} p={2}>
-      {/* Edit Issue Modal */}
+      {/* Edit Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -328,77 +238,23 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Problem Skórny</b>
+                <b>Edytuj Typ Skóry</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
                   <TextField
                     sx={{ marginBottom: 2 }}
-                    name="issue"
-                    label="Problem Skórny"
+                    name="SkinType"
+                    label="Typ Skóry"
                     fullWidth
-                    value={editIssue.SkinIssue}
+                    value={editSkinType.SkinType}
                     onChange={(e) =>
-                      setEditIssue({
-                        ...editIssue,
-                        SkinIssue: e.target.value,
+                      setEditSkinType({
+                        ...editSkinType,
+                        SkinType: e.target.value,
                       })
                     }
                   />
-                  <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-                    <InputLabel id="place-label">Umiejscowienie</InputLabel>
-                    {editIssue.Placement !== undefined && (
-                      <Select
-                        labelId="place-label"
-                        id="place-select"
-                        value={editIssue.Placement}
-                        onChange={(e) =>
-                          setEditIssue({
-                            ...editIssue,
-                            Placement: e.target.value,
-                          })
-                        }
-                      >
-                        <MenuItem value="Twarz">Twarz</MenuItem>
-                        <MenuItem value="Plecy">Plecy</MenuItem>
-                        <MenuItem value="Ramiona">Ramiona</MenuItem>
-                        <MenuItem value="Nogi">Nogi</MenuItem>
-                      </Select>
-                    )}
-                  </FormControl>
-                  <TextField
-                    sx={{ marginBottom: 2 }}
-                    name="issue_photo_url"
-                    label="Obraz"
-                    fullWidth
-                    value={imageName}
-                    disabled
-                  />
-                  <Grid item xs={12} margin={2}>
-                    <input
-                      type="file"
-                      //   onChange={(e) =>
-                      //     setEditIssue({
-                      //       ...editIssue,
-                      //       ImageURL: e.target.files[0],
-                      //     })
-                      //   }
-                      onChange={(e) => handleImageChange(e)}
-                    />
-                    <Button onClick={() => handleAddFile()}>Dodaj plik</Button>
-                    {/* <TextField
-                        type="text"
-                        label="Skin Picture Src"
-                        value={image}
-                        onChange={(e) =>
-                          setImage(
-                            '"/skin_issues_pictures/' + e.target.value + '"'
-                          )
-                        }
-                        required
-                        fullWidth
-                      /> */}
-                  </Grid>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -449,7 +305,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      {/* Delete Issue Modal */}
+      {/* Delete Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -479,16 +335,17 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length() !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny:{" "}
-                    {selectedIssue.SkinIsssue}?
+                {selectedSkinType && selectedSkinType.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąć typ skóry:{" "}
+                    {selectedSkinType.SkinType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc ten typ skóry?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -536,7 +393,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      {/* Revert Issue Modal */}
+      {/* Revert Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -566,16 +423,17 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length() !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny:{" "}
-                    {selectedIssue.SkinIsssue}?
+                {selectedSkinType && selectedSkinType.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić typ skóry:{" "}
+                    {selectedSkinType.SkinType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić ten typ skóry?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -624,24 +482,22 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {issuesData && issuesData.length !== 0 ? (
-          <Card style={{ height: "80vh" }}>
+        {skinTypesData && skinTypesData.length !== 0 ? (
+          <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Problemy Skórne</b>
+                  <b>Typy Skóry</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={IssuesColumns}
-                  rows={issuesData.map((issue, index) => ({
+                  columns={SkinTypesColumns}
+                  rows={skinTypesData.map((prod, index) => ({
                     id: index,
-                    Id: issue.Id,
-                    SkinIssue: issue.SkinIssue,
-                    Placement: issue.Placement,
-                    ImageURL: issue.ImageURL,
-                    IsDeleted: issue.IsDeleted,
+                    Id: prod.Id,
+                    SkinType: prod.SkinType,
+                    IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
                     pagination: {
@@ -656,9 +512,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>
-              Nie znaleziono żadnych Problemów Skórnych w Bazie Danych
-            </Typography>
+            <Typography>Nie znaleziono typów skóry w bazie danych</Typography>
           </Box>
         )}
       </div>
@@ -666,4 +520,4 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
   );
 };
 
-export default SkinIssues;
+export default SkinTypesTable;

@@ -169,7 +169,7 @@ const AdminHome = ({ onChangeContent }) => {
     },
     {
       field: "Name",
-      headerName: "Name",
+      headerName: "Imię",
       width: 100,
     },
     {
@@ -179,22 +179,22 @@ const AdminHome = ({ onChangeContent }) => {
     },
     {
       field: "CreatedAt",
-      headerName: "Created At",
+      headerName: "Data utworzenia",
       width: 100,
     },
     {
       field: "DeletedAt",
-      headerName: "Deleted At",
+      headerName: "Data usunięcia",
       width: 100,
     },
     {
       field: "IsActive",
-      headerName: "IsActive",
+      headerName: "Aktywny",
       width: 75,
     },
     {
       field: "IsDeleted",
-      headerName: "IsDeleted",
+      headerName: "Usunięty",
       width: 75,
     },
     {
@@ -204,7 +204,7 @@ const AdminHome = ({ onChangeContent }) => {
     },
     {
       field: "action-edit",
-      headerName: "Edit",
+      headerName: "Edytuj",
       sortable: false,
       width: 75,
       renderCell: (params) => {
@@ -221,7 +221,7 @@ const AdminHome = ({ onChangeContent }) => {
     },
     {
       field: "action-delete",
-      headerName: "Delete",
+      headerName: "Usuń",
       sortable: false,
       width: 75,
       renderCell: (params) => {
@@ -285,7 +285,7 @@ const AdminHome = ({ onChangeContent }) => {
                   variant="h5"
                   sx={{ textAlign: "center", marginBottom: 2 }}
                 >
-                  <b>Edit User's Properties</b>
+                  <b>Edituj Właściwości Użytkownika</b>
                 </Typography>
               </Stack>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
@@ -297,7 +297,7 @@ const AdminHome = ({ onChangeContent }) => {
                         {selectedUser.Id}
                       </Typography>
                       <Typography>
-                        <b>Name: </b>
+                        <b>Imię: </b>
                         {selectedUser.Name}
                       </Typography>
                       <Typography>
@@ -305,23 +305,23 @@ const AdminHome = ({ onChangeContent }) => {
                         {selectedUser.Email}
                       </Typography>
                       <Typography>
-                        <b>Created At: </b>
+                        <b>Data utworzenia: </b>
                         {selectedUser.CreatedAt}
                       </Typography>
                       <Typography>
-                        <b>Deleted At: </b>
+                        <b>Data usunięcia: </b>
                         {selectedUser.DeletedAt}
                       </Typography>
                       <Typography>
-                        <b>IsActive: </b>
+                        <b>Aktywny: </b>
                         {selectedUser.IsActive}
                       </Typography>
                       <Typography>
-                        <b>IsDeleted: </b>
+                        <b>Usunięty: </b>
                         {selectedUser.IsDeleted}
                       </Typography>
                       <Typography>
-                        <b>IsAdmin: </b>
+                        <b>Admin: </b>
                         {selectedUser.IsAdmin}
                       </Typography>
                     </Box>
@@ -330,7 +330,7 @@ const AdminHome = ({ onChangeContent }) => {
                       textAlign={"center"}
                       sx={{ marginTop: 5 }}
                     >
-                      <b>Choose option:</b>
+                      <b>Zmień właściwość:</b>
                     </Typography>
                     <Stack direction="row" justifyContent={"space-evenly"}>
                       <Button
@@ -339,7 +339,7 @@ const AdminHome = ({ onChangeContent }) => {
                         sx={{ margin: 2 }}
                         onClick={() => handleChangeIsActive()}
                       >
-                        Change IsActive
+                        Aktywny
                       </Button>
                       <Button
                         variant="contained"
@@ -347,7 +347,7 @@ const AdminHome = ({ onChangeContent }) => {
                         sx={{ margin: 2 }}
                         onClick={() => handleChangeIsAdmin()}
                       >
-                        Change IsAdmin
+                        Admin
                       </Button>
                     </Stack>
                   </div>
@@ -390,18 +390,18 @@ const AdminHome = ({ onChangeContent }) => {
                 variant="h5"
                 sx={{ textAlign: "center", p: 1, marginTop: 1 }}
               >
-                <b>Confirmation</b>
+                <b>Potwierdzenie</b>
               </Typography>
               <CardContent>
                 {selectedUserData.IsDeleted === 0 ? (
                   <Typography variant="h6" textAlign={"center"}>
-                    Are you sure you want to delete user{" "}
+                    Czy na pewno chcesz ununąć Użytkownika{" "}
                     <b>{selectedUserData.Name}</b> - email:{" "}
                     <b>{selectedUserData.Email}</b>?
                   </Typography>
                 ) : (
                   <Typography variant="h6" textAlign={"center"}>
-                    Are you sure you want to bring user{" "}
+                    Czy na pewno chcesz przywrócić Użytkownika{" "}
                     <b>{selectedUserData.Name}</b> back - email:{" "}
                     <b>{selectedUserData.Email}</b>?
                   </Typography>
@@ -431,7 +431,7 @@ const AdminHome = ({ onChangeContent }) => {
                         }}
                         onClick={handleDelete}
                       >
-                        Yes
+                        Tak
                       </Button>
                       <Button
                         variant="contained"
@@ -442,7 +442,7 @@ const AdminHome = ({ onChangeContent }) => {
                         }}
                         onClick={handleDeleteModalClose}
                       >
-                        No
+                        Nie
                       </Button>
                     </Stack>
                   </Box>
@@ -456,29 +456,29 @@ const AdminHome = ({ onChangeContent }) => {
       <Box textAlign={"center"}>
         <Typography variant="h5">
           {" "}
-          <b>Welcome Admin!</b>{" "}
+          <b>Witaj Admin!</b>{" "}
         </Typography>
       </Box>
       <Stack>
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-skincare">
-              <ListItemText>Skin Care</ListItemText>
+              <ListItemText>Pielęgnacja Skóry</ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-haircare">
-              <ListItemText>Hair Care</ListItemText>
+              <ListItemText>Pielęgnacja Włosów</ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-supplementation">
-              <ListItemText>Supplementation</ListItemText>
+              <ListItemText>Suplementacja</ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-prevention">
-              <ListItemText>Diseases and Prevention</ListItemText>
+              <ListItemText>Choroby i Zapobieganie</ListItemText>
             </ListItemButton>
           </ListItem>
         </List>
@@ -488,7 +488,7 @@ const AdminHome = ({ onChangeContent }) => {
           <CardContent>
             <Box>
               <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                <b>Users</b>
+                <b>Użytkownicy</b>
               </Typography>
             </Box>
             <div>
@@ -500,7 +500,7 @@ const AdminHome = ({ onChangeContent }) => {
                   Name: user.Name,
                   Email: user.Email,
                   CreatedAt: user.CreatedAt,
-                  DeletedAt: user.DeletedAt === null ? "never" : user.DeletedAt,
+                  DeletedAt: user.DeletedAt === null ? "nigdy" : user.DeletedAt,
                   IsActive: user.IsActive,
                   IsDeleted: user.IsDeleted,
                   IsAdmin: user.IsAdmin,
@@ -518,7 +518,7 @@ const AdminHome = ({ onChangeContent }) => {
         </Card>
       ) : (
         <Box textAlign={"center"} marginTop={2}>
-          <Typography>No users found in database</Typography>
+          <Typography>Nie znaleziono użytkowników w bazie danych</Typography>
         </Box>
       )}
     </Box>

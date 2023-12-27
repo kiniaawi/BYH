@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-home">
               <ListItemText
-                primary="Homepage"
+                primary="Strona Główna"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
@@ -50,7 +50,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-skincare">
               <ListItemText
-                primary="Skin Care"
+                primary="Pielęgnacja Skóry"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-haircare">
               <ListItemText
-                primary="Hair Care"
+                primary="Pielęgnacja Włosów"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-supplementation">
               <ListItemText
-                primary="Supplementation"
+                primary="Suplementacja"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
@@ -74,7 +74,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-prevention">
               <ListItemText
-                primary="Diseases and Prevention"
+                primary="Choroby i Zapobieganie"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>

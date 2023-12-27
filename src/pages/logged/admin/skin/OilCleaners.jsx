@@ -27,12 +27,14 @@ const OilCleaners = () => {
   const [frequency, setFrequency] = useState("");
   const [minAge, setMinAge] = useState("");
   const [pregnant, setPregnant] = useState("");
+  const [image, setImage] = useState("");
+  const [imageName, setImageName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
-  const handleAddOilCleaner = () => {
+  const handleAddProduct = () => {
     const data = {
       ProductName: productName,
       ProductType: productType,
@@ -41,11 +43,12 @@ const OilCleaners = () => {
       DayTime: dayTime,
       Frequency: frequency,
       minAge: minAge,
-      isPregnant: pregnant,
+      ImageURL: imageName,
+      forPregnant: pregnant,
     };
 
     axios
-      .post("/api/OilCleaners", data)
+      .post("api/OilCleaners/InsertingData", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -53,6 +56,41 @@ const OilCleaners = () => {
       .catch((error) => {
         console.log(error);
       });
+
+    setImageName("");
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleAddFile = () => {
+    console.log(image);
+    setImageName(image.name);
+    console.log("ImageName: ", imageName);
+
+    const formData = new FormData();
+    formData.append("file", image);
+
+    axios
+      .post("/api/OilCleaners/SaveFileOils", formData)
+      .then((response) => {
+        alert(response);
+      })
+      .catch((error) => {
+        console.log("Error uploading file:", error);
+        if (error.response) {
+          console.log("Response data:", error.response.data);
+          console.log("Response status:", error.response.status);
+          console.log("Response headers:", error.response.headers);
+        } else if (error.request) {
+          console.log("Request data:", error.request);
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+
+    setImage("");
   };
 
   const clearTextArea = () => {
@@ -64,6 +102,7 @@ const OilCleaners = () => {
     setFrequency("");
     setMinAge("");
     setPregnant("");
+    setImageName("");
   };
 
   return (
@@ -144,7 +183,7 @@ const OilCleaners = () => {
             >
               <Typography>Minimum Age</Typography>
               <TextField
-                type="text"
+                type="number"
                 label="Minimum Age"
                 value={minAge}
                 onChange={(e) => setMinAge(e.target.value)}
@@ -157,12 +196,19 @@ const OilCleaners = () => {
                 onChange={(e) => setPregnant(e.target.value)}
               />
             </Stack>
+            <Stack
+              direction="row"
+              sx={{ justifyContent: "center", marginTop: 2 }}
+            >
+              <input type="file" onChange={(e) => handleImageChange(e)} />
+              <Button onClick={() => handleAddFile()}>Add File</Button>
+            </Stack>
             <Box sx={{ textAlign: "center", marginTop: 3 }}>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
-                onClick={() => handleAddOilCleaner()}
+                onClick={() => handleAddProduct()}
               >
                 Add Oil Cleaner
               </Button>

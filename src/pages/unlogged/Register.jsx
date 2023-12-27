@@ -128,7 +128,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                             <Grid item xs={9} margin="auto">
                               <TextField
                                 name="name"
-                                label="Name"
+                                label="Imię"
                                 value={name}
                                 fullWidth
                                 required
@@ -138,7 +138,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                             <Grid item xs={9} margin="auto" marginTop={"20px"}>
                               <TextField
                                 type="password"
-                                label="Password"
+                                label="Hasło"
                                 value={password}
                                 fullWidth
                                 required
@@ -155,7 +155,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                             <Grid item xs={9} margin="auto">
                               <TextField
                                 type="password"
-                                label="Repeat Password"
+                                label="Powtórz hasło"
                                 value={passwordRep}
                                 fullWidth
                                 required
@@ -172,14 +172,14 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                                   fullWidth
                                   onClick={(e) => handleRegister(e)}
                                 >
-                                  Register
+                                  Zarejestruj
                                 </Button>
                               </Box>
                             </Grid>
                           </Grid>
                         </form>
                         <Typography>
-                          Have an account?
+                          Masz już konto?{" "}
                           <Link
                             component="button"
                             onClick={() => {
@@ -187,7 +187,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                               navigate("/login");
                             }}
                           >
-                            Login
+                            Zaloguj się
                           </Link>
                         </Typography>
                       </Stack>
