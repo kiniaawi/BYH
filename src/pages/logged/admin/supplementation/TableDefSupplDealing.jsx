@@ -20,15 +20,18 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableDefSupplIssues = () => {
+const TableDefSupplDealing = () => {
   const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
+  const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
+  const [defSupplDealing, setDefSupplDealing] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [editIssue, setEditIssue] = useState({
     Id: 0,
-    Issue: "",
+    IssueId: "",
+    SupplementId: "",
   });
 
   const handleSubmit = (event) => {
@@ -36,7 +39,9 @@ const TableDefSupplIssues = () => {
   };
 
   useEffect(() => {
+    fetchDefSupplDealing();
     fetchDefSupplIssues();
+    fetchDefSupplBloodTests();
   }, []);
 
   const fetchDefSupplIssues = () => {
@@ -52,6 +57,32 @@ const TableDefSupplIssues = () => {
       });
   };
 
+  const fetchDefSupplBloodTests = () => {
+    axios
+      .get("/api/DefSupplBloodTests")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setDefsupplBloodTests(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchDefSupplDealing = () => {
+    axios
+      .get("/api/DefSupplDealing")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setDefSupplDealing(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleEditModalOpen = (prod) => {
     setSelectedIssue(prod);
     console.log(prod);
@@ -59,7 +90,8 @@ const TableDefSupplIssues = () => {
 
     setEditIssue({
       Id: prod.Id,
-      Issue: prod.Issue,
+      IssueId: prod.IssueId,
+      SupplementId: prod.SupplementId,
     });
 
     console.log(editIssue.Id);
@@ -77,13 +109,14 @@ const TableDefSupplIssues = () => {
 
     const data = {
       Id: editIssue.Id,
-      Issue: editIssue.Issue,
+      IssueId: editIssue.IssueId,
+      SupplementId: editIssue.SupplementId,
     };
 
     axios
-      .put(`/api/DefSupplIssues/UpdateDefSupplIssue/${editIssue.Id}`, data)
+      .put(`/api/DefSupplDealing/UpdateDefSupplDealing/${editIssue.Id}`, data)
       .then((response) => {
-        fetchDefSupplIssues();
+        fetchDefSupplDealing();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -105,10 +138,10 @@ const TableDefSupplIssues = () => {
   const handleRevert = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplIssues/RevDefSupplIssue/${selectedIssue.Id}`)
+      .put(`/api/DefSupplDealing/RevDefSupplDealing/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplIssues();
+        fetchDefSupplDealing();
       })
       .catch((error) => {
         console.log(error);
@@ -132,10 +165,10 @@ const TableDefSupplIssues = () => {
   const handleDelete = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplIssues/DelDefSupplIssue/${selectedIssue.Id}`)
+      .put(`/api/DefSupplDealing/DelDefSupplDealing/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplIssues();
+        fetchDefSupplDealing();
       })
       .catch((error) => {
         console.log(error);
@@ -152,8 +185,23 @@ const TableDefSupplIssues = () => {
       width: 50,
     },
     {
+      field: "IssueId",
+      headerName: "ID Problemu",
+      width: 150,
+    },
+    {
+      field: "SupplementId",
+      headerName: "ID Suplement",
+      width: 150,
+    },
+    {
       field: "Issue",
-      headerName: "Objaw",
+      headerName: "Problem",
+      width: 150,
+    },
+    {
+      field: "Supplement",
+      headerName: "Splement",
       width: 150,
     },
     {
@@ -238,23 +286,51 @@ const TableDefSupplIssues = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Objaw</b>
+                <b>Edytuj Poradę Suplementacji</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <TextField
-                    sx={{ marginBottom: 2 }}
-                    name="Issue"
-                    label="Objaw"
-                    fullWidth
-                    value={editIssue.Issue}
-                    onChange={(e) =>
-                      setEditIssue({
-                        ...editIssue,
-                        Issue: e.target.value,
-                      })
-                    }
-                  />
+                  <Stack direction="row" sx={{ marginBottom: 3 }}>
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Wprowadź Problem:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.IssueId}
+                      onChange={(e) =>
+                        setEditIssue({ ...editIssue, IssueId: e.target.value })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      {defsupplIssuesData.map((item) => (
+                        <MenuItem key={item.Id} value={item.Id}>
+                          {item.Issue}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Wprowadź Suplement:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.SupplementId}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          SupplementId: e.target.value,
+                        })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      {defsupplBloodTests.map((item) => (
+                        <MenuItem key={item.Id} value={item.Id}>
+                          {item.Supplement}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Stack>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -337,11 +413,12 @@ const TableDefSupplIssues = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć objaw: {selectedIssue.Issue}?
+                    Czy na pewno chcesz usunąć poradę dla :{" "}
+                    {selectedIssue.Issue}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc ten objaw?
+                    Czy na pewno chcesz usunąc tą poradę?
                   </Typography>
                 )}
 
@@ -424,11 +501,12 @@ const TableDefSupplIssues = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić objaw: {selectedIssue.Issue}?
+                    Czy na pewno chcesz przywrócić poradę dla:{" "}
+                    {selectedIssue.Issue}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić ten objaw?
+                    Czy na pewno chcesz przywrócić tą poradę?
                   </Typography>
                 )}
 
@@ -480,21 +558,24 @@ const TableDefSupplIssues = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {defsupplIssuesData && defsupplIssuesData.length !== 0 ? (
+        {defSupplDealing && defSupplDealing.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Objawy Deficytu Suplementów</b>
+                  <b>Prady Suplementacjne</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
                   columns={DefSupplIssuesColumns}
-                  rows={defsupplIssuesData.map((prod, index) => ({
+                  rows={defSupplDealing.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
+                    IssueId: prod.IssueId,
+                    SupplementId: prod.SupplementId,
                     Issue: prod.Issue,
+                    Supplement: prod.Supplement,
                     IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
@@ -511,7 +592,7 @@ const TableDefSupplIssues = () => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie znaleziono Objawów Deficutów Suplementacji w Bazie danych
+              Nie znaleziono Porad Suplementacji w Bazie danych
             </Typography>
           </Box>
         )}
@@ -520,4 +601,4 @@ const TableDefSupplIssues = () => {
   );
 };
 
-export default TableDefSupplIssues;
+export default TableDefSupplDealing;

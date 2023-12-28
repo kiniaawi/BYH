@@ -40,9 +40,13 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
     "emailCookie",
     "currentPageContent",
     "nameCookie",
+    "isAdminCookie",
   ]);
 
   const username = cookies.nameCookie;
+  const isAdmin = cookies.isAdminCookie;
+
+  console.log("IsAdminCookieNavbar: ", isAdmin);
 
   const onLogout = () => {
     removeCookie("emailCookie");
@@ -69,7 +73,7 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
       {/* //"#d90f8b" #FF006E */}
       <StyledToolbar>
         <Stack direction="row" spacing={1}>
-          <Link to="/">
+          <Link to={isAdmin ? "/admin-home" : "/homepage"}>
             <Typography
               sx={{
                 display: { xs: "none", sm: "block" },

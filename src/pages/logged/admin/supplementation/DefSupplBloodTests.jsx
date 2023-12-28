@@ -14,7 +14,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import TableDefSupplIssues from "./TableDefSupplIssues";
 import TableDefSupplBloodTests from "./TableDefSupplBloodTests";
 
 const DefSupplBloodTests = ({ onChangeContent }) => {
@@ -47,6 +46,7 @@ const DefSupplBloodTests = ({ onChangeContent }) => {
       });
 
     setSupplement("");
+    setBloodTest("");
   };
 
   return (
