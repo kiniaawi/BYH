@@ -60,8 +60,8 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPost]
-        public JsonResult Post(DefSupplDealing defSuppl)
+        [HttpPost("PostData")]
+        public JsonResult PostData(DefSupplDealing defSuppl)
         {
             Response response = new Response();
 
@@ -117,8 +117,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.DefSupplDealing SET IssueId = @IssueId, SupplementId = @SupplementId
-                            WHERE Id = @Id";
+                string query = @"UPDATE dbo.DefSupplDealing SET IssueId = @IssueId, SupplementId = @SupplementId,
+                                Issue = (SELECT Issue FROM dbo.DefSupplIssues WHERE Id = @IssueId),
+                                Supplement = (SELECT Supplement FROM dbo.DefSupplBloodTests WHERE Id = @SupplementId)
+                                WHERE Id = @Id";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
