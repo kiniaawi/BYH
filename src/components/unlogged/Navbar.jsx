@@ -57,12 +57,12 @@ const Navbar = ({ setLang, lang, title }) => {
             />
           </Typography>
         </Stack>
-        <Icons onClick={(e) => setOpen(true)}>
+        {/* <Icons onClick={(e) => setOpen(true)}>
           <Typography>
             <LanguageIcon sx={{ width: 35, height: 35, color: "black" }} />
             <ArrowDropDownIcon sx={{ color: "black" }} />
           </Typography>
-        </Icons>
+        </Icons> */}
       </StyledToolbar>
       <Menu
         id="demo-positioned-menu"

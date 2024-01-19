@@ -134,15 +134,78 @@ const Skincare = ({ onChangeContent }) => {
           >
             Złuszczanie
           </Button>
-          <Button>Tonizacja</Button>
-          <Button>Esencja</Button>
+          <Button
+            component={Link}
+            to="/toners"
+            onClick={() => {
+              onChangeContent("toners");
+              navigate("/toners");
+            }}
+          >
+            Tonizacja
+          </Button>
+          <Button
+            component={Link}
+            to="/essences"
+            onClick={() => {
+              onChangeContent("essences");
+              navigate("/essences");
+            }}
+          >
+            Esencja
+          </Button>
         </Stack>
         <Stack direction="row" justifyContent={"space-evenly"}>
-          <Button>Serum</Button>
-          <Button>Maska</Button>
-          <Button>Krem pod oczy</Button>
-          <Button>Nawilżanie</Button>
-          <Button>SPF</Button>
+          <Button
+            component={Link}
+            to="/serums"
+            onClick={() => {
+              onChangeContent("serums");
+              navigate("/serums");
+            }}
+          >
+            Serum
+          </Button>
+          <Button
+            component={Link}
+            to="/masks"
+            onClick={() => {
+              onChangeContent("masks");
+              navigate("/masks");
+            }}
+          >
+            Maska
+          </Button>
+          <Button
+            component={Link}
+            to="/eye-creams"
+            onClick={() => {
+              onChangeContent("eye-creams");
+              navigate("/eye-creams");
+            }}
+          >
+            Krem pod oczy
+          </Button>
+          <Button
+            component={Link}
+            to="/moisturizers"
+            onClick={() => {
+              onChangeContent("moisturizers");
+              navigate("/moisturizers");
+            }}
+          >
+            Nawilżanie
+          </Button>
+          <Button
+            component={Link}
+            to="/spf"
+            onClick={() => {
+              onChangeContent("spf");
+              navigate("/spf");
+            }}
+          >
+            SPF
+          </Button>
         </Stack>
       </Box>
       <Box sx={{ marginBottom: 5, marginTop: 2 }}>

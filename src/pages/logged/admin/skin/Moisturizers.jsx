@@ -13,17 +13,17 @@ import {
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import FoamCleansersTable from "./FoamCleansersTable";
+import MoisturizersTable from "./MoisturizersTable";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const FoamCleansers = ({ onChangeContent }) => {
+const Moisturizers = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "foam-cleansers", { path: "/" });
+  setCookie("currentPageCookie", "moisturizers", { path: "/" });
   const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [productType, setProductType] = useState("");
@@ -72,7 +72,7 @@ const FoamCleansers = ({ onChangeContent }) => {
       });
   };
 
-  const handleAddFoamCleanser = () => {
+  const handleAddProduct = () => {
     const data = {
       ProductName: productName,
       ProductTypeId: productType,
@@ -85,7 +85,7 @@ const FoamCleansers = ({ onChangeContent }) => {
     };
 
     axios
-      .post("api/FoamCleansers", data)
+      .post("api/Moisturizers", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -110,7 +110,7 @@ const FoamCleansers = ({ onChangeContent }) => {
     formData.append("file", image);
 
     axios
-      .post("/api/FoamCleansers/SaveFile", formData)
+      .post("/api/Moisturizers/SaveFile", formData)
       .then((response) => {
         alert(response);
       })
@@ -156,7 +156,7 @@ const FoamCleansers = ({ onChangeContent }) => {
         Panel Pielęgnacji
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Produktów Myjących</b>
+        <b>Panel Nawilżania</b>
       </Typography>
       <Card>
         <CardHeader
@@ -222,7 +222,6 @@ const FoamCleansers = ({ onChangeContent }) => {
               >
                 <MenuItem value="Rano">Rano</MenuItem>
                 <MenuItem value="Wieczór">Wieczór</MenuItem>
-                <MenuItem value="Rano i Wieczór">Rano i Wieczór</MenuItem>
               </Select>
             </Stack>
             <Stack
@@ -273,7 +272,7 @@ const FoamCleansers = ({ onChangeContent }) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                onClick={() => handleAddFoamCleanser()}
+                onClick={() => handleAddProduct()}
               >
                 Dodaj Produkt
               </Button>
@@ -282,10 +281,10 @@ const FoamCleansers = ({ onChangeContent }) => {
         </CardContent>
       </Card>
       <Box>
-        <FoamCleansersTable />
+        <MoisturizersTable />
       </Box>
     </Box>
   );
 };
 
-export default FoamCleansers;
+export default Moisturizers;

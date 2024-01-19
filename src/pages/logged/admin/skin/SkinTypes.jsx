@@ -12,13 +12,17 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import SkinTypesTable from "./SkinTypesTable";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const SkinTypes = () => {
+const SkinTypes = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
   setCookie("currentPageCookie", "skin-types", { path: "/" });
+  const navigate = useNavigate();
   const [skinType, setSkinType] = useState("");
 
   const handleSubmit = (event) => {
@@ -44,6 +48,18 @@ const SkinTypes = () => {
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
+      <Button
+        component={Link}
+        to="/admin-skincare"
+        onClick={() => {
+          onChangeContent("admin-skincare");
+          navigate("/admin-skincare");
+        }}
+        size="small"
+      >
+        <ArrowBackIcon />
+        Panel Pielęgnacji
+      </Button>
       <Typography variant="h5" sx={{ textAlign: "center" }}>
         <b>Panel Typów Skóry</b>
       </Typography>

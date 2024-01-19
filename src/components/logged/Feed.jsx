@@ -21,6 +21,13 @@ import DealingSkinIssues from "../../pages/logged/admin/skin/DealingSkinIssues";
 import DefSupplIssues from "../../pages/logged/admin/supplementation/DefSupplIssues";
 import DefSupplBloodTests from "../../pages/logged/admin/supplementation/DefSupplBloodTests";
 import DefSupplDealing from "../../pages/logged/admin/supplementation/DefSupplDealing";
+import Toners from "../../pages/logged/admin/skin/Toners";
+import Essences from "../../pages/logged/admin/skin/Essences";
+import Serums from "../../pages/logged/admin/skin/Serums";
+import Masks from "../../pages/logged/admin/skin/Masks";
+import EyeCreams from "../../pages/logged/admin/skin/EyeCreams";
+import Moisturizers from "../../pages/logged/admin/skin/Moisturizers";
+import SPF from "../../pages/logged/admin/skin/SPF";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -74,6 +81,27 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "exfoliants" && (
               <Exfoliants onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "toners" && (
+              <Toners onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "essences" && (
+              <Essences onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "serums" && (
+              <Serums onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "masks" && (
+              <Masks onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "eye-creams" && (
+              <EyeCreams onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "moisturizers" && (
+              <Moisturizers onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "spf" && (
+              <SPF onChangeContent={onChangeContent} />
             )}
             {currentContent === "admin-haircare" && (
               <Haircare onChangeContent={onChangeContent} />

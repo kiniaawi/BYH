@@ -4,51 +4,88 @@ import {
   Card,
   CardContent,
   CardHeader,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import OilCleansersTable from "./OilCleansersTable";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const OilCleaners = () => {
+const OilCleaners = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
   setCookie("currentPageCookie", "oil-cleaners", { path: "/" });
+  const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [productType, setProductType] = useState("");
   const [skinType, setSkinType] = useState("");
-  const [skinIssue, setSkinIssue] = useState("");
   const [dayTime, setDayTime] = useState("");
   const [frequency, setFrequency] = useState("");
   const [minAge, setMinAge] = useState("");
   const [pregnant, setPregnant] = useState("");
   const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
+  const [allProductTypes, setAllProductTypes] = useState([]);
+  const [allSkinTypes, setAllSkinTypes] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
+  useEffect(() => {
+    fetchProductTypes();
+    fetchSkinTypes();
+  }, []);
+
+  const fetchProductTypes = () => {
+    axios
+      .get("/api/DealingSkinIssues")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setAllProductTypes(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchSkinTypes = () => {
+    axios
+      .get("/api/SkincareSteps")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setAllSkinTypes(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleAddProduct = () => {
     const data = {
       ProductName: productName,
-      ProductType: productType,
+      ProductTypeId: productType,
       SkinType: skinType,
-      SkinIssue: skinIssue,
       DayTime: dayTime,
       Frequency: frequency,
-      minAge: minAge,
-      ImageURL: imageName,
-      forPregnant: pregnant,
+      MinAge: minAge,
+      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ForPregnant: pregnant,
     };
 
     axios
-      .post("api/OilCleaners/InsertingData", data)
+      .post("api/OilCleaners", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -97,7 +134,6 @@ const OilCleaners = () => {
     setProductName("");
     setProductType("");
     setSkinType("");
-    setSkinIssue("");
     setDayTime("");
     setFrequency("");
     setMinAge("");
@@ -107,14 +143,26 @@ const OilCleaners = () => {
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
+      <Button
+        component={Link}
+        to="/admin-skincare"
+        onClick={() => {
+          onChangeContent("admin-skincare");
+          navigate("/admin-skincare");
+        }}
+        size="small"
+      >
+        <ArrowBackIcon />
+        Panel Pielęgnacji
+      </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Oil Cleaners Panel</b>
+        <b>Panel Produktów Olejowych Oczyszczających</b>
       </Typography>
       <Card>
         <CardHeader
           title={
             <Typography variant="h6" textAlign={"center"}>
-              <b>Add Oil Cleaner</b>
+              <b>Dodaj Produkt</b>
             </Typography>
           }
         />
@@ -124,84 +172,100 @@ const OilCleaners = () => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 4 }}
             >
-              <Typography>Product Name</Typography>
+              <Typography>Nazwa Produktu</Typography>
               <TextField
+                sx={{ width: "25%" }}
                 type="text"
                 label="Product Name"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
               />
-              <Typography>Product Type</Typography>
-              <TextField
-                type="text"
-                label="Product Type"
+              <Typography>Typ Produktu</Typography>
+              <Select
                 value={productType}
                 onChange={(e) => setProductType(e.target.value)}
-              />
+                required
+                sx={{ width: "25%" }}
+              >
+                {allProductTypes.map((item) => (
+                  <MenuItem key={item.Id} value={item.Id}>
+                    {item.Solution}
+                  </MenuItem>
+                ))}
+              </Select>
             </Stack>
             <Stack
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Skin Type</Typography>
-              <TextField
-                type="text"
-                label="Skin Type"
+              <Typography>Typ Skóry</Typography>
+              <Select
                 value={skinType}
                 onChange={(e) => setSkinType(e.target.value)}
-              />
-              <Typography>Skin Issue</Typography>
-              <TextField
-                type="text"
-                label="Skin Issue"
-                value={skinIssue}
-                onChange={(e) => setSkinIssue(e.target.value)}
-              />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ justifyContent: "space-between", marginTop: 2 }}
-            >
-              <Typography>Day Time</Typography>
-              <TextField
-                type="text"
+                required
+                sx={{ width: "25%" }}
+              >
+                {allSkinTypes
+                  .filter((item) => item.DayTime === "Wieczór")
+                  .map((item) => (
+                    <MenuItem key={item.SkinType} value={item.SkinType}>
+                      {item.SkinType}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <Typography>Pora Dnia</Typography>
+              <Select
                 label="Day Time"
                 value={dayTime}
                 onChange={(e) => setDayTime(e.target.value)}
-              />
-              <Typography>Frequency</Typography>
+                sx={{ width: "25%" }}
+              >
+                <MenuItem value="Rano">Rano</MenuItem>
+                <MenuItem value="Wieczór">Wieczór</MenuItem>
+              </Select>
+            </Stack>
+            <Stack
+              direction="row"
+              sx={{ justifyContent: "space-between", marginTop: 2 }}
+            >
+              <Typography>Częstotliwość</Typography>
               <TextField
+                sx={{ width: "25%" }}
                 type="text"
                 label="Frequency"
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value)}
               />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ justifyContent: "space-between", marginTop: 2 }}
-            >
-              <Typography>Minimum Age</Typography>
+              <Typography>Minimalny Wiek</Typography>
               <TextField
+                sx={{ width: "25%" }}
                 type="number"
                 label="Minimum Age"
                 value={minAge}
                 onChange={(e) => setMinAge(e.target.value)}
-              />
-              <Typography>Is For Pregnant</Typography>
-              <TextField
-                type="text"
-                label="Is For Pregnant"
-                value={pregnant}
-                onChange={(e) => setPregnant(e.target.value)}
               />
             </Stack>
             <Stack
               direction="row"
               sx={{ justifyContent: "center", marginTop: 2 }}
             >
+              <Typography>Czy Bezpieczny Przy Ciąży</Typography>
+              <Select
+                label="Is For Pregnant"
+                value={pregnant}
+                onChange={(e) => setPregnant(e.target.value)}
+                sx={{ width: "25%", marginLeft: 3 }}
+              >
+                <MenuItem value="Tak">Tak</MenuItem>
+                <MenuItem value="Nie">Nie</MenuItem>
+              </Select>
+            </Stack>
+            <Stack
+              direction="row"
+              sx={{ justifyContent: "center", marginTop: 2 }}
+            >
               <input type="file" onChange={(e) => handleImageChange(e)} />
-              <Button onClick={() => handleAddFile()}>Add File</Button>
+              <Button onClick={() => handleAddFile()}>Dodaj Obraz</Button>
             </Stack>
             <Box sx={{ textAlign: "center", marginTop: 3 }}>
               <Button
@@ -210,7 +274,7 @@ const OilCleaners = () => {
                 color="primary"
                 onClick={() => handleAddProduct()}
               >
-                Add Oil Cleaner
+                Dodaj Produkt
               </Button>
             </Box>
           </form>

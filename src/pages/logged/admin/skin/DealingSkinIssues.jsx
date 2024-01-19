@@ -13,12 +13,16 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DealingSkinIssuesTable from "./DealingSkinIssuesTable";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const DealingSkinIssues = () => {
+const DealingSkinIssues = ({ onChangeContent }) => {
   const [skinIssue, setSkinIssue] = useState("");
   const [solution, setSolution] = useState("");
   const [description, setDescription] = useState("");
   const [skinIssuesData, setSkinIssuesData] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,6 +75,18 @@ const DealingSkinIssues = () => {
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
+      <Button
+        component={Link}
+        to="/admin-skincare"
+        onClick={() => {
+          onChangeContent("admin-skincare");
+          navigate("/admin-skincare");
+        }}
+        size="small"
+      >
+        <ArrowBackIcon />
+        Panel Pielęgnacji
+      </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
         <b>Panel Rozwiązań Rroblemów Skórnych - Twarz</b>
       </Typography>

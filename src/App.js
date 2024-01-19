@@ -160,6 +160,76 @@ function App() {
               }
             />
             <Route
+              path="/toners"
+              element={
+                <Feed
+                  currentContent="toners"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/essences"
+              element={
+                <Feed
+                  currentContent="essences"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/serums"
+              element={
+                <Feed
+                  currentContent="serums"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/masks"
+              element={
+                <Feed
+                  currentContent="masks"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/eye-creams"
+              element={
+                <Feed
+                  currentContent="eye-creams"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/moisturizers"
+              element={
+                <Feed
+                  currentContent="moisturizers"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/spf"
+              element={
+                <Feed
+                  currentContent="spf"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/admin-haircare"
               element={
                 <Feed

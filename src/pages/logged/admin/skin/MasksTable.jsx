@@ -18,7 +18,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const OilCleansersTable = () => {
+const MasksTable = () => {
   const [productsData, setProductsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
@@ -53,7 +53,7 @@ const OilCleansersTable = () => {
 
   const fetchProducts = () => {
     axios
-      .get("/api/OilCleaners")
+      .get("/api/Masks")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
@@ -103,7 +103,7 @@ const OilCleansersTable = () => {
     formData.append("file", image);
 
     axios
-      .post("/api/OilCleaners/SaveFileOils", formData)
+      .post("/api/Masks/SaveFile", formData)
       .then((response) => {
         alert(response);
       })
@@ -167,7 +167,7 @@ const OilCleansersTable = () => {
     };
 
     axios
-      .put(`/api/OilCleaners/UpdateOilCl/${editProduct.Id}`, data)
+      .put(`/api/Masks/UpdateMask/${editProduct.Id}`, data)
       .then((response) => {
         fetchProducts();
         console.log("Step has been edited", response.data);
@@ -191,7 +191,7 @@ const OilCleansersTable = () => {
   const handleRevert = () => {
     console.log(selectedProduct);
     axios
-      .put(`/api/OilCleaners/RevOilCl/${selectedProduct.Id}`)
+      .put(`/api/Masks/RevMask/${selectedProduct.Id}`)
       .then((response) => {
         console.log(selectedProduct);
         fetchProducts();
@@ -218,7 +218,7 @@ const OilCleansersTable = () => {
   const handleDelete = () => {
     console.log(selectedProduct);
     axios
-      .put(`/api/OilCleaners/DelOilCl/${selectedProduct.Id}`)
+      .put(`/api/Masks/DelMask/${selectedProduct.Id}`)
       .then((response) => {
         console.log(selectedProduct);
         fetchProducts();
@@ -360,7 +360,7 @@ const OilCleansersTable = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Produkt Oczyszczania Olejowego</b>
+                <b>Edytuj Produkt</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
@@ -709,7 +709,7 @@ const OilCleansersTable = () => {
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Tabela Oczyszczania</b>
+                  <b>Tabela Masek</b>
                 </Typography>
               </Box>
               <div style={{ height: "80vh" }}>
@@ -741,9 +741,7 @@ const OilCleansersTable = () => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>
-              Nie Znaleziono Produktów Oczyszczania Olejowego w Bazie Danych
-            </Typography>
+            <Typography>Nie Znaleziono Masek w Bazie Danych</Typography>
           </Box>
         )}
       </div>
@@ -751,4 +749,4 @@ const OilCleansersTable = () => {
   );
 };
 
-export default OilCleansersTable;
+export default MasksTable;

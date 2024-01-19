@@ -13,23 +13,24 @@ import {
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import FoamCleansersTable from "./FoamCleansersTable";
+import SerumsTable from "./SerumsTable";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const FoamCleansers = ({ onChangeContent }) => {
+const Serums = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "foam-cleansers", { path: "/" });
+  setCookie("currentPageCookie", "serums", { path: "/" });
   const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [productType, setProductType] = useState("");
   const [skinType, setSkinType] = useState("");
   const [dayTime, setDayTime] = useState("");
   const [frequency, setFrequency] = useState("");
+  const [application, setApplication] = useState("");
   const [minAge, setMinAge] = useState("");
   const [pregnant, setPregnant] = useState("");
   const [image, setImage] = useState("");
@@ -72,20 +73,21 @@ const FoamCleansers = ({ onChangeContent }) => {
       });
   };
 
-  const handleAddFoamCleanser = () => {
+  const handleAddProduct = () => {
     const data = {
       ProductName: productName,
       ProductTypeId: productType,
       SkinType: skinType,
       DayTime: dayTime,
       Frequency: frequency,
+      ApplicationWay: application,
       MinAge: minAge,
       ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
       ForPregnant: pregnant,
     };
 
     axios
-      .post("api/FoamCleansers", data)
+      .post("api/Serums", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -110,7 +112,7 @@ const FoamCleansers = ({ onChangeContent }) => {
     formData.append("file", image);
 
     axios
-      .post("/api/FoamCleansers/SaveFile", formData)
+      .post("/api/Serums/SaveFile", formData)
       .then((response) => {
         alert(response);
       })
@@ -156,7 +158,7 @@ const FoamCleansers = ({ onChangeContent }) => {
         Panel Pielęgnacji
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Produktów Myjących</b>
+        <b>Panel Produktów Serum</b>
       </Typography>
       <Card>
         <CardHeader
@@ -222,7 +224,6 @@ const FoamCleansers = ({ onChangeContent }) => {
               >
                 <MenuItem value="Rano">Rano</MenuItem>
                 <MenuItem value="Wieczór">Wieczór</MenuItem>
-                <MenuItem value="Rano i Wieczór">Rano i Wieczór</MenuItem>
               </Select>
             </Stack>
             <Stack
@@ -237,6 +238,19 @@ const FoamCleansers = ({ onChangeContent }) => {
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value)}
               />
+              <Typography>Aplikacja</Typography>
+              <TextField
+                sx={{ width: "25%" }}
+                type="text"
+                label="Application"
+                value={application}
+                onChange={(e) => setApplication(e.target.value)}
+              />
+            </Stack>
+            <Stack
+              direction="row"
+              sx={{ justifyContent: "space-between", marginTop: 2 }}
+            >
               <Typography>Minimalny Wiek</Typography>
               <TextField
                 sx={{ width: "25%" }}
@@ -245,11 +259,6 @@ const FoamCleansers = ({ onChangeContent }) => {
                 value={minAge}
                 onChange={(e) => setMinAge(e.target.value)}
               />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ justifyContent: "center", marginTop: 2 }}
-            >
               <Typography>Czy Bezpieczny Przy Ciąży</Typography>
               <Select
                 label="Is For Pregnant"
@@ -273,7 +282,7 @@ const FoamCleansers = ({ onChangeContent }) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                onClick={() => handleAddFoamCleanser()}
+                onClick={() => handleAddProduct()}
               >
                 Dodaj Produkt
               </Button>
@@ -282,10 +291,10 @@ const FoamCleansers = ({ onChangeContent }) => {
         </CardContent>
       </Card>
       <Box>
-        <FoamCleansersTable />
+        <SerumsTable />
       </Box>
     </Box>
   );
 };
 
-export default FoamCleansers;
+export default Serums;

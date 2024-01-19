@@ -14,13 +14,17 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import StepsSkincareTable from "./StepsSkincareTable";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const StepsSkincare = () => {
+const StepsSkincare = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
   setCookie("currentPageCookie", "skincare-steps", { path: "/" });
+  const navigate = useNavigate();
   const [skinType, setSkinType] = useState("");
   const [dayTime, setDayTime] = useState("");
   const [step1, setStep1] = useState("");
@@ -101,6 +105,18 @@ const StepsSkincare = () => {
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
+      <Button
+        component={Link}
+        to="/admin-skincare"
+        onClick={() => {
+          onChangeContent("admin-skincare");
+          navigate("/admin-skincare");
+        }}
+        size="small"
+      >
+        <ArrowBackIcon />
+        Panel Pielęgnacji
+      </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
         <b>Panel Kroków Pielęgnacyjnych</b>
       </Typography>
