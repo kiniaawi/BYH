@@ -1,12 +1,17 @@
 ﻿using byh_api.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
-using System.Data;
 using System;
-using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
+using System.Reflection.PortableExecutable;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace byh_api.Controllers
 {
@@ -71,8 +76,9 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.Serums VALUES(@ProductName, @ProductType, @SkinIssue, @Application, @DayTime,
-                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
+                string query = @"INSERT INTO dbo.Serums VALUES(@ProductName, @ProductTypeId, 
+                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
+                                @Frequency, @ApplicationWay, @MinAge, @ImageURL, @ForPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -83,14 +89,14 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@ProductName", serums.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", serums.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", serums.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@Application", serums.Application);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", serums.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", serums.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", serums.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", serums.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", serums.minAge);
+                        myCommand.Parameters.AddWithValue("@ApplicationWay", serums.ApplicationWay);
+                        myCommand.Parameters.AddWithValue("@MinAge", serums.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", serums.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", serums.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", serums.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -122,9 +128,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Serums SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            Application = @Application, DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, 
-                            ImageURL = @ImageURL, forPregnant = @forPregnant
+                string query = @"UPDATE dbo.Serums SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
+                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            SkinType = @SkinType, DayTime = @DayTime, Frequency = @Frequency, ApplicationWay = @ApplicationWay,
+                            MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -137,14 +144,14 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", serums.Id);
                         myCommand.Parameters.AddWithValue("@ProductName", serums.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", serums.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", serums.SkinIssue);
-                        myCommand.Parameters.AddWithValue("@Application", serums.Application);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", serums.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", serums.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", serums.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", serums.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", serums.minAge);
+                        myCommand.Parameters.AddWithValue("@ApplicationWay", serums.ApplicationWay);
+                        myCommand.Parameters.AddWithValue("@MinAge", serums.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", serums.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", serums.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", serums.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -176,8 +183,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Serums SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Serums SET IsDeleted = 1
+                            WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -219,8 +226,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Serums SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Serums SET IsDeleted = 0
+                            WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");

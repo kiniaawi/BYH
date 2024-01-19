@@ -71,7 +71,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.FoamCleansers VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
+                string query = @"INSERT INTO dbo.FoamCleansers VALUES(@ProductName, @ProductTypeId, 
+                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
                                 @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
                 DataTable table = new DataTable();
@@ -83,8 +84,8 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@ProductName", foamCleansers.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", foamCleansers.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", foamCleansers.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", foamCleansers.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", foamCleansers.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
                         myCommand.Parameters.AddWithValue("@MinAge", foamCleansers.MinAge);
@@ -121,8 +122,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.FoamCleansers SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
+                string query = @"UPDATE dbo.FoamCleansers SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
+                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            SkinType = @SkinType, DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL,
+                            ForPregnant = @ForPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -135,8 +138,8 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", foamCleansers.Id);
                         myCommand.Parameters.AddWithValue("@ProductName", foamCleansers.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", foamCleansers.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", foamCleansers.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", foamCleansers.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", foamCleansers.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", foamCleansers.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", foamCleansers.Frequency);
                         myCommand.Parameters.AddWithValue("@MinAge", foamCleansers.MinAge);

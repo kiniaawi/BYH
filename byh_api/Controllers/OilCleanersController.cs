@@ -70,15 +70,15 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [Route("InsertData")]
         [HttpPost]
-        public JsonResult InsertData(OilCleaners oilCleaner)
+        public JsonResult Post(OilCleaners oilCleaner)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"INSERT INTO dbo.OilCleaners VALUES(@ProductName, @ProductType, @SkinType, @SkinIssue, @DayTime,
+                string query = @"INSERT INTO dbo.OilCleaners VALUES(@ProductName, @ProductTypeId, 
+                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
                                 @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
                 DataTable table = new DataTable();
@@ -90,9 +90,8 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@ProductName", oilCleaner.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", oilCleaner.ProductType);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", oilCleaner.ProductTypeId);
                         myCommand.Parameters.AddWithValue("@SkinType", oilCleaner.SkinType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaner.SkinIssue);
                         myCommand.Parameters.AddWithValue("@DayTime", oilCleaner.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", oilCleaner.Frequency);
                         myCommand.Parameters.AddWithValue("@MinAge", oilCleaner.MinAge);
@@ -122,64 +121,6 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        /*        //[Route("InsertingData")]
-                [HttpPost("InsertingData")]
-                public JsonResult InsertingData(OilCleaners oilCleaners)
-                {
-                    Response response = new Response();
-
-                    try
-                    {
-                        string query = @"INSERT INTO dbo.OilCleaners VALUES(@ProductName, @ProductType, @SkinType, @SkinIssue, @DayTime,
-                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
-
-                        string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-
-                        using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                        {
-                            myConn.Open();
-                            using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                            {
-                                myCommand.Parameters.AddWithValue("@ProductName", oilCleaners.ProductName);
-                                myCommand.Parameters.AddWithValue("@ProductType", oilCleaners.ProductType);
-                                myCommand.Parameters.AddWithValue("@SkinType", oilCleaners.SkinType);
-                                myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaners.SkinIssue);
-                                myCommand.Parameters.AddWithValue("@DayTime", oilCleaners.DayTime);
-                                myCommand.Parameters.AddWithValue("@Frequency", oilCleaners.Frequency);
-                                myCommand.Parameters.AddWithValue("@MinAge", oilCleaners.MinAge);
-                                myCommand.Parameters.AddWithValue("@ImageURL", oilCleaners.ImageURL);
-                                myCommand.Parameters.AddWithValue("@ForPregnant", oilCleaners.ForPregnant);
-
-                                int rowsAffected = myCommand.ExecuteNonQuery();
-                                if (rowsAffected > 0)
-                                {
-                                    response.StatusCode = 200;
-                                    response.StatusMessage = "Data Inserted Successfully";
-                                }
-                                else
-                                {
-                                    response.StatusCode = 100;
-                                    response.StatusMessage = "Inserting Data Failed";
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error: {ex.Message}");
-                        response.StatusCode = 100;
-                        response.StatusMessage = "Inserting Data Failed";
-                    }
-
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(response);
-                }*/
-
-        /*private static void ReadSingleRow(IDataRecord dataRecord)
-        {
-            Console.WriteLine(String.Format("{0}, {1}", dataRecord[0], dataRecord[1]));
-        }*/
-
         [HttpPut("UpdateOilCl/{Id}")]
         public JsonResult UpdateOilCl(OilCleaners oilCleaners, int Id)
         {
@@ -187,8 +128,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.OilCleaners SET ProductName = @ProductName, ProductType = @ProductType, SkinType = @SkinType,
-                            SkinIssue = @SkinIssue, DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
+                string query = @"UPDATE dbo.OilCleaners SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
+                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            SkinType = @SkinType, DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL,
+                            ForPregnant = @ForPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -201,14 +144,13 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", oilCleaners.Id);
                         myCommand.Parameters.AddWithValue("@ProductName", oilCleaners.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", oilCleaners.ProductType);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", oilCleaners.ProductTypeId);
                         myCommand.Parameters.AddWithValue("@SkinType", oilCleaners.SkinType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", oilCleaners.SkinIssue);
                         myCommand.Parameters.AddWithValue("@DayTime", oilCleaners.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", oilCleaners.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", oilCleaners.MinAge);
+                        myCommand.Parameters.AddWithValue("@MinAge", oilCleaners.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", oilCleaners.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", oilCleaners.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", oilCleaners.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -283,8 +225,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.OilCleaners SET IsDeleted = 1
-                            WHERE Id = @Id AND IsDeleted = 0";
+                string query = @"UPDATE dbo.OilCleaners SET IsDeleted = 0
+                            WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");

@@ -1,12 +1,17 @@
 ﻿using byh_api.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
-using System.Data;
 using System;
-using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
+using System.Reflection.PortableExecutable;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace byh_api.Controllers
 {
@@ -71,8 +76,9 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.Masks VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
+                string query = @"INSERT INTO dbo.Masks VALUES(@ProductName, @ProductTypeId, 
+                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
+                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -83,13 +89,13 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@ProductName", masks.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", masks.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", masks.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", masks.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", masks.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", masks.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", masks.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", masks.minAge);
+                        myCommand.Parameters.AddWithValue("@MinAge", masks.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", masks.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", masks.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", masks.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,8 +127,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Masks SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
+                string query = @"UPDATE dbo.Masks SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
+                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            SkinType = @SkinType, DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL,
+                            ForPregnant = @ForPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -135,13 +143,13 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", masks.Id);
                         myCommand.Parameters.AddWithValue("@ProductName", masks.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", masks.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", masks.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", masks.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", masks.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", masks.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", masks.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", masks.minAge);
+                        myCommand.Parameters.AddWithValue("@MinAge", masks.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", masks.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", masks.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", masks.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -173,8 +181,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Masks SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Masks SET IsDeleted = 1
+                            WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -216,8 +224,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Masks SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Masks SET IsDeleted = 0
+                            WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");

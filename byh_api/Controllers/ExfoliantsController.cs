@@ -71,8 +71,9 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.Exfoliants VALUES(@ProductName, @ProductType, @SkinIssue, @DayTime,
-                                @Frequency, @minAge, @ImageURL, @forPregnant, 0)";
+                string query = @"INSERT INTO dbo.Exfoliants VALUES(@ProductName, @ProductTypeId, 
+                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
+                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -83,13 +84,13 @@ namespace byh_api.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
                         myCommand.Parameters.AddWithValue("@ProductName", exfoliants.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", exfoliants.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", exfoliants.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", exfoliants.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", exfoliants.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", exfoliants.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", exfoliants.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", exfoliants.minAge);
+                        myCommand.Parameters.AddWithValue("@MinAge", exfoliants.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", exfoliants.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", exfoliants.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", exfoliants.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -121,8 +122,10 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET ProductName = @ProductName, ProductType = @ProductType, SkinIssue = @SkinIssue,
-                            DayTime = @DayTime, Frequency = @Frequency, minAge = @minAge, ImageURL = @ImageURL, forPregnant = @forPregnant
+                string query = @"UPDATE dbo.Exfoliants SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
+                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            SkinType = @SkinType, DayTime = @DayTime, Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL,
+                            ForPregnant = @ForPregnant
                             WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -135,13 +138,13 @@ namespace byh_api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@Id", exfoliants.Id);
                         myCommand.Parameters.AddWithValue("@ProductName", exfoliants.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductType", exfoliants.ProductType);
-                        myCommand.Parameters.AddWithValue("@SkinIssue", exfoliants.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@ProductTypeId", exfoliants.ProductTypeId);
+                        myCommand.Parameters.AddWithValue("@SkinType", exfoliants.SkinType);
                         myCommand.Parameters.AddWithValue("@DayTime", exfoliants.DayTime);
                         myCommand.Parameters.AddWithValue("@Frequency", exfoliants.Frequency);
-                        myCommand.Parameters.AddWithValue("@minAge", exfoliants.minAge);
+                        myCommand.Parameters.AddWithValue("@MinAge", exfoliants.MinAge);
                         myCommand.Parameters.AddWithValue("@ImageURL", exfoliants.ImageURL);
-                        myCommand.Parameters.AddWithValue("@forPregnant", exfoliants.forPregnant);
+                        myCommand.Parameters.AddWithValue("@ForPregnant", exfoliants.ForPregnant);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -173,8 +176,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Exfoliants SET IsDeleted = 1
+                            WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -216,8 +219,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.Exfoliants SET isDeleted = 1
-                            WHERE Id = @Id AND isDeleted = 0";
+                string query = @"UPDATE dbo.Exfoliants SET IsDeleted = 0
+                            WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
