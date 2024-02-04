@@ -68,9 +68,6 @@ const Skincare = ({ onChangeContent }) => {
         </Button>
       </Box>
       <Box>
-        <Typography variant="h6">
-          <b>Twarz</b>
-        </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
@@ -92,6 +89,11 @@ const Skincare = ({ onChangeContent }) => {
           >
             Rozwiązania Problemów Skórnych
           </Button>
+        </Stack>
+        <Typography variant="h6">
+          <b>Twarz</b>
+        </Typography>
+        <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
             to="/skincare-steps"
@@ -213,18 +215,68 @@ const Skincare = ({ onChangeContent }) => {
           <b>Ciało</b>
         </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
+          <Button
+            component={Link}
+            to="/steps-bodycare"
+            onClick={() => {
+              onChangeContent("steps-bodycare");
+              navigate("/steps-bodycare");
+            }}
+          >
+            Kroki pielęgnacyjne
+          </Button>
         </Stack>
         <Stack direction="row" justifyContent={"space-evenly"}>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
-          <Button>Add Skin Issue</Button>
+          <Button
+            component={Link}
+            to="/shower-gels"
+            onClick={() => {
+              onChangeContent("shower-gels");
+              navigate("/shower-gels");
+            }}
+          >
+            Mycie
+          </Button>
+          <Button
+            component={Link}
+            to="/body-exfoliants"
+            onClick={() => {
+              onChangeContent("body-exfoliants");
+              navigate("/body-exfoliants");
+            }}
+          >
+            Złuszczanie
+          </Button>
+          <Button
+            component={Link}
+            to="/body-oils"
+            onClick={() => {
+              onChangeContent("body-oils");
+              navigate("/body-oils");
+            }}
+          >
+            Olejki
+          </Button>
+          <Button
+            component={Link}
+            to="/body-moisturizers"
+            onClick={() => {
+              onChangeContent("body-moisturizers");
+              navigate("/body-moisturizers");
+            }}
+          >
+            Nawilżanie
+          </Button>
+          <Button
+            component={Link}
+            to="/body-actives"
+            onClick={() => {
+              onChangeContent("body-actives");
+              navigate("/body-actives");
+            }}
+          >
+            Składniki Aktywne
+          </Button>
         </Stack>
       </Box>
       <SkinIssuesTable />

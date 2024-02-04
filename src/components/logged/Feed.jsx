@@ -28,6 +28,12 @@ import Masks from "../../pages/logged/admin/skin/Masks";
 import EyeCreams from "../../pages/logged/admin/skin/EyeCreams";
 import Moisturizers from "../../pages/logged/admin/skin/Moisturizers";
 import SPF from "../../pages/logged/admin/skin/SPF";
+import StepsBodycare from "../../pages/logged/admin/skin/StepsBodycare";
+import ShowerGels from "../../pages/logged/admin/skin/ShowerGels";
+import BodyOils from "../../pages/logged/admin/skin/BodyOils";
+import BodyExfoliants from "../../pages/logged/admin/skin/BodyExfoliants";
+import BodyMoisturizers from "../../pages/logged/admin/skin/BodyMoisturizers";
+import BodyActives from "../../pages/logged/admin/skin/BodyActives";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -102,6 +108,24 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "spf" && (
               <SPF onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "steps-bodycare" && (
+              <StepsBodycare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "shower-gels" && (
+              <ShowerGels onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "body-oils" && (
+              <BodyOils onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "body-exfoliants" && (
+              <BodyExfoliants onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "body-moisturizers" && (
+              <BodyMoisturizers onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "body-actives" && (
+              <BodyActives onChangeContent={onChangeContent} />
             )}
             {currentContent === "admin-haircare" && (
               <Haircare onChangeContent={onChangeContent} />

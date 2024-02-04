@@ -230,6 +230,66 @@ function App() {
               }
             />
             <Route
+              path="/steps-bodycare"
+              element={
+                <Feed
+                  currentContent="steps-bodycare"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/shower-gels"
+              element={
+                <Feed
+                  currentContent="shower-gels"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/body-oils"
+              element={
+                <Feed
+                  currentContent="body-oils"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/body-exfoliants"
+              element={
+                <Feed
+                  currentContent="body-exfoliants"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/body-moisturizers"
+              element={
+                <Feed
+                  currentContent="body-moisturizers"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/body-actives"
+              element={
+                <Feed
+                  currentContent="body-actives"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/admin-haircare"
               element={
                 <Feed
