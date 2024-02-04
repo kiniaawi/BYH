@@ -19,6 +19,11 @@
     <Folder Include="Photos\Masks\" />
     <Folder Include="Photos\Moisturizers\" />
     <Folder Include="Photos\DefSupplIssues\" />
+    <Folder Include="Photos\BodyOils\" />
+    <Folder Include="Photos\BodyExfoliants\" />
+    <Folder Include="Photos\BodyMoisturizers\" />
+    <Folder Include="Photos\BodyActives\" />
+    <Folder Include="Photos\ShowerGels\" />
     <Folder Include="Photos\Toners\" />
     <Folder Include="Photos\SPF\" />
     <Folder Include="Photos\Serums\" />
