@@ -11,24 +11,5 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Photos\Essences\" />
-    <Folder Include="Photos\Exfoliants\" />
-    <Folder Include="Photos\EyeCreams\" />
-    <Folder Include="Photos\FoamCleansers\" />
-    <Folder Include="Photos\Masks\" />
-    <Folder Include="Photos\Moisturizers\" />
-    <Folder Include="Photos\DefSupplIssues\" />
-    <Folder Include="Photos\BodyOils\" />
-    <Folder Include="Photos\BodyExfoliants\" />
-    <Folder Include="Photos\BodyMoisturizers\" />
-    <Folder Include="Photos\BodyActives\" />
-    <Folder Include="Photos\ShowerGels\" />
-    <Folder Include="Photos\Toners\" />
-    <Folder Include="Photos\SPF\" />
-    <Folder Include="Photos\Serums\" />
-    <Folder Include="Photos\OilCleaners\" />
-  </ItemGroup>
-
 
 </Project>
