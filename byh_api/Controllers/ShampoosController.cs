@@ -211,7 +211,7 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("RevShampoo{Id}")]
+        [HttpPut("RevShampoo/{Id}")]
         public JsonResult RevShampoo(int Id)
         {
             Response response = new Response();

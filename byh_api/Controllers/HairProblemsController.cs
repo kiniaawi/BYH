@@ -71,7 +71,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.HairProblems VALUES(@HairProblem @ImageURL, 0)";
+                string query = @"INSERT INTO dbo.HairProblems VALUES(@HairProblem, @ImageURL, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
