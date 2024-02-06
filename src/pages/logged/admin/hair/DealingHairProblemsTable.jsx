@@ -3,9 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -20,16 +18,16 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
+const DealingHairProblemsTable = ({}) => {
   const [solutionsData, setSolutionsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [skinIssuesData, setSkinIssuesData] = useState([]);
+  const [selectedProblem, setSelectedProblem] = useState(null);
+  const [hairProblemsData, setHairProblemsData] = useState([]);
   const [editSolution, setEditSolution] = useState({
     Id: 0,
-    SkinIssue: "",
+    HairProblem: "",
     Solution: "",
     Description: "",
   });
@@ -40,20 +38,16 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
 
   useEffect(() => {
     fetchSolutions();
-    fetchSkinIssues();
+    fetchHairProblems();
   }, []);
 
-  const fetchSkinIssues = () => {
+  const fetchHairProblems = () => {
     axios
-      .get("/api/SkinIssues")
+      .get("/api/HairProblems")
       .then((response) => {
         console.log(response.data);
-        console.log(response.data.Data[0].SkinIssue);
-        const skinIssuesArray = response.data.Data.filter(
-          (item) => item.Placement === "Twarz"
-        ).map((item) => item.SkinIssue);
-        console.log(skinIssuesArray);
-        setSkinIssuesData(skinIssuesArray);
+        console.log(response.data.Data[0].HairProblem);
+        setHairProblemsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +56,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
 
   const fetchSolutions = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingHairProblems")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
@@ -74,13 +68,13 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   };
 
   const handleEditModalOpen = (sol) => {
-    setSelectedIssue(sol);
+    setSelectedProblem(sol);
     console.log(sol);
     setEditModalOpen(true);
 
     setEditSolution({
       Id: sol.Id,
-      SkinIssue: sol.SkinIssue,
+      HairProblem: sol.HairProblem,
       Solution: sol.Solution,
       Description: sol.Description,
     });
@@ -89,7 +83,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   };
 
   const handleEditModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedProblem(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
@@ -100,13 +94,13 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
 
     const data = {
       Id: editSolution.Id,
-      SkinIssue: editSolution.SkinIssue,
+      HairProblem: editSolution.HairProblem,
       Solution: editSolution.Solution,
       Description: editSolution.Description,
     };
 
     axios
-      .put(`/api/DealingSkinIssues/UpdateDealIssue/${editSolution.Id}`, data)
+      .put(`/api/DealingHairProblems/Update/${editSolution.Id}`, data)
       .then((response) => {
         fetchSolutions();
         console.log("Data has been edited", response.data);
@@ -118,54 +112,54 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   };
 
   const handleRevertModalOpen = (sol) => {
-    setSelectedIssue(sol);
+    setSelectedProblem(sol);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedProblem(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedIssue);
+    console.log(selectedProblem);
     axios
-      .put(`/api/DealingSkinIssues/RevDealIssue/${selectedIssue.Id}`)
+      .put(`/api/DealingHairProblems/Revert/${selectedProblem.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
+        console.log(selectedProblem);
         fetchSolutions();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedProblem(null);
     setRevertModalOpen(false);
   };
 
   const handleDeleteModalOpen = (sol) => {
-    setSelectedIssue(sol);
+    setSelectedProblem(sol);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedProblem(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedIssue);
+    console.log(selectedProblem);
     axios
-      .put(`/api/DealingSkinIssues/DelDealIssue/${selectedIssue.Id}`)
+      .put(`/api/DealingHairProblems/Delete/${selectedProblem.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
+        console.log(selectedProblem);
         fetchSolutions();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedProblem(null);
     setDeleteModalOpen(false);
   };
 
@@ -176,8 +170,8 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
       width: 50,
     },
     {
-      field: "SkinIssue",
-      headerName: "Problem Skórny",
+      field: "HairProblem",
+      headerName: "Problem Włosów",
       width: 190,
     },
     {
@@ -272,7 +266,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Rozwiązanie Problemu Skórnego</b>
+                <b>Edytuj Rozwiązanie Problemu Włosów</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
@@ -287,19 +281,19 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
                         </Typography>
                         <Select
                           label="Problem Skórny"
-                          value={editSolution.SkinIssue}
+                          value={editSolution.HairProblem}
                           onChange={(e) =>
                             setEditSolution({
                               ...editSolution,
-                              SkinIssue: e.target.value,
+                              HairProblem: e.target.value,
                             })
                           }
                           required
                           sx={{ width: "80%" }}
                         >
-                          {skinIssuesData.map((skinTypeSel) => (
-                            <MenuItem key={skinTypeSel.Id} value={skinTypeSel}>
-                              {skinTypeSel}
+                          {hairProblemsData.map((item) => (
+                            <MenuItem key={item.Id} value={item.HairProblem}>
+                              {item.HairProblem}
                             </MenuItem>
                           ))}
                         </Select>
@@ -432,14 +426,14 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedProblem && selectedProblem.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc Problem Włosów:{" "}
+                    {selectedProblem.HairProblem}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc Problem Włosów?
                   </Typography>
                 )}
                 <Box
@@ -519,14 +513,14 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedProblem && selectedProblem.length !== 0 ? (
+                  <Typography x={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić Problem Włosów:{" "}
+                    {selectedProblem.HairProblem}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić Problem Włosów?
                   </Typography>
                 )}
                 <Box
@@ -591,7 +585,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
                   rows={solutionsData.map((sol, index) => ({
                     id: index,
                     Id: sol.Id,
-                    SkinIssue: sol.SkinIssue,
+                    HairProblem: sol.HairProblem,
                     Solution: sol.Solution,
                     Description: sol.Description,
                     IsDeleted: sol.IsDeleted,
@@ -610,7 +604,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie znaleziono żadnych Rozwiązań Problemów Skórnych w Bazie Danych
+              Nie znaleziono żadnych Rozwiązań Problemów Włosów w Bazie Danych
             </Typography>
           </Box>
         )}
@@ -619,4 +613,4 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   );
 };
 
-export default DealingSkinIssuesTable;
+export default DealingHairProblemsTable;

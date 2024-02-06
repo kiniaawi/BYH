@@ -16,25 +16,25 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import BodyOilsTable from "./BodyOilsTable";
+import HairOilsProtectionTable from "./HairOilsProtectionTable";
 
-const BodyOils = ({ onChangeContent }) => {
+const HairOilsProtection = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "body-oils", { path: "/" });
+  setCookie("currentPageCookie", "hair-oils-protection", { path: "/" });
   const navigate = useNavigate();
   const [productName, setProductName] = useState("");
-  const [productType, setProductType] = useState("");
-  const [skinType, setSkinType] = useState("");
+  const [productTypeId, setProductTypeId] = useState("");
+  const [hairTypeId, setHairTypeId] = useState("");
   const [frequency, setFrequency] = useState("");
   const [minAge, setMinAge] = useState("");
   const [pregnant, setPregnant] = useState("");
   const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
   const [allProductTypes, setAllProductTypes] = useState([]);
-  const [allSkinTypes, setAllSkinTypes] = useState([]);
+  const [allHairTypes, setAllHairTypes] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,12 +42,12 @@ const BodyOils = ({ onChangeContent }) => {
 
   useEffect(() => {
     fetchProductTypes();
-    fetchSkinTypes();
+    fetchHairTypes();
   }, []);
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingHairProblems")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
@@ -58,13 +58,13 @@ const BodyOils = ({ onChangeContent }) => {
       });
   };
 
-  const fetchSkinTypes = () => {
+  const fetchHairTypes = () => {
     axios
-      .get("/api/BodycareSteps")
+      .get("/api/HaircareSteps")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setAllSkinTypes(response.data.Data);
+        setAllHairTypes(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -74,8 +74,8 @@ const BodyOils = ({ onChangeContent }) => {
   const handleAddProduct = () => {
     const data = {
       ProductName: productName,
-      ProductTypeId: productType,
-      SkinTypeId: skinType,
+      ProductTypeId: productTypeId,
+      HairTypeId: hairTypeId,
       Frequency: frequency,
       MinAge: minAge,
       ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
@@ -83,7 +83,7 @@ const BodyOils = ({ onChangeContent }) => {
     };
 
     axios
-      .post("api/BodyOils", data)
+      .post("/api/HairOilProtection", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -108,7 +108,7 @@ const BodyOils = ({ onChangeContent }) => {
     formData.append("file", image);
 
     axios
-      .post("/api/BodyOils/SaveFile", formData)
+      .post("/api/HairOilProtection/SaveFile", formData)
       .then((response) => {
         alert(response);
       })
@@ -130,8 +130,8 @@ const BodyOils = ({ onChangeContent }) => {
 
   const clearTextArea = () => {
     setProductName("");
-    setProductType("");
-    setSkinType("");
+    setProductTypeId("");
+    setHairTypeId("");
     setFrequency("");
     setMinAge("");
     setPregnant("");
@@ -142,18 +142,18 @@ const BodyOils = ({ onChangeContent }) => {
     <Box p={2} sx={{ height: "300vh" }}>
       <Button
         component={Link}
-        to="/admin-skincare"
+        to="/admin-haircare"
         onClick={() => {
-          onChangeContent("admin-skincare");
-          navigate("/admin-skincare");
+          onChangeContent("admin-haircare");
+          navigate("/admin-haircare");
         }}
         size="small"
       >
         <ArrowBackIcon />
-        Panel Pielęgnacji
+        Panel Pielęgnacji Włosów
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Produktów Olejowych</b>
+        <b>Panel Olejków Ochronnych do Włosów</b>
       </Typography>
       <Card>
         <CardHeader
@@ -179,8 +179,8 @@ const BodyOils = ({ onChangeContent }) => {
               />
               <Typography>Typ Produktu</Typography>
               <Select
-                value={productType}
-                onChange={(e) => setProductType(e.target.value)}
+                value={productTypeId}
+                onChange={(e) => setProductTypeId(e.target.value)}
                 required
                 sx={{ width: "25%" }}
               >
@@ -195,16 +195,16 @@ const BodyOils = ({ onChangeContent }) => {
               direction="row"
               sx={{ justifyContent: "space-between", marginTop: 2 }}
             >
-              <Typography>Typ Skóry</Typography>
+              <Typography>Typ Włosów</Typography>
               <Select
-                value={skinType}
-                onChange={(e) => setSkinType(e.target.value)}
+                value={hairTypeId}
+                onChange={(e) => setHairTypeId(e.target.value)}
                 required
                 sx={{ width: "25%" }}
               >
-                {allSkinTypes.map((item) => (
+                {allHairTypes.map((item) => (
                   <MenuItem key={item.Id} value={item.Id}>
-                    {item.SkinType}
+                    {item.HairType}
                   </MenuItem>
                 ))}
               </Select>
@@ -261,11 +261,10 @@ const BodyOils = ({ onChangeContent }) => {
         </CardContent>
       </Card>
       <Box>
-        {" "}
-        <BodyOilsTable />
+        <HairOilsProtectionTable />
       </Box>
     </Box>
   );
 };
 
-export default BodyOils;
+export default HairOilsProtection;

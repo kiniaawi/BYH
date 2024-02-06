@@ -3,9 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -20,174 +18,238 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
-  const [solutionsData, setSolutionsData] = useState([]);
+const StepsHaircareTable = () => {
+  const [stepsData, setStepsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [skinIssuesData, setSkinIssuesData] = useState([]);
-  const [editSolution, setEditSolution] = useState({
+  const [selectedStep, setSelectedStep] = useState(null);
+  const [editStep, setEditStep] = useState({
     Id: 0,
-    SkinIssue: "",
-    Solution: "",
-    Description: "",
+    HairTypeId: 0,
+    Step1: "",
+    Step2: "",
+    Step3: "",
+    Step4: "",
+    Step5: "",
+    Step6: "",
+    Step7: "",
+    Step8: "",
+    Step9: "",
+    Step10: "",
   });
+  const [hairTypesData, setHairTypesData] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   useEffect(() => {
-    fetchSolutions();
-    fetchSkinIssues();
+    fetchSteps();
+    fetchHairTypes();
   }, []);
 
-  const fetchSkinIssues = () => {
+  const fetchSteps = () => {
     axios
-      .get("/api/SkinIssues")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0].SkinIssue);
-        const skinIssuesArray = response.data.Data.filter(
-          (item) => item.Placement === "Twarz"
-        ).map((item) => item.SkinIssue);
-        console.log(skinIssuesArray);
-        setSkinIssuesData(skinIssuesArray);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchSolutions = () => {
-    axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/HaircareSteps")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
-        setSolutionsData(response.data.Data);
+        setStepsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleEditModalOpen = (sol) => {
-    setSelectedIssue(sol);
-    console.log(sol);
+  const fetchHairTypes = () => {
+    axios
+      .get("api/HairTypesTable")
+      .then((response) => {
+        setHairTypesData(response.data.Data);
+        console.log("Skin Types: ", response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleEditModalOpen = (step) => {
+    setSelectedStep(step);
+    console.log(step);
     setEditModalOpen(true);
 
-    setEditSolution({
-      Id: sol.Id,
-      SkinIssue: sol.SkinIssue,
-      Solution: sol.Solution,
-      Description: sol.Description,
+    setEditStep({
+      Id: step.Id,
+      HairTypeId: step.HairTypeId,
+      Step1: step.Step1,
+      Step2: step.Step2,
+      Step3: step.Step3,
+      Step4: step.Step4,
+      Step5: step.Step5,
+      Step6: step.Step6,
+      Step7: step.Step7,
+      Step8: step.Step8,
+      Step9: step.Step9,
+      Step10: step.Step10,
     });
 
-    console.log(editSolution.Id);
+    console.log(editStep.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedStep(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log("id", editSolution.Id);
-    console.log("editSolution: ", editSolution);
+    console.log("id", editStep.Id);
+    console.log("editStep: ", editStep);
 
     const data = {
-      Id: editSolution.Id,
-      SkinIssue: editSolution.SkinIssue,
-      Solution: editSolution.Solution,
-      Description: editSolution.Description,
+      Id: editStep.Id,
+      HairTypeId: editStep.HairTypeId,
+      Step1: editStep.Step1,
+      Step2: editStep.Step2,
+      Step3: editStep.Step3,
+      Step4: editStep.Step4,
+      Step5: editStep.Step5,
+      Step6: editStep.Step6,
+      Step7: editStep.Step7,
+      Step8: editStep.Step8,
+      Step9: editStep.Step9,
+      Step10: editStep.Step10,
     };
 
     axios
-      .put(`/api/DealingSkinIssues/UpdateDealIssue/${editSolution.Id}`, data)
+      .put(`/api/HaircareSteps/UpdateStep/${editStep.Id}`, data)
       .then((response) => {
-        fetchSolutions();
-        console.log("Data has been edited", response.data);
+        fetchSteps();
+        console.log("Step has been edited", response.data);
         handleEditModalClose();
       })
       .catch((error) => {
-        console.error("Error during editing issue", error);
+        console.error("Error during editing step", error);
       });
   };
 
-  const handleRevertModalOpen = (sol) => {
-    setSelectedIssue(sol);
+  const handleRevertModalOpen = (step) => {
+    setSelectedStep(step);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedStep(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedIssue);
+    console.log(selectedStep);
     axios
-      .put(`/api/DealingSkinIssues/RevDealIssue/${selectedIssue.Id}`)
+      .put(`/api/HaircareSteps/RevStep/${selectedStep.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchSolutions();
+        console.log(selectedStep.Id);
+        fetchSteps();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedStep(null);
     setRevertModalOpen(false);
   };
 
-  const handleDeleteModalOpen = (sol) => {
-    setSelectedIssue(sol);
+  const handleDeleteModalOpen = (step) => {
+    setSelectedStep(step);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedStep(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedIssue);
+    console.log(selectedStep);
     axios
-      .put(`/api/DealingSkinIssues/DelDealIssue/${selectedIssue.Id}`)
+      .put(`/api/HaircareSteps/DelStep/${selectedStep.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchSolutions();
+        console.log(selectedStep);
+        fetchSteps();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedStep(null);
     setDeleteModalOpen(false);
   };
 
-  const SolutionsColumns = [
+  const StepsColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "SkinIssue",
-      headerName: "Problem Skórny",
-      width: 190,
+      field: "HairTypeId",
+      headerName: "ID Typu Włosów",
+      width: 50,
     },
     {
-      field: "Solution",
-      headerName: "Rozwiązanie",
+      field: "HairType",
+      headerName: "Typ Włosów",
       width: 150,
     },
     {
-      field: "Description",
-      headerName: "Wyjaśnienie",
+      field: "Step1",
+      headerName: "Krok 1",
+      width: 100,
+    },
+    {
+      field: "Step2",
+      headerName: "Krok 2",
+      width: 100,
+    },
+    {
+      field: "Step3",
+      headerName: "Krok 3",
+      width: 100,
+    },
+    {
+      field: "Step4",
+      headerName: "Krok 4",
+      width: 100,
+    },
+    {
+      field: "Step5",
+      headerName: "Krok 5",
+      width: 100,
+    },
+    {
+      field: "Step6",
+      headerName: "Krok 6",
+      width: 100,
+    },
+    {
+      field: "Step7",
+      headerName: "Krok 7",
+      width: 100,
+    },
+    {
+      field: "Step8",
+      headerName: "Krok 8",
+      width: 100,
+    },
+    {
+      field: "Step9",
+      headerName: "Krok 9",
+      width: 100,
+    },
+    {
+      field: "Step10",
+      headerName: "Krok 10",
       width: 100,
     },
     {
@@ -199,7 +261,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 100,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -214,7 +276,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
     },
     {
       field: "action-delete",
-      headerName: "Usuń / Przywróc",
+      headerName: "Usuń / Przywróć",
       sortable: false,
       width: 150,
       renderCell: (params) => {
@@ -244,7 +306,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
     <Box flex={12} p={2}>
       {/* Edit Issue Modal */}
       <Modal
-        sx={{
+        style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -270,88 +332,177 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           padding={3}
         >
           <Grid container spacing={2}>
-            <Card>
+            <Card sx={{ width: "80vw", maxWidth: "800px" }}>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Rozwiązanie Problemu Skórnego</b>
+                <b>Edytuj Rutynę Pielęgnacyjną Włosów</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Grid container spacing={1} margin="auto">
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Problem Skórny
-                        </Typography>
-                        <Select
-                          label="Problem Skórny"
-                          value={editSolution.SkinIssue}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              SkinIssue: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        >
-                          {skinIssuesData.map((skinTypeSel) => (
-                            <MenuItem key={skinTypeSel.Id} value={skinTypeSel}>
-                              {skinTypeSel}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Rozwiązanie
-                        </Typography>
-                        <TextField
-                          type="text"
-                          label="Rozwiązanie"
-                          value={editSolution.Solution}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              Solution: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        />
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Rozwiązanie
-                        </Typography>
-                        <TextField
-                          type="text"
-                          label="Rozwiązanie"
-                          value={editSolution.Description}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              Description: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        />
-                      </Stack>
-                    </Grid>
-                  </Grid>
+                  <Stack direction="row" sx={{ justifyContent: "center" }}>
+                    <Typography sx={{ marginRight: 2 }}>
+                      <b>Typ Włosów</b>
+                    </Typography>
+                    <Select
+                      label="Typ Włosów"
+                      value={editStep.HairTypeId}
+                      onChange={(e) =>
+                        setEditStep({ ...editStep, HairTypeId: e.target.value })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      {hairTypesData.map((item) => (
+                        <MenuItem key={item.Id} value={item.Id}>
+                          {item.HairType}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 4 }}
+                  >
+                    <Typography>Krok 1</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 1"
+                      value={editStep.Step1}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step1: e.target.value,
+                        })
+                      }
+                    />
+                    <Typography>Krok 2</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 2"
+                      value={editStep.Step2}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step2: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 2 }}
+                  >
+                    <Typography>Krok 3</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 3"
+                      value={editStep.Step3}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step3: e.target.value,
+                        })
+                      }
+                    />
+                    <Typography>Krok 4</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 4"
+                      value={editStep.Step4}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step4: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 2 }}
+                  >
+                    <Typography>Krok 5</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 5"
+                      value={editStep.Step5}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step5: e.target.value,
+                        })
+                      }
+                    />
+                    <Typography>Krok 6</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 6"
+                      value={editStep.Step6}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step6: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 2 }}
+                  >
+                    <Typography>Krok 7</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 7"
+                      value={editStep.Step7}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step7: e.target.value,
+                        })
+                      }
+                    />
+                    <Typography>Krok 8</Typography>
+                    <TextField
+                      type="text"
+                      label="Krok 8"
+                      value={editStep.Step8}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step8: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 2 }}
+                  >
+                    <Typography>Krok 9</Typography>
+                    <TextField
+                      type="text"
+                      label="Step 9"
+                      value={editStep.Step9}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step9: e.target.value,
+                        })
+                      }
+                    />
+                    <Typography>Krok 10</Typography>
+                    <TextField
+                      type="text"
+                      label="Step 10"
+                      value={editStep.Step10}
+                      onChange={(e) =>
+                        setEditStep({
+                          ...editStep,
+                          Step10: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -432,16 +583,17 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedStep && selectedStep.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz ununąc rutynę pielęgnacyjną dla typu
+                    skóry: {selectedStep.HairType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz unusąc tą rutynę pielęgnacyjną?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -489,7 +641,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      {/* Revert Issue Modal */}
+      {/* Delete Issue Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -519,16 +671,17 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedStep && selectedStep.length !== 0 ? (
+                  <Typography>
+                    Czy na pewno chcesz przywrócić rutynę pielęgnacyjną dla typu
+                    skóry: {selectedStep.HairType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić tą rutynę pielęgnacyjną?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -577,24 +730,33 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {solutionsData && solutionsData.length !== 0 ? (
-          <Card style={{ height: "80vh" }}>
+        {stepsData && stepsData.length !== 0 ? (
+          <Card>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Rozwiązanie Problemów Skórnych - Twarz</b>
+                  <b>Rutyny Pielęgnacyjne</b>
                 </Typography>
               </Box>
-              <div>
+              <div style={{ height: "80vh" }}>
                 <DataGrid
-                  columns={SolutionsColumns}
-                  rows={solutionsData.map((sol, index) => ({
+                  columns={StepsColumns}
+                  rows={stepsData.map((step, index) => ({
                     id: index,
-                    Id: sol.Id,
-                    SkinIssue: sol.SkinIssue,
-                    Solution: sol.Solution,
-                    Description: sol.Description,
-                    IsDeleted: sol.IsDeleted,
+                    Id: step.Id,
+                    HairTypeId: step.HairTypeId,
+                    HairType: step.HairType,
+                    Step1: step.Step1,
+                    Step2: step.Step2,
+                    Step3: step.Step3,
+                    Step4: step.Step4,
+                    Step5: step.Step5,
+                    Step6: step.Step6,
+                    Step7: step.Step7,
+                    Step8: step.Step8,
+                    Step9: step.Step9,
+                    Step10: step.Step10,
+                    IsDeleted: step.IsDeleted,
                   }))}
                   initialState={{
                     pagination: {
@@ -610,7 +772,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie znaleziono żadnych Rozwiązań Problemów Skórnych w Bazie Danych
+              Nie zneleziono żadnych Rutyn Pielęgnacyjnych w Bazie Dancyh
             </Typography>
           </Box>
         )}
@@ -619,4 +781,4 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   );
 };
 
-export default DealingSkinIssuesTable;
+export default StepsHaircareTable;

@@ -3,12 +3,8 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
   Modal,
-  Select,
   Stack,
   TextField,
   Typography,
@@ -20,18 +16,15 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
-  const [solutionsData, setSolutionsData] = useState([]);
+const HairTypesTable = () => {
+  const [hairTypesData, setHairTypesData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [skinIssuesData, setSkinIssuesData] = useState([]);
-  const [editSolution, setEditSolution] = useState({
+  const [selectedHairType, setSelectedHairType] = useState(null);
+  const [editHairType, setEditHairType] = useState({
     Id: 0,
-    SkinIssue: "",
-    Solution: "",
-    Description: "",
+    HairType: "",
   });
 
   const handleSubmit = (event) => {
@@ -39,156 +32,125 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   };
 
   useEffect(() => {
-    fetchSolutions();
-    fetchSkinIssues();
+    fetchHairTypes();
   }, []);
 
-  const fetchSkinIssues = () => {
+  const fetchHairTypes = () => {
     axios
-      .get("/api/SkinIssues")
+      .get("/api/HairTypesTable")
       .then((response) => {
         console.log(response.data);
-        console.log(response.data.Data[0].SkinIssue);
-        const skinIssuesArray = response.data.Data.filter(
-          (item) => item.Placement === "Twarz"
-        ).map((item) => item.SkinIssue);
-        console.log(skinIssuesArray);
-        setSkinIssuesData(skinIssuesArray);
+        console.log(response.data.Data[0]);
+        setHairTypesData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const fetchSolutions = () => {
-    axios
-      .get("/api/DealingSkinIssues")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data);
-        setSolutionsData(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleEditModalOpen = (sol) => {
-    setSelectedIssue(sol);
-    console.log(sol);
+  const handleEditModalOpen = (prod) => {
+    setSelectedHairType(prod);
+    console.log(prod);
     setEditModalOpen(true);
 
-    setEditSolution({
-      Id: sol.Id,
-      SkinIssue: sol.SkinIssue,
-      Solution: sol.Solution,
-      Description: sol.Description,
+    setEditHairType({
+      Id: prod.Id,
+      HairType: prod.HairType,
     });
 
-    console.log(editSolution.Id);
+    console.log(editHairType.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedHairType(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log("id", editSolution.Id);
-    console.log("editSolution: ", editSolution);
+    console.log("id", editHairType.Id);
+    console.log("editStep: ", editHairType);
 
     const data = {
-      Id: editSolution.Id,
-      SkinIssue: editSolution.SkinIssue,
-      Solution: editSolution.Solution,
-      Description: editSolution.Description,
+      Id: editHairType.Id,
+      HairType: editHairType.HairType,
     };
 
     axios
-      .put(`/api/DealingSkinIssues/UpdateDealIssue/${editSolution.Id}`, data)
+      .put(`/api/HairTypesTable/Update/${editHairType.Id}`, data)
       .then((response) => {
-        fetchSolutions();
-        console.log("Data has been edited", response.data);
+        fetchHairTypes();
+        console.log("Skin Type has been edited", response.data);
         handleEditModalClose();
       })
       .catch((error) => {
-        console.error("Error during editing issue", error);
+        console.error("Error during editing step", error);
       });
   };
 
-  const handleRevertModalOpen = (sol) => {
-    setSelectedIssue(sol);
+  const handleRevertModalOpen = (prod) => {
+    setSelectedHairType(prod);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedHairType(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedIssue);
+    console.log(selectedHairType);
     axios
-      .put(`/api/DealingSkinIssues/RevDealIssue/${selectedIssue.Id}`)
+      .put(`/api/HairTypesTable/Revert/${selectedHairType.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchSolutions();
+        console.log(selectedHairType);
+        fetchHairTypes();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedHairType(null);
     setRevertModalOpen(false);
   };
 
-  const handleDeleteModalOpen = (sol) => {
-    setSelectedIssue(sol);
+  const handleDeleteModalOpen = (prod) => {
+    setSelectedHairType(prod);
+    console.log("Delete: ", selectedHairType);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedIssue(null);
+    setSelectedHairType(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedIssue);
+    console.log(selectedHairType);
     axios
-      .put(`/api/DealingSkinIssues/DelDealIssue/${selectedIssue.Id}`)
+      .put(`/api/HairTypesTable/Delete/${selectedHairType.Id}`)
       .then((response) => {
-        console.log(selectedIssue);
-        fetchSolutions();
+        console.log(selectedHairType);
+        fetchHairTypes();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedIssue(null);
+    setSelectedHairType(null);
     setDeleteModalOpen(false);
   };
 
-  const SolutionsColumns = [
+  const HairTypesColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "SkinIssue",
-      headerName: "Problem Skórny",
-      width: 190,
-    },
-    {
-      field: "Solution",
-      headerName: "Rozwiązanie",
+      field: "HairType",
+      headerName: "Typ Włosów",
       width: 150,
-    },
-    {
-      field: "Description",
-      headerName: "Wyjaśnienie",
-      width: 100,
     },
     {
       field: "IsDeleted",
@@ -199,7 +161,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 100,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -214,7 +176,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
     },
     {
       field: "action-delete",
-      headerName: "Usuń / Przywróc",
+      headerName: "Usuń / Przywróć",
       sortable: false,
       width: 150,
       renderCell: (params) => {
@@ -225,7 +187,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
             sx={{ color: isDeleted ? "blue" : "red" }}
             size="small"
             onClick={() => {
-              console.log("Clicked issue:", params.row.Id);
+              console.log("Clicked skin type:", params.row.Id);
               if (isDeleted) {
                 handleRevertModalOpen(params.row);
               } else {
@@ -242,7 +204,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
 
   return (
     <Box flex={12} p={2}>
-      {/* Edit Issue Modal */}
+      {/* Edit Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -272,86 +234,23 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Rozwiązanie Problemu Skórnego</b>
+                <b>Edytuj Typ Włosów</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Grid container spacing={1} margin="auto">
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Problem Skórny
-                        </Typography>
-                        <Select
-                          label="Problem Skórny"
-                          value={editSolution.SkinIssue}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              SkinIssue: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        >
-                          {skinIssuesData.map((skinTypeSel) => (
-                            <MenuItem key={skinTypeSel.Id} value={skinTypeSel}>
-                              {skinTypeSel}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Rozwiązanie
-                        </Typography>
-                        <TextField
-                          type="text"
-                          label="Rozwiązanie"
-                          value={editSolution.Solution}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              Solution: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        />
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12} margin={2}>
-                      <Stack
-                        direction="row"
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography sx={{ marginRight: 3 }}>
-                          Rozwiązanie
-                        </Typography>
-                        <TextField
-                          type="text"
-                          label="Rozwiązanie"
-                          value={editSolution.Description}
-                          onChange={(e) =>
-                            setEditSolution({
-                              ...editSolution,
-                              Description: e.target.value,
-                            })
-                          }
-                          required
-                          sx={{ width: "80%" }}
-                        />
-                      </Stack>
-                    </Grid>
-                  </Grid>
+                  <TextField
+                    sx={{ marginBottom: 2 }}
+                    name="HairType"
+                    label="Typ Włosów"
+                    fullWidth
+                    value={editHairType.HairType}
+                    onChange={(e) =>
+                      setEditHairType({
+                        ...editHairType,
+                        HairType: e.target.value,
+                      })
+                    }
+                  />
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -402,7 +301,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      {/* Delete Issue Modal */}
+      {/* Delete Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -432,16 +331,17 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedHairType && selectedHairType.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąć typ włosów:{" "}
+                    {selectedHairType.HairType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc ten typ włosów?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -489,7 +389,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
         </Box>
       </Modal>
 
-      {/* Revert Issue Modal */}
+      {/* Revert Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -519,16 +419,17 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny:{" "}
-                    {selectedIssue.SkinIssue}?
+                {selectedHairType && selectedHairType.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić typ włosów:{" "}
+                    {selectedHairType.HairType}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić Problem Skórny?
+                  <Typography sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić ten typ włosów?
                   </Typography>
                 )}
+
                 <Box
                   sx={{
                     textAlign: "center",
@@ -577,24 +478,22 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {solutionsData && solutionsData.length !== 0 ? (
-          <Card style={{ height: "80vh" }}>
+        {hairTypesData && hairTypesData.length !== 0 ? (
+          <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Rozwiązanie Problemów Skórnych - Twarz</b>
+                  <b>Typy Włosów</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={SolutionsColumns}
-                  rows={solutionsData.map((sol, index) => ({
+                  columns={HairTypesColumns}
+                  rows={hairTypesData.map((prod, index) => ({
                     id: index,
-                    Id: sol.Id,
-                    SkinIssue: sol.SkinIssue,
-                    Solution: sol.Solution,
-                    Description: sol.Description,
-                    IsDeleted: sol.IsDeleted,
+                    Id: prod.Id,
+                    HairType: prod.HairType,
+                    IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
                     pagination: {
@@ -609,9 +508,7 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>
-              Nie znaleziono żadnych Rozwiązań Problemów Skórnych w Bazie Danych
-            </Typography>
+            <Typography>Nie znaleziono typów włosów w Bazie Danych</Typography>
           </Box>
         )}
       </div>
@@ -619,4 +516,4 @@ const DealingSkinIssuesTable = ({ handleSkinIssueClick }) => {
   );
 };
 
-export default DealingSkinIssuesTable;
+export default HairTypesTable;

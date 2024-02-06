@@ -12,22 +12,22 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DealingSkinIssuesTable from "./DealingSkinIssuesTable";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useCookies } from "react-cookie";
+import DealingHairProblemsTable from "./DealingHairProblemsTable";
 
-const DealingSkinIssues = ({ onChangeContent }) => {
+const DealingHairProblems = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "dealing-skinissues", { path: "/" });
-  const [skinIssue, setSkinIssue] = useState("");
+  setCookie("currentPageCookie", "dealing-hairproblems", { path: "/" });
+  const [hairProblem, setHairProblem] = useState("");
   const [solution, setSolution] = useState("");
   const [description, setDescription] = useState("");
-  const [skinIssuesData, setSkinIssuesData] = useState([]);
+  const [hairProblemsData, setHairProblemsData] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -35,20 +35,16 @@ const DealingSkinIssues = ({ onChangeContent }) => {
   };
 
   useEffect(() => {
-    fetchSkinIssues();
+    fetchhairProblems();
   }, []);
 
-  const fetchSkinIssues = () => {
+  const fetchhairProblems = () => {
     axios
-      .get("/api/SkinIssues")
+      .get("/api/HairProblems")
       .then((response) => {
         console.log(response.data);
-        console.log(response.data.Data[0].SkinIssue);
-        const skinIssuesArray = response.data.Data.filter(
-          (item) => item.Placement === "Twarz"
-        ).map((item) => item.SkinIssue);
-        console.log(skinIssuesArray);
-        setSkinIssuesData(skinIssuesArray);
+        console.log(response.data.Data[0].HairProblem);
+        setHairProblemsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -57,13 +53,13 @@ const DealingSkinIssues = ({ onChangeContent }) => {
 
   const handleAdd = () => {
     const data = {
-      SkinIssue: skinIssue,
+      HairProblem: hairProblem,
       Solution: solution,
       Description: description,
     };
 
     axios
-      .post("/api/DealingSkinIssues", data)
+      .post("/api/DealingHairProblems", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -74,7 +70,7 @@ const DealingSkinIssues = ({ onChangeContent }) => {
   };
 
   const clearTextArea = () => {
-    setSkinIssue("");
+    setHairProblem("");
     setSolution("");
     setDescription("");
   };
@@ -83,23 +79,23 @@ const DealingSkinIssues = ({ onChangeContent }) => {
     <Box p={2} sx={{ height: "300vh" }}>
       <Button
         component={Link}
-        to="/admin-skincare"
+        to="/admin-haircare"
         onClick={() => {
-          onChangeContent("admin-skincare");
-          navigate("/admin-skincare");
+          onChangeContent("admin-haircare");
+          navigate("/admin-haircare");
         }}
         size="small"
       >
         <ArrowBackIcon />
-        Panel Pielęgnacji
+        Panel Pielęgnacji Włosów
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Rozwiązań Rroblemów Skórnych - Twarz</b>
+        <b>Panel Rozwiązań Rroblemów Włosów</b>
       </Typography>
       <Card>
         <CardContent>
           <Typography variant="h6" textAlign={"center"}>
-            <b>Dodaj Rozwiązanie Problemu Skórnego</b>
+            <b>Dodaj Rozwiązanie Problemu Włosów</b>
           </Typography>
           <Box>
             <form onSubmit={handleSubmit}>
@@ -110,18 +106,18 @@ const DealingSkinIssues = ({ onChangeContent }) => {
                     sx={{ justifyContent: "space-between" }}
                   >
                     <Typography sx={{ marginRight: 3 }}>
-                      Problem Skórny
+                      Problem Włosów
                     </Typography>
                     <Select
-                      label="Problem Skórny"
-                      value={skinIssue}
-                      onChange={(e) => setSkinIssue(e.target.value)}
+                      label="Problem Włosów"
+                      value={hairProblem}
+                      onChange={(e) => setHairProblem(e.target.value)}
                       required
                       sx={{ width: "80%" }}
                     >
-                      {skinIssuesData.map((skinTypeSel) => (
-                        <MenuItem key={skinTypeSel.Id} value={skinTypeSel}>
-                          {skinTypeSel}
+                      {hairProblemsData.map((item) => (
+                        <MenuItem key={item.Id} value={item.HairProblem}>
+                          {item.HairProblem}
                         </MenuItem>
                       ))}
                     </Select>
@@ -176,9 +172,9 @@ const DealingSkinIssues = ({ onChangeContent }) => {
           </Box>
         </CardContent>
       </Card>
-      <DealingSkinIssuesTable />
+      <DealingHairProblemsTable />
     </Box>
   );
 };
 
-export default DealingSkinIssues;
+export default DealingHairProblems;

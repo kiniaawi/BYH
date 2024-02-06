@@ -34,6 +34,17 @@ import BodyOils from "../../pages/logged/admin/skin/BodyOils";
 import BodyExfoliants from "../../pages/logged/admin/skin/BodyExfoliants";
 import BodyMoisturizers from "../../pages/logged/admin/skin/BodyMoisturizers";
 import BodyActives from "../../pages/logged/admin/skin/BodyActives";
+import HairTypes from "../../pages/logged/admin/hair/HairTypes";
+import StepsHaircare from "../../pages/logged/admin/hair/StepsHaircare";
+import DealingHairProblems from "../../pages/logged/admin/hair/DealingHairProblems";
+import HairPeelings from "../../pages/logged/admin/hair/HairPeelings";
+import Shampoos from "../../pages/logged/admin/hair/Shampoos";
+import HairMasks from "../../pages/logged/admin/hair/HairMasks";
+import HairConditioners from "../../pages/logged/admin/hair/HairConditioners";
+import HairOils from "../../pages/logged/admin/hair/HairOils";
+import HeatProtection from "../../pages/logged/admin/hair/HeatProtection";
+import HairOilsProtection from "../../pages/logged/admin/hair/HairOilsProtection";
+import HairSerums from "../../pages/logged/admin/hair/HairSerums";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -129,6 +140,39 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "admin-haircare" && (
               <Haircare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-types" && (
+              <HairTypes onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "dealing-hairproblems" && (
+              <DealingHairProblems onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "haircare-steps" && (
+              <StepsHaircare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-peelings" && (
+              <HairPeelings onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "shampoos" && (
+              <Shampoos onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-masks" && (
+              <HairMasks onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-conditioners" && (
+              <HairConditioners onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-oils" && (
+              <HairOils onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "heat-protection" && (
+              <HeatProtection onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-oils-protection" && (
+              <HairOilsProtection onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-serums" && (
+              <HairSerums onChangeContent={onChangeContent} />
             )}
             {currentContent === "admin-prevention" && (
               <Prevention onChangeContent={onChangeContent} />

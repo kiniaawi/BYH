@@ -239,7 +239,7 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
         console.log(params.row.ImageURL);
         return (
           <img
-            src={`https://localhost:44313/Photos/${params.row.ImageURL}`}
+            src={`https://localhost:44313/Photos/SkinIssues/${params.row.ImageURL}`}
             alt="Issue"
             style={{ width: "auto", height: 100 }}
           />
