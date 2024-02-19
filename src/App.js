@@ -420,6 +420,56 @@ function App() {
               }
             />
             <Route
+              path="/diseases"
+              element={
+                <Feed
+                  currentContent="diseases"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/diets"
+              element={
+                <Feed
+                  currentContent="diets"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/workouts"
+              element={
+                <Feed
+                  currentContent="workouts"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/diseases-symptoms"
+              element={
+                <Feed
+                  currentContent="diseases-symptoms"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/diseases-prevention"
+              element={
+                <Feed
+                  currentContent="diseases-prevention"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/admin-supplementation"
               element={
                 <Feed
@@ -444,6 +494,16 @@ function App() {
               element={
                 <Feed
                   currentContent="def-suppl-tests"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
+              path="/suppl-dosage"
+              element={
+                <Feed
+                  currentContent="suppl-dosage"
                   onChangeContent={handleChangeContent}
                   setCurrentContent={setCurrentContent}
                 />

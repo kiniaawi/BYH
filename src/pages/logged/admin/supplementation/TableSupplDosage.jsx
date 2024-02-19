@@ -3,9 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -20,18 +18,20 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableDefSupplDealing = () => {
-  const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
+const TableSupplDosage = () => {
+  const [supplDosageData, setSupplDosageData] = useState([]);
   const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
-  const [defSupplDealing, setDefSupplDealing] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [editIssue, setEditIssue] = useState({
     Id: 0,
-    IssueId: "",
-    SupplementId: "",
+    SupplementId: 0,
+    FkgTeen: "",
+    MkgTeen: "",
+    FkgAdult: "",
+    MkgAdult: "",
   });
 
   const handleSubmit = (event) => {
@@ -39,18 +39,17 @@ const TableDefSupplDealing = () => {
   };
 
   useEffect(() => {
-    fetchDefSupplDealing();
-    fetchDefSupplIssues();
+    fetchSupplDosage();
     fetchDefSupplBloodTests();
   }, []);
 
-  const fetchDefSupplIssues = () => {
+  const fetchSupplDosage = () => {
     axios
-      .get("/api/DefSupplIssues")
+      .get("/api/SupplDosage")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplIssuesData(response.data.Data);
+        setSupplDosageData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -70,19 +69,6 @@ const TableDefSupplDealing = () => {
       });
   };
 
-  const fetchDefSupplDealing = () => {
-    axios
-      .get("/api/DefSupplDealing")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setDefSupplDealing(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const handleEditModalOpen = (prod) => {
     setSelectedIssue(prod);
     console.log(prod);
@@ -90,8 +76,11 @@ const TableDefSupplDealing = () => {
 
     setEditIssue({
       Id: prod.Id,
-      IssueId: prod.IssueId,
       SupplementId: prod.SupplementId,
+      FkgTeen: prod.FkgTeen,
+      MkgTeen: prod.MkgTeen,
+      FkgAdult: prod.FkgAdult,
+      MkgAdult: prod.MkgAdult,
     });
 
     console.log(editIssue.Id);
@@ -109,14 +98,17 @@ const TableDefSupplDealing = () => {
 
     const data = {
       Id: editIssue.Id,
-      IssueId: editIssue.IssueId,
       SupplementId: editIssue.SupplementId,
+      FkgTeen: editIssue.FkgTeen,
+      MkgTeen: editIssue.MkgTeen,
+      FkgAdult: editIssue.FkgAdult,
+      MkgAdult: editIssue.MkgAdult,
     };
 
     axios
-      .put(`/api/DefSupplDealing/UpdateDefSupplDealing/${editIssue.Id}`, data)
+      .put(`/api/SupplDosage/UpdateSupplDosage/${editIssue.Id}`, data)
       .then((response) => {
-        fetchDefSupplDealing();
+        fetchSupplDosage();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -138,10 +130,10 @@ const TableDefSupplDealing = () => {
   const handleRevert = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/RevDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/SupplDosage/RevSupplDosage/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchSupplDosage();
       })
       .catch((error) => {
         console.log(error);
@@ -165,10 +157,10 @@ const TableDefSupplDealing = () => {
   const handleDelete = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/DelDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/SupplDosage/DelSupplDosage/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchSupplDosage();
       })
       .catch((error) => {
         console.log(error);
@@ -178,42 +170,52 @@ const TableDefSupplDealing = () => {
     setDeleteModalOpen(false);
   };
 
-  const DefSupplIssuesColumns = [
+  const SupplDosageColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "IssueId",
-      headerName: "ID Problemu",
-      width: 100,
-    },
-    {
       field: "SupplementId",
       headerName: "ID Suplement",
-      width: 100,
-    },
-    {
-      field: "Issue",
-      headerName: "Problem",
-      width: 150,
+      width: 50,
     },
     {
       field: "Supplement",
-      headerName: "Splement",
-      width: 150,
+      headerName: "Suplement",
+      width: 120,
+    },
+    {
+      field: "FkgTeen",
+      headerName: "Kobieta do 18 lat",
+      width: 100,
+    },
+    {
+      field: "MkgTeen",
+      headerName: "Mężczyzna do 18 lat",
+      width: 100,
+    },
+    {
+      field: "FkgAdult",
+      headerName: "Kobieta po 18 lat",
+      width: 100,
+    },
+    {
+      field: "MkgAdult",
+      headerName: "Mężczyzna po 18 lat",
+      width: 100,
     },
     {
       field: "IsDeleted",
       headerName: "Usunięto",
-      width: 90,
+      width: 70,
     },
     {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 150,
+      width: 80,
       renderCell: (params) => {
         return (
           <Button
@@ -286,29 +288,10 @@ const TableDefSupplDealing = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Poradę Suplementacji</b>
+                <b>Edytuj Dawkowanie Suplementu</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Stack direction="row" sx={{ marginBottom: 3 }}>
-                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź Problem:{" "}
-                    </Typography>
-                    <Select
-                      value={editIssue.IssueId}
-                      onChange={(e) =>
-                        setEditIssue({ ...editIssue, IssueId: e.target.value })
-                      }
-                      required
-                      sx={{ width: "25%" }}
-                    >
-                      {defsupplIssuesData.map((item) => (
-                        <MenuItem key={item.Id} value={item.Id}>
-                          {item.Issue}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Stack>
                   <Stack direction="row">
                     <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
                       Wprowadź Suplement:{" "}
@@ -330,6 +313,90 @@ const TableDefSupplDealing = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                  </Stack>
+                  <Typography
+                    variant="h6"
+                    sx={{ textAlign: "center", marginBottom: 3 }}
+                  >
+                    <b>Dawkowanie / kg Masy Ciała</b>
+                  </Typography>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 4 }}
+                  >
+                    <Stack direction="row">
+                      <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                        Kobieta do 18 lat:{" "}
+                      </Typography>
+                      <TextField
+                        type="text"
+                        label="mg/kg"
+                        value={editIssue.FkgTeen}
+                        onChange={(e) =>
+                          setEditIssue({
+                            ...editIssue,
+                            FkgTeen: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Stack>
+                    <Stack direction="row">
+                      <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                        Mężczyzna do 18 lat:{" "}
+                      </Typography>
+                      <TextField
+                        type="text"
+                        label="mg/kg"
+                        value={editIssue.MkgTeen}
+                        onChange={(e) =>
+                          setEditIssue({
+                            ...editIssue,
+                            MkgTeen: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Stack>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ justifyContent: "space-between", marginTop: 4 }}
+                  >
+                    <Stack direction="row">
+                      <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                        Kobieta powyżej 18 lat:{" "}
+                      </Typography>
+                      <TextField
+                        type="text"
+                        label="mg/kg"
+                        value={editIssue.FkgAdult}
+                        onChange={(e) =>
+                          setEditIssue({
+                            ...editIssue,
+                            FkgAdult: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Stack>
+                    <Stack direction="row">
+                      <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                        Mężczyzna powyżej 18 lat:{" "}
+                      </Typography>
+                      <TextField
+                        type="text"
+                        label="mg/kg"
+                        value={editIssue.MkgAdult}
+                        onChange={(e) =>
+                          setEditIssue({
+                            ...editIssue,
+                            MkgAdult: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Stack>
                   </Stack>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
@@ -413,12 +480,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć poradę dla :{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz usunąć dawkowanie dla :{" "}
+                    {selectedIssue.Supplement}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc tą poradę?
+                    Czy na pewno chcesz usunąc dawkowanie?
                   </Typography>
                 )}
 
@@ -501,12 +568,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić poradę dla:{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz przywrócić dawkowanie dla:{" "}
+                    {selectedIssue.Supplement}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić tą poradę?
+                    Czy na pewno chcesz przywrócić to dawkowanie?
                   </Typography>
                 )}
 
@@ -558,24 +625,26 @@ const TableDefSupplDealing = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {defSupplDealing && defSupplDealing.length !== 0 ? (
+        {supplDosageData && supplDosageData.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Prady Suplementacjne</b>
+                  <b>Dawkowanie Suplementów</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={DefSupplIssuesColumns}
-                  rows={defSupplDealing.map((prod, index) => ({
+                  columns={SupplDosageColumns}
+                  rows={supplDosageData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
-                    IssueId: prod.IssueId,
                     SupplementId: prod.SupplementId,
-                    Issue: prod.Issue,
                     Supplement: prod.Supplement,
+                    FkgTeen: prod.FkgTeen,
+                    MkgTeen: prod.MkgTeen,
+                    FkgAdult: prod.FkgAdult,
+                    MkgAdult: prod.MkgAdult,
                     IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
@@ -592,7 +661,7 @@ const TableDefSupplDealing = () => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie znaleziono Porad Suplementacji w Bazie danych
+              Nie Znaleziono Dawkowań Suplementacji w Bazie Danych
             </Typography>
           </Box>
         )}
@@ -601,4 +670,4 @@ const TableDefSupplDealing = () => {
   );
 };
 
-export default TableDefSupplDealing;
+export default TableSupplDosage;

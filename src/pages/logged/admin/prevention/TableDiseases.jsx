@@ -3,9 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -20,18 +18,19 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableDefSupplDealing = () => {
-  const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
-  const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
-  const [defSupplDealing, setDefSupplDealing] = useState([]);
+const TableDiseases = () => {
+  const [diseasesData, setDiseasesData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [editIssue, setEditIssue] = useState({
     Id: 0,
-    IssueId: "",
-    SupplementId: "",
+    DiseaseName: "",
+    Diet: "",
+    Supplementation: "",
+    Workout: "",
+    Preventable: "",
   });
 
   const handleSubmit = (event) => {
@@ -39,44 +38,16 @@ const TableDefSupplDealing = () => {
   };
 
   useEffect(() => {
-    fetchDefSupplDealing();
-    fetchDefSupplIssues();
-    fetchDefSupplBloodTests();
+    fetchDiseasesData();
   }, []);
 
-  const fetchDefSupplIssues = () => {
+  const fetchDiseasesData = () => {
     axios
-      .get("/api/DefSupplIssues")
+      .get("/api/Diseases")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplIssuesData(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchDefSupplBloodTests = () => {
-    axios
-      .get("/api/DefSupplBloodTests")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setDefsupplBloodTests(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchDefSupplDealing = () => {
-    axios
-      .get("/api/DefSupplDealing")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setDefSupplDealing(response.data.Data);
+        setDiseasesData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -90,8 +61,11 @@ const TableDefSupplDealing = () => {
 
     setEditIssue({
       Id: prod.Id,
-      IssueId: prod.IssueId,
-      SupplementId: prod.SupplementId,
+      DiseaseName: prod.DiseaseName,
+      Diet: prod.Diet,
+      Supplementation: prod.Supplementation,
+      Workout: prod.Workout,
+      Preventable: prod.Preventable,
     });
 
     console.log(editIssue.Id);
@@ -109,14 +83,17 @@ const TableDefSupplDealing = () => {
 
     const data = {
       Id: editIssue.Id,
-      IssueId: editIssue.IssueId,
-      SupplementId: editIssue.SupplementId,
+      DiseaseName: editIssue.DiseaseName,
+      Diet: editIssue.Diet,
+      Supplementation: editIssue.Supplementation,
+      Workout: editIssue.Workout,
+      Preventable: editIssue.Preventable,
     };
 
     axios
-      .put(`/api/DefSupplDealing/UpdateDefSupplDealing/${editIssue.Id}`, data)
+      .put(`/api/Diseases/UpdateDisease/${editIssue.Id}`, data)
       .then((response) => {
-        fetchDefSupplDealing();
+        fetchDiseasesData();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -138,10 +115,10 @@ const TableDefSupplDealing = () => {
   const handleRevert = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/RevDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/Diseases/RevDisease/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchDiseasesData();
       })
       .catch((error) => {
         console.log(error);
@@ -165,10 +142,10 @@ const TableDefSupplDealing = () => {
   const handleDelete = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/DelDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/Diseases/DelDisease/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchDiseasesData();
       })
       .catch((error) => {
         console.log(error);
@@ -178,42 +155,47 @@ const TableDefSupplDealing = () => {
     setDeleteModalOpen(false);
   };
 
-  const DefSupplIssuesColumns = [
+  const DiseasesColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "IssueId",
-      headerName: "ID Problemu",
-      width: 100,
-    },
-    {
-      field: "SupplementId",
-      headerName: "ID Suplement",
-      width: 100,
-    },
-    {
-      field: "Issue",
-      headerName: "Problem",
+      field: "DiseaseName",
+      headerName: "Nazwa Choroby",
       width: 150,
     },
     {
-      field: "Supplement",
-      headerName: "Splement",
-      width: 150,
+      field: "Diet",
+      headerName: "Dieta",
+      width: 120,
+    },
+    {
+      field: "Supplementation",
+      headerName: "Suplementacja",
+      width: 100,
+    },
+    {
+      field: "Workout",
+      headerName: "Ćwiczenia",
+      width: 100,
+    },
+    {
+      field: "Preventable",
+      headerName: "Zapobieganlność",
+      width: 100,
     },
     {
       field: "IsDeleted",
       headerName: "Usunięto",
-      width: 90,
+      width: 70,
     },
     {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 150,
+      width: 80,
       renderCell: (params) => {
         return (
           <Button
@@ -286,51 +268,116 @@ const TableDefSupplDealing = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Poradę Suplementacji</b>
+                <b>Edytuj Chorobę</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Stack direction="row" sx={{ marginBottom: 3 }}>
-                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź Problem:{" "}
-                    </Typography>
-                    <Select
-                      value={editIssue.IssueId}
-                      onChange={(e) =>
-                        setEditIssue({ ...editIssue, IssueId: e.target.value })
-                      }
-                      required
-                      sx={{ width: "25%" }}
-                    >
-                      {defsupplIssuesData.map((item) => (
-                        <MenuItem key={item.Id} value={item.Id}>
-                          {item.Issue}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Stack>
                   <Stack direction="row">
                     <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź Suplement:{" "}
+                      Wprowadź Nazwę Choroby:{" "}
                     </Typography>
-                    <Select
-                      value={editIssue.SupplementId}
+                    <TextField
+                      type="text"
+                      label="Nazwa Choroby"
+                      value={editIssue.DiseaseName}
                       onChange={(e) =>
                         setEditIssue({
                           ...editIssue,
-                          SupplementId: e.target.value,
+                          DiseaseName: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Czy zastosować dietę:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.Diet}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Diet: e.target.value,
                         })
                       }
                       required
                       sx={{ width: "25%" }}
                     >
-                      {defsupplBloodTests.map((item) => (
-                        <MenuItem key={item.Id} value={item.Id}>
-                          {item.Supplement}
-                        </MenuItem>
-                      ))}
+                      <MenuItem value="Tak">Tak</MenuItem>
+                      <MenuItem value="Nie">Nie</MenuItem>
                     </Select>
                   </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Czy zastosować suplementację:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.Supplementation}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Supplementation: e.target.value,
+                        })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      <MenuItem value="Tak">Tak</MenuItem>
+                      <MenuItem value="Nie">Nie</MenuItem>
+                    </Select>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Czy zastosować ćwiczenia:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.Workout}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Workout: e.target.value,
+                        })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      <MenuItem value="Tak">Tak</MenuItem>
+                      <MenuItem value="Nie">Nie</MenuItem>
+                    </Select>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Czy można zapobiegać:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.Preventable}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Preventable: e.target.value,
+                        })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      <MenuItem value="Tak">Tak</MenuItem>
+                      <MenuItem value="Nie">Nie</MenuItem>
+                    </Select>
+                  </Stack>
+
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -413,12 +460,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć poradę dla :{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz usunąć chorobę:{" "}
+                    {selectedIssue.DiseaseName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc tą poradę?
+                    Czy na pewno chcesz usunąc tą chorobę?
                   </Typography>
                 )}
 
@@ -501,12 +548,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić poradę dla:{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz przywrócić chorobę:{" "}
+                    {selectedIssue.DiseaseName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić tą poradę?
+                    Czy na pewno chcesz przywrócić tą chorobę?
                   </Typography>
                 )}
 
@@ -558,24 +605,25 @@ const TableDefSupplDealing = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {defSupplDealing && defSupplDealing.length !== 0 ? (
+        {diseasesData && diseasesData.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Prady Suplementacjne</b>
+                  <b>Tabela Chorób</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={DefSupplIssuesColumns}
-                  rows={defSupplDealing.map((prod, index) => ({
+                  columns={DiseasesColumns}
+                  rows={diseasesData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
-                    IssueId: prod.IssueId,
-                    SupplementId: prod.SupplementId,
-                    Issue: prod.Issue,
-                    Supplement: prod.Supplement,
+                    DiseaseName: prod.DiseaseName,
+                    Diet: prod.Diet,
+                    Supplementation: prod.Supplementation,
+                    Workout: prod.Workout,
+                    Preventable: prod.Preventable,
                     IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
@@ -591,9 +639,7 @@ const TableDefSupplDealing = () => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>
-              Nie znaleziono Porad Suplementacji w Bazie danych
-            </Typography>
+            <Typography>Nie Znaleziono Chorób w Bazie Danych</Typography>
           </Box>
         )}
       </div>
@@ -601,4 +647,4 @@ const TableDefSupplDealing = () => {
   );
 };
 
-export default TableDefSupplDealing;
+export default TableDiseases;

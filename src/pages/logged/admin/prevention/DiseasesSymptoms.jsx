@@ -16,51 +16,35 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import TableDefSupplBloodTests from "./TableDefSupplBloodTests";
-import TableDefSupplDealing from "./TableDefSupplDealing";
+import TableDiseasesSymptoms from "./TableDiseasesSymptoms";
 
-const DefSupplDealing = ({ onChangeContent }) => {
+const DiseasesSymptoms = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "def-suppl-tests", { path: "/" });
+  setCookie("currentPageCookie", "diseases-symptoms", { path: "/" });
   const navigate = useNavigate();
-
-  const [issueId, setIssueId] = useState("");
-  const [supplemetId, setSupplementId] = useState("");
-  const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
-  const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
+  const [diseaseId, setDiseaseId] = useState("");
+  const [mainSymptom, setMainSymptom] = useState("");
+  const [sideSymptoms, setSideSymptoms] = useState("");
+  const [diseasesData, setDiseasesData] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   useEffect(() => {
-    fetchDefSupplIssues();
-    fetchDefSupplBloodTests();
+    fetchDiseasesData();
   }, []);
 
-  const fetchDefSupplIssues = () => {
+  const fetchDiseasesData = () => {
     axios
-      .get("/api/DefSupplIssues")
+      .get("/api/Diseases")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplIssuesData(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchDefSupplBloodTests = () => {
-    axios
-      .get("/api/DefSupplBloodTests")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setDefsupplBloodTests(response.data.Data);
+        setDiseasesData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -69,12 +53,13 @@ const DefSupplDealing = ({ onChangeContent }) => {
 
   const handleAdd = () => {
     const data = {
-      IssueId: issueId,
-      SupplementId: supplemetId,
+      DiseaseId: diseaseId,
+      MainSymptom: mainSymptom,
+      SideSymptoms: sideSymptoms,
     };
 
     axios
-      .post("/api/DefSupplDealing/PostData", data)
+      .post("/api/DiseasesSymptoms", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -82,101 +67,112 @@ const DefSupplDealing = ({ onChangeContent }) => {
       .catch((error) => {
         console.log(error);
       });
-
-    setIssueId("");
-    setSupplementId("");
   };
 
   const clearTextArea = () => {
-    setIssueId("");
-    setSupplementId("");
+    setDiseaseId("");
+    setMainSymptom("");
+    setSideSymptoms("");
   };
 
   return (
     <Box p={2} sx={{ height: "300vh" }}>
       <Button
         component={Link}
-        to="/admin-supplementation"
+        to="/admin-prevention"
         onClick={() => {
-          onChangeContent("admin-supplementation");
-          navigate("/admin-supplementation");
+          onChangeContent("admin-prevention");
+          navigate("/admin-prevention");
         }}
         size="small"
       >
         <ArrowBackIcon />
-        Panel Suplementacji
+        Panel Chorób i Zapobiegania
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Porad Suplementacyjnych</b>
+        <b>Panel Objawów Chorób</b>
       </Typography>
       <Card>
         <CardHeader
           title={
             <Typography variant="h6" textAlign={"center"}>
-              <b>Dodaj Badania</b>
+              <b>Dodaj Objawy</b>
             </Typography>
           }
         />
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <Stack direction="row" sx={{ marginBottom: 3 }}>
+            <Stack
+              direction="row"
+              sx={{ marginBottom: 3, justifyContent: "center" }}
+            >
               <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                Wprowadź Problem:{" "}
+                Wprowadź Nazwę Choroby:{" "}
               </Typography>
               <Select
-                value={issueId}
-                onChange={(e) => setIssueId(e.target.value)}
+                value={diseaseId}
+                onChange={(e) => setDiseaseId(e.target.value)}
                 required
                 sx={{ width: "25%" }}
               >
-                {defsupplIssuesData.map((item) => (
+                {diseasesData.map((item) => (
                   <MenuItem key={item.Id} value={item.Id}>
-                    {item.Issue}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-
-            <Stack direction="row">
-              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                Wprowadź Suplement:{" "}
-              </Typography>
-              <Select
-                value={supplemetId}
-                onChange={(e) => setSupplementId(e.target.value)}
-                required
-                sx={{ width: "25%" }}
-              >
-                {defsupplBloodTests.map((item) => (
-                  <MenuItem key={item.Id} value={item.Id}>
-                    {item.Supplement}
+                    {item.DiseaseName}
                   </MenuItem>
                 ))}
               </Select>
             </Stack>
             <Stack
               direction="row"
-              sx={{ justifyContent: "right", marginTop: 4 }}
+              sx={{ marginBottom: 3, justifyContent: "center" }}
             >
+              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                Wprowadź główny objaw:{" "}
+              </Typography>
+              <TextField
+                type="text"
+                label="Główny Symptom"
+                value={mainSymptom}
+                onChange={(e) => setMainSymptom(e.target.value)}
+                sx={{ width: "25%" }}
+                required
+              />
+            </Stack>
+            <Stack
+              direction="row"
+              sx={{ marginBottom: 3, justifyContent: "center" }}
+            >
+              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                Wprowadź poboczne objawy:{" "}
+              </Typography>
+              <TextField
+                type="text"
+                label="Poboczne Objawy"
+                value={sideSymptoms}
+                onChange={(e) => setSideSymptoms(e.target.value)}
+                sx={{ width: "25%" }}
+                required
+              />
+            </Stack>
+            <Box sx={{ textAlign: "center", marginTop: 3 }}>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
-                size="small"
                 sx={{ marginRight: 4 }}
                 onClick={() => handleAdd()}
               >
                 Dodaj
               </Button>
-            </Stack>
+            </Box>
           </form>
         </CardContent>
       </Card>
       <Box>
-        <TableDefSupplDealing />
+        <TableDiseasesSymptoms />
       </Box>
     </Box>
   );
 };
 
-export default DefSupplDealing;
+export default DiseasesSymptoms;

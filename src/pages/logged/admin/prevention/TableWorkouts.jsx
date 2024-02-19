@@ -3,9 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -20,18 +18,20 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableDefSupplDealing = () => {
-  const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
-  const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
-  const [defSupplDealing, setDefSupplDealing] = useState([]);
+const TableWorkouts = () => {
+  const [diseasesData, setDiseasesData] = useState([]);
+  const [workoutsData, setWorkoutsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [editIssue, setEditIssue] = useState({
     Id: 0,
-    IssueId: "",
-    SupplementId: "",
+    DiseaseId: 0,
+    WorkoutName: "",
+    Dos: "",
+    Donts: "",
+    Description: "",
   });
 
   const handleSubmit = (event) => {
@@ -39,44 +39,30 @@ const TableDefSupplDealing = () => {
   };
 
   useEffect(() => {
-    fetchDefSupplDealing();
-    fetchDefSupplIssues();
-    fetchDefSupplBloodTests();
+    fetchDiseasesData();
+    fetchWorkoutsData();
   }, []);
 
-  const fetchDefSupplIssues = () => {
+  const fetchDiseasesData = () => {
     axios
-      .get("/api/DefSupplIssues")
+      .get("/api/Diseases")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplIssuesData(response.data.Data);
+        setDiseasesData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const fetchDefSupplBloodTests = () => {
+  const fetchWorkoutsData = () => {
     axios
-      .get("/api/DefSupplBloodTests")
+      .get("/api/Workouts")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDefsupplBloodTests(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchDefSupplDealing = () => {
-    axios
-      .get("/api/DefSupplDealing")
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setDefSupplDealing(response.data.Data);
+        setWorkoutsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -90,8 +76,11 @@ const TableDefSupplDealing = () => {
 
     setEditIssue({
       Id: prod.Id,
-      IssueId: prod.IssueId,
-      SupplementId: prod.SupplementId,
+      DiseaseId: prod.DiseaseId,
+      WorkoutName: prod.WorkoutName,
+      Dos: prod.Dos,
+      Donts: prod.Donts,
+      Description: prod.Description,
     });
 
     console.log(editIssue.Id);
@@ -109,14 +98,17 @@ const TableDefSupplDealing = () => {
 
     const data = {
       Id: editIssue.Id,
-      IssueId: editIssue.IssueId,
-      SupplementId: editIssue.SupplementId,
+      DiseaseId: editIssue.DiseaseId,
+      WorkoutName: editIssue.WorkoutName,
+      Dos: editIssue.Dos,
+      Donts: editIssue.Donts,
+      Description: editIssue.Description,
     };
 
     axios
-      .put(`/api/DefSupplDealing/UpdateDefSupplDealing/${editIssue.Id}`, data)
+      .put(`/api/Workouts/UpdateWorkout/${editIssue.Id}`, data)
       .then((response) => {
-        fetchDefSupplDealing();
+        fetchWorkoutsData();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -138,10 +130,10 @@ const TableDefSupplDealing = () => {
   const handleRevert = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/RevDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/Workouts/RevWorkout/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchWorkoutsData();
       })
       .catch((error) => {
         console.log(error);
@@ -165,10 +157,10 @@ const TableDefSupplDealing = () => {
   const handleDelete = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/DefSupplDealing/DelDefSupplDealing/${selectedIssue.Id}`)
+      .put(`/api/Workouts/DelWorkout/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchDefSupplDealing();
+        fetchWorkoutsData();
       })
       .catch((error) => {
         console.log(error);
@@ -178,42 +170,52 @@ const TableDefSupplDealing = () => {
     setDeleteModalOpen(false);
   };
 
-  const DefSupplIssuesColumns = [
+  const WorkoutColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "IssueId",
-      headerName: "ID Problemu",
-      width: 100,
+      field: "DiseaseId",
+      headerName: "ID Choroby",
+      width: 50,
     },
     {
-      field: "SupplementId",
-      headerName: "ID Suplement",
-      width: 100,
-    },
-    {
-      field: "Issue",
-      headerName: "Problem",
+      field: "DiseaseName",
+      headerName: "Nazwa Choroby",
       width: 150,
     },
     {
-      field: "Supplement",
-      headerName: "Splement",
-      width: 150,
+      field: "WorkoutName",
+      headerName: "Nazwa Ćwiczenia",
+      width: 120,
+    },
+    {
+      field: "Dos",
+      headerName: "Wprowadzić",
+      width: 100,
+    },
+    {
+      field: "Donts",
+      headerName: "Unikać",
+      width: 100,
+    },
+    {
+      field: "Description",
+      headerName: "Opis",
+      width: 100,
     },
     {
       field: "IsDeleted",
       headerName: "Usunięto",
-      width: 90,
+      width: 70,
     },
     {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 150,
+      width: 80,
       renderCell: (params) => {
         return (
           <Button
@@ -286,51 +288,116 @@ const TableDefSupplDealing = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Poradę Suplementacji</b>
+                <b>Edytuj Dietę</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Stack direction="row" sx={{ marginBottom: 3 }}>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
                     <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź Problem:{" "}
+                      Wprowadź Nazwę Choroby:{" "}
                     </Typography>
                     <Select
-                      value={editIssue.IssueId}
-                      onChange={(e) =>
-                        setEditIssue({ ...editIssue, IssueId: e.target.value })
-                      }
-                      required
-                      sx={{ width: "25%" }}
-                    >
-                      {defsupplIssuesData.map((item) => (
-                        <MenuItem key={item.Id} value={item.Id}>
-                          {item.Issue}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Stack>
-                  <Stack direction="row">
-                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź Suplement:{" "}
-                    </Typography>
-                    <Select
-                      value={editIssue.SupplementId}
+                      value={editIssue.DiseaseId}
                       onChange={(e) =>
                         setEditIssue({
                           ...editIssue,
-                          SupplementId: e.target.value,
+                          DiseaseId: e.target.value,
                         })
                       }
                       required
                       sx={{ width: "25%" }}
                     >
-                      {defsupplBloodTests.map((item) => (
+                      {diseasesData.map((item) => (
                         <MenuItem key={item.Id} value={item.Id}>
-                          {item.Supplement}
+                          {item.DiseaseName}
                         </MenuItem>
                       ))}
                     </Select>
                   </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Wprowadź nazwę ćwiczenia:{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      label="Nazwa Diety"
+                      value={editIssue.WorkoutName}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          WorkoutName: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Co należy wprowadzić:{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      label="Wprowadzić"
+                      value={editIssue.Dos}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Dos: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Czego należy unikać:{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      label="Unikać"
+                      value={editIssue.Donts}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Donts: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    sx={{ marginBottom: 3, justifyContent: "center" }}
+                  >
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Opis:{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      label="Opis"
+                      value={editIssue.Description}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          Description: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Stack>
+
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -413,12 +480,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć poradę dla :{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz usunąć ćwiczenie:{" "}
+                    {selectedIssue.WorkoutName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc tą poradę?
+                    Czy na pewno chcesz usunąc to ćwiczenie?
                   </Typography>
                 )}
 
@@ -501,12 +568,12 @@ const TableDefSupplDealing = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić poradę dla:{" "}
-                    {selectedIssue.Issue}?
+                    Czy na pewno chcesz przywrócić ćwiczenie:{" "}
+                    {selectedIssue.WorkoutName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić tą poradę?
+                    Czy na pewno chcesz przywrócić to ćwiczenie?
                   </Typography>
                 )}
 
@@ -558,24 +625,26 @@ const TableDefSupplDealing = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {defSupplDealing && defSupplDealing.length !== 0 ? (
+        {workoutsData && workoutsData.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Prady Suplementacjne</b>
+                  <b>Tabela Ćwiczeń</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={DefSupplIssuesColumns}
-                  rows={defSupplDealing.map((prod, index) => ({
+                  columns={WorkoutColumns}
+                  rows={workoutsData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
-                    IssueId: prod.IssueId,
-                    SupplementId: prod.SupplementId,
-                    Issue: prod.Issue,
-                    Supplement: prod.Supplement,
+                    DiseaseId: prod.DiseaseId,
+                    DiseaseName: prod.DiseaseName,
+                    WorkoutName: prod.WorkoutName,
+                    Dos: prod.Dos,
+                    Donts: prod.Donts,
+                    Description: prod.Description,
                     IsDeleted: prod.IsDeleted,
                   }))}
                   initialState={{
@@ -591,9 +660,7 @@ const TableDefSupplDealing = () => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>
-              Nie znaleziono Porad Suplementacji w Bazie danych
-            </Typography>
+            <Typography>Nie Znaleziono Ćwiczeń w Bazie Danych</Typography>
           </Box>
         )}
       </div>
@@ -601,4 +668,4 @@ const TableDefSupplDealing = () => {
   );
 };
 
-export default TableDefSupplDealing;
+export default TableWorkouts;

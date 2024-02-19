@@ -3,6 +3,7 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import TableDefSupplDealing from "./TableDefSupplDealing";
 
 const Supplementation = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -43,6 +44,16 @@ const Supplementation = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
+            to="/suppl-dosage"
+            onClick={() => {
+              onChangeContent("suppl-dosage");
+              navigate("/suppl-dosage");
+            }}
+          >
+            Dawkowanie suplementów
+          </Button>
+          <Button
+            component={Link}
             to="/dealing-def-suppl"
             onClick={() => {
               onChangeContent("dealing-def-suppl");
@@ -52,6 +63,9 @@ const Supplementation = ({ onChangeContent }) => {
             Porada suplementacyjna
           </Button>
         </Stack>
+      </Box>
+      <Box sx={{ marginTop: 4 }}>
+        <TableDefSupplDealing />
       </Box>
     </Box>
   );

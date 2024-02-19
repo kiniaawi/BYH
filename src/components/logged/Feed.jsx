@@ -45,6 +45,12 @@ import HairOils from "../../pages/logged/admin/hair/HairOils";
 import HeatProtection from "../../pages/logged/admin/hair/HeatProtection";
 import HairOilsProtection from "../../pages/logged/admin/hair/HairOilsProtection";
 import HairSerums from "../../pages/logged/admin/hair/HairSerums";
+import SupplDosage from "../../pages/logged/admin/supplementation/SupplDosage";
+import Diseases from "../../pages/logged/admin/prevention/Diseases";
+import Diets from "../../pages/logged/admin/prevention/Diets";
+import Workouts from "../../pages/logged/admin/prevention/Workouts";
+import DiseasesSymptoms from "../../pages/logged/admin/prevention/DiseasesSymptoms";
+import DiseasesPrevention from "../../pages/logged/admin/prevention/DiseasesPrevention";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -177,6 +183,21 @@ const Feed = ({ currentContent, onChangeContent }) => {
             {currentContent === "admin-prevention" && (
               <Prevention onChangeContent={onChangeContent} />
             )}
+            {currentContent === "diseases" && (
+              <Diseases onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "diets" && (
+              <Diets onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "workouts" && (
+              <Workouts onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "diseases-symptoms" && (
+              <DiseasesSymptoms onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "diseases-prevention" && (
+              <DiseasesPrevention onChangeContent={onChangeContent} />
+            )}
             {/* {currentContent === "admin-skinissues" && <SkinIssuesFace />} */}
             {currentContent === "admin-supplementation" && (
               <Supplementation onChangeContent={onChangeContent} />
@@ -186,6 +207,9 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "def-suppl-tests" && (
               <DefSupplBloodTests onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "suppl-dosage" && (
+              <SupplDosage onChangeContent={onChangeContent} />
             )}
             {currentContent === "dealing-def-suppl" && (
               <DefSupplDealing onChangeContent={onChangeContent} />

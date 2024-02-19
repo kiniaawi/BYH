@@ -38,11 +38,16 @@ const DefSupplIssues = ({ onChangeContent }) => {
       .post("/api/DefSupplIssues", data)
       .then((response) => {
         alert(response.data.StatusMessage);
+        clearTextArea();
       })
       .catch((error) => {
         console.log(error);
       });
 
+    setDefSupplIssue("");
+  };
+
+  const clearTextArea = () => {
     setDefSupplIssue("");
   };
 
