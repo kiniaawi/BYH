@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,47 @@ namespace byh_api.Controllers
         {
             _configuration = configuration;
 
+        }
+
+        [HttpGet]
+        public JsonResult Get()
+        {
+            Response response = new Response();
+
+            try
+            {
+                string query = @"SELECT * from dbo.Registration";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+                SqlDataReader myReader;
+                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                {
+                    myConn.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                    {
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myConn.Close();
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "Data Fetched Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Fetching Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
+            }
+
+            return new JsonResult(response);
         }
 
         [HttpPost]

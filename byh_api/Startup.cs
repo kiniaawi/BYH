@@ -48,7 +48,7 @@ namespace byh_api
             {
                 options.AddPolicy("AllowLocalhost", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000") // Dodaj adres URL swojego frontendu
+                    builder.WithOrigins("http://localhost:3000") 
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
