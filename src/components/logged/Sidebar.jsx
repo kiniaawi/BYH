@@ -153,6 +153,14 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
               />
             </ListItemButton>
           </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/user-profile">
+              <ListItemText
+                primary="Twój Profil"
+                primaryTypographyProps={{ className: "icon-text" }}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       )}
     </Box>

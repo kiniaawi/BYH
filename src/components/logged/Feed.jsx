@@ -59,6 +59,8 @@ import HairNailsSupplAdvice from "../../pages/logged/user/Supplementation/HairNa
 import DigestiveSystemSupplAdvice from "../../pages/logged/user/Supplementation/DigestiveSystemSupplAdvice";
 import FunctioningSupplAdvice from "../../pages/logged/user/Supplementation/FunctioningSupplAdvice";
 import SkinSupplAdvice from "../../pages/logged/user/Supplementation/SkinSupplAdvice";
+import UserProfile from "../../pages/logged/user/profile/UserProfile";
+import HistorySupplAdvices from "../../pages/logged/user/profile/HistorySupplAdvices";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -250,6 +252,12 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "functioning-suppl-advice" && (
               <FunctioningSupplAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-profile" && (
+              <UserProfile onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "history-supplementation-advices" && (
+              <HistorySupplAdvices onChangeContent={onChangeContent} />
             )}
           </div>
         </Box>

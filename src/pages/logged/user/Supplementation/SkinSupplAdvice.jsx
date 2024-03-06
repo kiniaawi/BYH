@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { format } from "date-fns";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const SkinSupplAdvice = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -51,6 +53,22 @@ const SkinSupplAdvice = ({ onChangeContent }) => {
       });
   };
 
+  const saveAsPDF = async () => {
+    const capture = document.getElementById("pdf-content");
+    const canvas = await html2canvas(capture);
+    const imgData = canvas.toDataURL("image/png");
+
+    const doc = new jsPDF("l", "mm", "a4");
+    const width = doc.internal.pageSize.getWidth();
+    const height = doc.internal.pageSize.getHeight();
+
+    const imgWidth = width;
+    const imgHeight = (canvas.height * width) / canvas.width;
+
+    doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    doc.save("Porada_Suplementacyjna_Skora.pdf");
+  };
+
   return (
     <Box flex={12} p={2} sx={{ height: "300vh" }}>
       <Button
@@ -68,9 +86,10 @@ const SkinSupplAdvice = ({ onChangeContent }) => {
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
         <b>Porada Suplementacyjna - Skóra</b>
       </Typography>
+      <Button onClick={saveAsPDF}>Zapisz jako PDF</Button>
       {supplAdviceData ? (
         <Box>
-          <Card sx={{ marginTop: 5 }}>
+          <Card sx={{ marginTop: 5 }} id="pdf-content">
             <Typography p={1}>
               <b>
                 {supplAdviceData.DiagnDate &&

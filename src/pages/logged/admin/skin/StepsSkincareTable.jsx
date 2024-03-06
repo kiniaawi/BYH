@@ -381,8 +381,8 @@ const StepsSkincareTable = () => {
                       required
                       sx={{ width: "25%" }}
                     >
-                      <MenuItem value="Morning">Rano</MenuItem>
-                      <MenuItem value="Evening">Wieczór</MenuItem>
+                      <MenuItem value="Rano">Rano</MenuItem>
+                      <MenuItem value="Wieczór">Wieczór</MenuItem>
                     </Select>
                   </Stack>
                   <Stack

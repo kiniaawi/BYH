@@ -609,6 +609,24 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/user-profile"
+              element={
+                <Feed
+                  currentContent="user-profile"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/history-supplementation-advices"
+              element={
+                <Feed
+                  currentContent="history-supplementation-advices"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
             <Route path="/" element={<Navigate to="/login" />} />
           </Routes>
         </ThemeProvider>
