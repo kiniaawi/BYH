@@ -60,14 +60,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpGet("GetSkinSupplAdvice/{Id}")]
-        public JsonResult GetSkinSupplAdvice(int Id)
+        [HttpGet("GetUserSupplAdvice/{Id}")]
+        public JsonResult GetUserSupplAdvice(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"SELECT * FROM dbo.SupplAdvice WHERE UserId = @Id AND IssueCategory = 'Skóra'";
+                string query = @"SELECT * FROM dbo.SupplAdvice WHERE UserId = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -100,14 +100,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpGet("GetHairNailsSupplAdvice/{Id}")]
-        public JsonResult GetHairNailsSupplAdvice(int Id)
+        [HttpGet("GetDetailsSupplAdvice")]
+        public JsonResult GetDetailsSupplAdvice(SupplDiagnosticQuestions question)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"SELECT * FROM dbo.SupplAdvice WHERE UserId = @Id AND IssueCategory = 'Włosy,Paznokcie'";
+                string query = @"SELECT * FROM dbo.SupplAdvice WHERE Id = @Id AND UserId = @UserId";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -115,7 +115,8 @@ namespace byh_api.Controllers
                 {
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
+                        myCommand.Parameters.AddWithValue("@Id", question.Id);
+                        myCommand.Parameters.AddWithValue("@UserId", question.UserId);
                         myConn.Open();
                         SqlDataReader myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
@@ -140,85 +141,6 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpGet("GetDigestSysSupplAdvice/{Id}")]
-        public JsonResult GetDigestSysSupplAdvice(int Id)
-        {
-            Response response = new Response();
-
-            try
-            {
-                string query = @"SELECT * FROM dbo.SupplAdvice WHERE UserId = @Id AND IssueCategory = 'Układ Pokarmowy'";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                {
-                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                    {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
-                        myConn.Open();
-                        SqlDataReader myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                    }
-                }
-
-                response.StatusCode = 200;
-                response.StatusMessage = "Data Fetched Successfully";
-                HttpContext.Response.StatusCode = response.StatusCode;
-                response.Data = table;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Fetching Data Failed";
-                HttpContext.Response.StatusCode = response.StatusCode;
-            }
-
-            return new JsonResult(response);
-        }
-
-        [HttpGet("GetFuncSupplAdvice/{Id}")]
-        public JsonResult GetFuncSupplAdvice(int Id)
-        {
-            Response response = new Response();
-
-            try
-            {
-                string query = @"SELECT * FROM dbo.SupplAdvice WHERE UserId = @Id AND IssueCategory = 'Funkcjonowanie'";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
-                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-                {
-                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                    {
-                        myCommand.Parameters.AddWithValue("@Id", Id);
-                        myConn.Open();
-                        SqlDataReader myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                    }
-                }
-
-                response.StatusCode = 200;
-                response.StatusMessage = "Data Fetched Successfully";
-                HttpContext.Response.StatusCode = response.StatusCode;
-                response.Data = table;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Fetching Data Failed";
-                HttpContext.Response.StatusCode = response.StatusCode;
-            }
-
-            return new JsonResult(response);
-        }
 
         [HttpPost]
         public JsonResult Post(SupplDiagnosticQuestions question)
@@ -694,7 +616,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"UPDATE dbo.SupplDiagnosticQuestions SET IsDeleted = 1
+                string query = @"UPDATE dbo.SupplAdvice SET IsDeleted = 1
                             WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
