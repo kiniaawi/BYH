@@ -5,7 +5,6 @@ import AdminHome from "../../pages/logged/admin/skin/AdminHome";
 import Skincare from "../../pages/logged/admin/skin/Skincare";
 import Haircare from "../../pages/logged/admin/hair/Haircare";
 import Prevention from "../../pages/logged/admin/prevention/Prevention";
-//import SkinIssuesFace from "../../pages/logged/admin/SkinIssues";
 import Supplementation from "../../pages/logged/admin/supplementation/Supplementation";
 import Navbar from "./Navbar";
 import BlankBar from "./BlankBar";
@@ -51,6 +50,15 @@ import Diets from "../../pages/logged/admin/prevention/Diets";
 import Workouts from "../../pages/logged/admin/prevention/Workouts";
 import DiseasesSymptoms from "../../pages/logged/admin/prevention/DiseasesSymptoms";
 import DiseasesPrevention from "../../pages/logged/admin/prevention/DiseasesPrevention";
+import UserSupplementation from "../../pages/logged/user/Supplementation/UserSupplementation";
+import SkinSupplementation from "../../pages/logged/user/Supplementation/SkinSupplementation";
+import HairNailsSupplementation from "../../pages/logged/user/Supplementation/HairNailsSupplementation";
+import DigestiveSystemSupplementation from "../../pages/logged/user/Supplementation/DigestiveSystemSupplementation";
+import FunctioningSupplementation from "../../pages/logged/user/Supplementation/FunctioningSupplementation";
+import HairNailsSupplAdvice from "../../pages/logged/user/Supplementation/HairNailsSupplAdvice";
+import DigestiveSystemSupplAdvice from "../../pages/logged/user/Supplementation/DigestiveSystemSupplAdvice";
+import FunctioningSupplAdvice from "../../pages/logged/user/Supplementation/FunctioningSupplAdvice";
+import SkinSupplAdvice from "../../pages/logged/user/Supplementation/SkinSupplAdvice";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -213,6 +221,35 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "dealing-def-suppl" && (
               <DefSupplDealing onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-supplementation" && (
+              <UserSupplementation onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "skin-supplementation" && (
+              <SkinSupplementation onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-nails-supplementation" && (
+              <HairNailsSupplementation onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "digestive-system-supplementation" && (
+              <DigestiveSystemSupplementation
+                onChangeContent={onChangeContent}
+              />
+            )}
+            {currentContent === "skin-suppl-advice" && (
+              <SkinSupplAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "hair-nails-suppl-advice" && (
+              <HairNailsSupplAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "digestive-system-suppl-advice" && (
+              <DigestiveSystemSupplAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "functioning-supplementation" && (
+              <FunctioningSupplementation onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "functioning-suppl-advice" && (
+              <FunctioningSupplAdvice onChangeContent={onChangeContent} />
             )}
           </div>
         </Box>

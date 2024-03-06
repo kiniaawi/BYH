@@ -32,6 +32,7 @@ const TableDefSupplDealing = () => {
     Id: 0,
     IssueId: "",
     SupplementId: "",
+    IssueCategory: "",
   });
 
   const handleSubmit = (event) => {
@@ -92,6 +93,7 @@ const TableDefSupplDealing = () => {
       Id: prod.Id,
       IssueId: prod.IssueId,
       SupplementId: prod.SupplementId,
+      IssueCategory: prod.IssueCategory,
     });
 
     console.log(editIssue.Id);
@@ -111,6 +113,7 @@ const TableDefSupplDealing = () => {
       Id: editIssue.Id,
       IssueId: editIssue.IssueId,
       SupplementId: editIssue.SupplementId,
+      IssueCategory: editIssue.IssueCategory,
     };
 
     axios
@@ -197,6 +200,11 @@ const TableDefSupplDealing = () => {
     {
       field: "Issue",
       headerName: "Problem",
+      width: 250,
+    },
+    {
+      field: "IssueCategory",
+      headerName: "Kategoria Problemu",
       width: 150,
     },
     {
@@ -307,6 +315,38 @@ const TableDefSupplDealing = () => {
                           {item.Issue}
                         </MenuItem>
                       ))}
+                    </Select>
+                  </Stack>
+                  <Stack direction="row" sx={{ marginBottom: 3 }}>
+                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                      Wprowadź Kategorię:{" "}
+                    </Typography>
+                    <Select
+                      value={editIssue.IssueCategory}
+                      onChange={(e) =>
+                        setEditIssue({
+                          ...editIssue,
+                          IssueCategory: e.target.value,
+                        })
+                      }
+                      required
+                      sx={{ width: "25%" }}
+                    >
+                      <MenuItem key="Skóra" value="Skóra">
+                        Skóra
+                      </MenuItem>
+                      <MenuItem key="Włosy" value="Włosy">
+                        Włosy
+                      </MenuItem>
+                      <MenuItem key="Paznokcie" value="Paznokcie">
+                        Paznokcie
+                      </MenuItem>
+                      <MenuItem key="Układ Pokarmowy" value="Układ Pokarmowy">
+                        Układ Pokarmowy
+                      </MenuItem>
+                      <MenuItem key="Funkcjonowanie" value="Funkcjonowanie">
+                        Funkcjonowanie
+                      </MenuItem>
                     </Select>
                   </Stack>
                   <Stack direction="row">
@@ -563,7 +603,7 @@ const TableDefSupplDealing = () => {
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Prady Suplementacjne</b>
+                  <b>Porady Suplementacjne</b>
                 </Typography>
               </Box>
               <div>
@@ -575,6 +615,7 @@ const TableDefSupplDealing = () => {
                     IssueId: prod.IssueId,
                     SupplementId: prod.SupplementId,
                     Issue: prod.Issue,
+                    IssueCategory: prod.IssueCategory,
                     Supplement: prod.Supplement,
                     IsDeleted: prod.IsDeleted,
                   }))}

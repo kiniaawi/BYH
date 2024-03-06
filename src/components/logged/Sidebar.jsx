@@ -1,21 +1,13 @@
 import {
   Box,
-  Collapse,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
-  Stack,
-  Switch,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import CallIcon from "@mui/icons-material/Call";
-import GroupsIcon from "@mui/icons-material/Groups";
-import EmailIcon from "@mui/icons-material/Email";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "../../style.css";
 import { useCookies } from "react-cookie";
 
@@ -26,8 +18,47 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
     "isAdminCookie",
   ]);
 
-  //setCookie("currentPageCookie", "admin-home", { path: "/" });
   const adminCheck = cookies.isAdminCookie;
+  const userEmail = cookies.emailCookie;
+
+  const [userData, setUserData] = useState([]);
+  const [adminChecking, setAdminChecking] = useState("");
+
+  useEffect(() => {
+    fetchUserData();
+    CheckIfIsAdmin();
+  }, []);
+
+  const fetchUserData = () => {
+    axios
+      .get("/api/Registration")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setUserData(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const CheckIfIsAdmin = () => {
+    if (userData.length > 0) {
+      const currentUser = userData.find((user) => user.Email === userEmail);
+
+      if (currentUser) {
+        if (currentUser.isAdmin) {
+          setAdminChecking(true);
+        } else {
+          setAdminChecking(false);
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
 
   return (
     <Box
@@ -37,7 +68,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
       sx={{ display: { xs: "none", sm: "block" } }}
       marginTop={8}
     >
-      {adminCheck ? (
+      {adminChecking ? (
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/admin-home">
@@ -84,55 +115,40 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/homepage">
-              <ListItemIcon>
-                <HomeIcon className="icon-text" />
-              </ListItemIcon>
               <ListItemText
-                primary="Calendar"
+                primary="Strona Główna"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/calls">
-              <ListItemIcon>
-                <CallIcon className="icon-text" />
-              </ListItemIcon>
+            <ListItemButton component={Link} to="/user-supplementation">
               <ListItemText
-                primary="Calendar"
+                primary="Pielęgnacja Skóry"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/meetings">
-              <ListItemIcon>
-                <GroupsIcon className="icon-text" />
-              </ListItemIcon>
+            <ListItemButton component={Link} to="/user-supplementation">
               <ListItemText
-                primary="Calendar"
+                primary="Pielęgnacja Włosów"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/emails">
-              <ListItemIcon>
-                <EmailIcon className="icon-text" />
-              </ListItemIcon>
+            <ListItemButton component={Link} to="/user-supplementation">
               <ListItemText
-                primary="Calendar"
+                primary="Suplementacja"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/calendar">
-              <ListItemIcon>
-                <CalendarMonthIcon className="icon-text" />
-              </ListItemIcon>
+            <ListItemButton component={Link} to="/user-supplementation">
               <ListItemText
-                primary="Calendar"
+                primary="Choroby I Ich Zapobieganie"
                 primaryTypographyProps={{ className: "icon-text" }}
               />
             </ListItemButton>

@@ -11,7 +11,8 @@ import {
   IconButton,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Flag from "react-world-flags";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -45,6 +46,10 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
 
   const username = cookies.nameCookie;
   const isAdmin = cookies.isAdminCookie;
+  const userEmail = cookies.emailCookie;
+
+  const [userData, setUserData] = useState([]);
+  const [adminChecking, setAdminChecking] = useState("");
 
   console.log("IsAdminCookieNavbar: ", isAdmin);
 
@@ -66,6 +71,42 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
     }
   }
 
+  useEffect(() => {
+    fetchUserData();
+    CheckIfIsAdmin();
+  }, []);
+
+  const fetchUserData = () => {
+    axios
+      .get("/api/Registration")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setUserData(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const CheckIfIsAdmin = () => {
+    if (userData.length > 0) {
+      const currentUser = userData.find((user) => user.Email === userEmail);
+
+      if (currentUser) {
+        if (currentUser.isAdmin) {
+          setAdminChecking(true);
+        } else {
+          setAdminChecking(false);
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   const initial = getInitial(username);
 
   return (
@@ -73,7 +114,7 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
       {/* //"#d90f8b" #FF006E */}
       <StyledToolbar>
         <Stack direction="row" spacing={1}>
-          <Link to={isAdmin ? "/admin-home" : "/homepage"}>
+          <Link to={adminChecking ? "/admin-home" : "/homepage"}>
             <Typography
               sx={{
                 display: { xs: "none", sm: "block" },

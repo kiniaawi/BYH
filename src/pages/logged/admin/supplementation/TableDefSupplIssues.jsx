@@ -154,7 +154,7 @@ const TableDefSupplIssues = () => {
     {
       field: "Issue",
       headerName: "Objaw",
-      width: 150,
+      width: 250,
     },
     {
       field: "IsDeleted",

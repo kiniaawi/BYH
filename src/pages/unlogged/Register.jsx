@@ -5,6 +5,8 @@ import {
   Button,
   Card,
   CardContent,
+  Checkbox,
+  FormControlLabel,
   Grid,
   Link,
   Stack,
@@ -22,6 +24,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRep, setPasswordRep] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
@@ -50,6 +53,10 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
     } else {
       alert("Incorrect password repeated");
     }
+  };
+
+  const handleVerify = () => {
+    setIsVerified(true);
   };
 
   const clearTextArea = () => {
@@ -163,6 +170,14 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                                 onChange={(e) => setPasswordRep(e.target.value)}
                               />
                             </Grid>
+                            <Grid item xs={9} margin="auto">
+                              <FormControlLabel
+                                required
+                                control={<Checkbox />}
+                                label="Nie jestem robotem"
+                                onChange={handleVerify}
+                              />
+                            </Grid>
                             <Grid item xs={9} margin="auto" marginTop={"20px"}>
                               <Box display="flex" justifyContent={"center"}>
                                 <Button
@@ -171,6 +186,7 @@ const Register = ({ currentContent, setCurrentContent, onChangeContent }) => {
                                   color="primary"
                                   fullWidth
                                   onClick={(e) => handleRegister(e)}
+                                  disabled={!isVerified}
                                 >
                                   Zarejestruj
                                 </Button>

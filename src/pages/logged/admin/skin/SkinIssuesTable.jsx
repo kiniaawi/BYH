@@ -366,38 +366,9 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
                       </Select>
                     )}
                   </FormControl>
-                  <TextField
-                    sx={{ marginBottom: 2 }}
-                    name="issue_photo_url"
-                    label="Obraz"
-                    fullWidth
-                    value={imageName}
-                    disabled
-                  />
                   <Grid item xs={12} margin={2}>
-                    <input
-                      type="file"
-                      //   onChange={(e) =>
-                      //     setEditIssue({
-                      //       ...editIssue,
-                      //       ImageURL: e.target.files[0],
-                      //     })
-                      //   }
-                      onChange={(e) => handleImageChange(e)}
-                    />
+                    <input type="file" onChange={(e) => handleImageChange(e)} />
                     <Button onClick={() => handleAddFile()}>Dodaj plik</Button>
-                    {/* <TextField
-                        type="text"
-                        label="Skin Picture Src"
-                        value={image}
-                        onChange={(e) =>
-                          setImage(
-                            '"/skin_issues_pictures/' + e.target.value + '"'
-                          )
-                        }
-                        required
-                        fullWidth
-                      /> */}
                   </Grid>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
@@ -479,13 +450,13 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length() !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                {selectedIssue && selectedIssue.length !== 0 ? (
+                  <Typography sx={{ textAlign: "center" }}>
                     Czy na pewno chcesz usunąc Problem Skórny:{" "}
-                    {selectedIssue.SkinIsssue}?
+                    {selectedIssue.SkinIssue}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                  <Typography sx={{ textAlign: "center" }}>
                     Czy na pewno chcesz usunąc Problem Skórny?
                   </Typography>
                 )}
@@ -566,13 +537,13 @@ const SkinIssues = ({ handleSkinIssueClick }) => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedIssue && selectedIssue.length() !== 0 ? (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                {selectedIssue && selectedIssue.length !== 0 ? (
+                  <Typography x={{ textAlign: "center" }}>
                     Czy na pewno chcesz przywrócić Problem Skórny:{" "}
-                    {selectedIssue.SkinIsssue}?
+                    {selectedIssue.SkinIssue}?
                   </Typography>
                 ) : (
-                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                  <Typography sx={{ textAlign: "center" }}>
                     Czy na pewno chcesz przywrócić Problem Skórny?
                   </Typography>
                 )}

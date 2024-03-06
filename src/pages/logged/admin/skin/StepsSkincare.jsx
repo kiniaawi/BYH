@@ -157,8 +157,12 @@ const StepsSkincare = ({ onChangeContent }) => {
                 required
                 sx={{ width: "25%" }}
               >
-                <MenuItem value="Morning">Rano</MenuItem>
-                <MenuItem value="Evening">Wieczór</MenuItem>
+                <MenuItem key="morning" value="Rano">
+                  Rano
+                </MenuItem>
+                <MenuItem key="evening" value="Wieczór">
+                  Wieczór
+                </MenuItem>
               </Select>
             </Stack>
             <Stack

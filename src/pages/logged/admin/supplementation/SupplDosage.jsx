@@ -129,7 +129,7 @@ const SupplDosage = ({ onChangeContent }) => {
               variant="h6"
               sx={{ textAlign: "center", marginBottom: 3 }}
             >
-              <b>Dawkowanie / kg Masy Ciała</b>
+              <b>Dawkowanie</b>
             </Typography>
             <Stack
               direction="row"
@@ -137,11 +137,11 @@ const SupplDosage = ({ onChangeContent }) => {
             >
               <Stack direction="row">
                 <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                  Kobieta do 18 lat:{" "}
+                  Kobieta do 19 lat:{" "}
                 </Typography>
                 <TextField
                   type="text"
-                  label="mg/kg"
+                  label="Dawka"
                   value={FkgTeen}
                   onChange={(e) => setFkgTeen(e.target.value)}
                   required
@@ -149,11 +149,11 @@ const SupplDosage = ({ onChangeContent }) => {
               </Stack>
               <Stack direction="row">
                 <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                  Mężczyzna do 18 lat:{" "}
+                  Mężczyzna do 19 lat:{" "}
                 </Typography>
                 <TextField
                   type="text"
-                  label="mg/kg"
+                  label="Dawka"
                   value={MkgTeen}
                   onChange={(e) => setMkgTeen(e.target.value)}
                   required
@@ -166,11 +166,11 @@ const SupplDosage = ({ onChangeContent }) => {
             >
               <Stack direction="row">
                 <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                  Kobieta powyżej 18 lat:{" "}
+                  Kobieta powyżej 19 lat:{" "}
                 </Typography>
                 <TextField
                   type="text"
-                  label="mg/kg"
+                  label="Dawka"
                   value={FkgAdult}
                   onChange={(e) => setFkgAdult(e.target.value)}
                   required
@@ -178,11 +178,11 @@ const SupplDosage = ({ onChangeContent }) => {
               </Stack>
               <Stack direction="row">
                 <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                  Mężczyzna powyżej 18 lat:{" "}
+                  Mężczyzna powyżej 19 lat:{" "}
                 </Typography>
                 <TextField
                   type="text"
-                  label="mg/kg"
+                  label="Dawka"
                   value={MkgAdult}
                   onChange={(e) => setMkgAdult(e.target.value)}
                   required

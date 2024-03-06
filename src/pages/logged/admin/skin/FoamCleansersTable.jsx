@@ -29,12 +29,12 @@ const FoamCleansersTable = () => {
   const [editProduct, setEditProduct] = useState({
     Id: 0,
     ProductName: "",
-    ProductTypeId: "",
+    ProductTypeId: 0,
     ProductType: "",
     SkinType: "",
     DayTime: "",
     Frequency: "",
-    MinAge: "",
+    MinAge: 0,
     ImageURL: "",
     ForPregnant: "",
   });
@@ -103,7 +103,7 @@ const FoamCleansersTable = () => {
     formData.append("file", image);
 
     axios
-      .post("/api/OilCleaners/SaveFileOils", formData)
+      .post("/api/FoamCleansers/SaveFile", formData)
       .then((response) => {
         alert(response);
       })
@@ -162,7 +162,7 @@ const FoamCleansersTable = () => {
       DayTime: editProduct.DayTime,
       Frequency: editProduct.Frequency,
       MinAge: editProduct.MinAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: editProduct.ForPregnant,
     };
 
@@ -252,6 +252,21 @@ const FoamCleansersTable = () => {
       field: "ProductTypeId",
       headerName: " Id Typu Produktu",
       width: 50,
+    },
+    {
+      field: "ImageURL",
+      headerName: "Obraz",
+      width: 150,
+      renderCell: (params) => {
+        console.log(params.row.ImageURL);
+        return (
+          <img
+            src={`https://localhost:44313/Photos/FoamCleansers/${params.row.ImageURL}`}
+            alt="FoamCleanser"
+            style={{ width: "auto", height: 100 }}
+          />
+        );
+      },
     },
     {
       field: "SkinType",
@@ -721,6 +736,7 @@ const FoamCleansersTable = () => {
                     ProductName: prod.ProductName,
                     ProductType: prod.ProductType,
                     ProductTypeId: prod.ProductTypeId,
+                    ImageURL: prod.ImageURL,
                     SkinType: prod.SkinType,
                     DayTime: prod.DayTime,
                     Frequency: prod.Frequency,

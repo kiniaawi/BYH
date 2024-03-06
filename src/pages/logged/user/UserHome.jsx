@@ -1,24 +1,72 @@
-import { Box } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const UserHome = ({ lang }) => {
+const UserHome = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
+    "nameCookie",
   ]);
+  const username = cookies.nameCookie;
   setCookie("currentPageCookie", "homepage", { path: "/" });
+  const navigate = useNavigate();
+
   return (
-    <Box
-      flex={12}
-      p={2}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-    >
-      <h1>User page</h1>
+    <Box flex={12} p={2}>
+      <Typography variant="h4" sx={{ textAlign: "center", marginBottom: 3 }}>
+        <b>Witaj na stronie BoostYourHealth, {username}!</b>
+      </Typography>
+      <Typography variant="h6" sx={{ textAlign: "center", marginTop: 10 }}>
+        Wybierz dziedzinę, w której potrzebujesz pomocy
+      </Typography>
+      <Box sx={{ marginTop: 5 }}>
+        <Stack direction="row" justifyContent={"space-evenly"}>
+          <Button
+            component={Link}
+            to="/def-suppl-issues"
+            onClick={() => {
+              onChangeContent("def-suppl-issues");
+              navigate("/def-suppl-issues");
+            }}
+          >
+            Pielęgnacja Skóry
+          </Button>
+          <Button
+            component={Link}
+            to="/def-suppl-tests"
+            onClick={() => {
+              onChangeContent("def-suppl-tests");
+              navigate("/def-suppl-tests");
+            }}
+          >
+            Pielęgnacja Włosów
+          </Button>
+          <Button
+            component={Link}
+            to="/user-supplementation"
+            onClick={() => {
+              onChangeContent("user-supplementation");
+              navigate("/user-supplementation");
+            }}
+          >
+            Suplementacja
+          </Button>
+          <Button
+            component={Link}
+            to="/dealing-def-suppl"
+            onClick={() => {
+              onChangeContent("dealing-def-suppl");
+              navigate("/dealing-def-suppl");
+            }}
+          >
+            Choroby i Ich Zapobieganie
+          </Button>
+        </Stack>
+      </Box>
+      <Box sx={{ marginTop: 4 }}>{/* Formularz kontaktowy */}</Box>
     </Box>
   );
 };

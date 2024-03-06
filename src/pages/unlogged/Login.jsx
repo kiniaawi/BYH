@@ -52,6 +52,7 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
             setCookie("isAdminCookie", dt.Registration.IsAdmin, { path: "/" });
             setCookie("nameCookie", dt.Registration.Name, { path: "/" });
             setCookie("emailCookie", dt.Registration.Email, { path: "/" });
+            setCookie("userIdCookie", dt.Registration.Id, { path: "/" });
             console.log("name: ", name);
             navigate("/admin-home");
           } else {
@@ -60,6 +61,7 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
             setCookie("isAdminCookie", dt.Registration.IsAdmin, { path: "/" });
             setCookie("nameCookie", dt.Registration.Name, { path: "/" });
             setCookie("emailCookie", dt.Registration.Email, { path: "/" });
+            setCookie("userIdCookie", dt.Registration.Id, { path: "/" });
             navigate("/homepage");
           }
         } else {

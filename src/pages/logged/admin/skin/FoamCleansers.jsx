@@ -80,7 +80,7 @@ const FoamCleansers = ({ onChangeContent }) => {
       DayTime: dayTime,
       Frequency: frequency,
       MinAge: minAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: pregnant,
     };
 
@@ -222,7 +222,6 @@ const FoamCleansers = ({ onChangeContent }) => {
               >
                 <MenuItem value="Rano">Rano</MenuItem>
                 <MenuItem value="Wieczór">Wieczór</MenuItem>
-                <MenuItem value="Rano i Wieczór">Rano i Wieczór</MenuItem>
               </Select>
             </Stack>
             <Stack

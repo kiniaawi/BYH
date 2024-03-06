@@ -29,6 +29,7 @@ const DefSupplDealing = ({ onChangeContent }) => {
 
   const [issueId, setIssueId] = useState("");
   const [supplemetId, setSupplementId] = useState("");
+  const [issueCategory, setIssueCategory] = useState("");
   const [defsupplIssuesData, setDefsupplIssuesData] = useState([]);
   const [defsupplBloodTests, setDefsupplBloodTests] = useState([]);
 
@@ -71,6 +72,7 @@ const DefSupplDealing = ({ onChangeContent }) => {
     const data = {
       IssueId: issueId,
       SupplementId: supplemetId,
+      IssueCategory: issueCategory,
     };
 
     axios
@@ -90,6 +92,7 @@ const DefSupplDealing = ({ onChangeContent }) => {
   const clearTextArea = () => {
     setIssueId("");
     setSupplementId("");
+    setIssueCategory("");
   };
 
   return (
@@ -136,7 +139,33 @@ const DefSupplDealing = ({ onChangeContent }) => {
                 ))}
               </Select>
             </Stack>
-
+            <Stack direction="row" sx={{ marginBottom: 3 }}>
+              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
+                Wprowadź Kategorię:{" "}
+              </Typography>
+              <Select
+                value={issueCategory}
+                onChange={(e) => setIssueCategory(e.target.value)}
+                required
+                sx={{ width: "25%" }}
+              >
+                <MenuItem key="Skóra" value="Skóra">
+                  Skóra
+                </MenuItem>
+                <MenuItem key="Włosy" value="Włosy">
+                  Włosy
+                </MenuItem>
+                <MenuItem key="Paznokcie" value="Paznokcie">
+                  Paznokcie
+                </MenuItem>
+                <MenuItem key="Układ Pokarmowy" value="Układ Pokarmowy">
+                  Układ Pokarmowy
+                </MenuItem>
+                <MenuItem key="Funkcjonowanie" value="Funkcjonowanie">
+                  Funkcjonowanie
+                </MenuItem>
+              </Select>
+            </Stack>
             <Stack direction="row">
               <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
                 Wprowadź Suplement:{" "}
