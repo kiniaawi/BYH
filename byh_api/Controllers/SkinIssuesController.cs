@@ -68,6 +68,90 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
+        [HttpGet("GetFaceSkinIssues")]
+        public JsonResult GetFaceSkinIssues()
+        {
+            Response response = new Response();
+
+            try
+            {
+                string query = @"SELECT Id, SkinIssue, Placement, ImageURL, IsDeleted FROM dbo.SkinIssues 
+                                WHERE Placement = 'Twarz' AND IsDeleted = 0";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+                SqlDataReader myReader;
+                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                {
+                    myConn.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                    {
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myConn.Close();
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "Data Fetched Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Fetching Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
+            }
+
+            return new JsonResult(response);
+        }
+
+        [HttpGet("GetBodySkinIssues")]
+        public JsonResult GetBodySkinIssues()
+        {
+            Response response = new Response();
+
+            try
+            {
+                string query = @"SELECT Id, SkinIssue, Placement, ImageURL, IsDeleted FROM dbo.SkinIssues 
+                                WHERE Placement != 'Twarz' AND IsDeleted = 0";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("BYHCon");
+                SqlDataReader myReader;
+                using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+                {
+                    myConn.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                    {
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myConn.Close();
+                    }
+
+                    response.StatusCode = 200;
+                    response.StatusMessage = "Data Fetched Successfully";
+                    HttpContext.Response.StatusCode = response.StatusCode;
+                    response.Data = table;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                response.StatusCode = 100;
+                response.StatusMessage = "Fetching Data Failed";
+                HttpContext.Response.StatusCode = response.StatusCode;
+            }
+
+            return new JsonResult(response);
+        }
+
         [HttpPost]
         public JsonResult Post(SkinIssues skinIssues)
         {

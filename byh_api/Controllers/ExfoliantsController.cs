@@ -71,7 +71,8 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"INSERT INTO dbo.Exfoliants VALUES(@ProductName, @ProductTypeId, 
+                string query = @"INSERT INTO dbo.Exfoliants (ProductName, ProductTypeId, ProductType, SkinType, DayTime, 
+                                Frequency, MinAge, ImageURL, ForPregnant, IsDeleted) VALUES(@ProductName, @ProductTypeId, 
                                 (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinType, @DayTime,
                                 @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
