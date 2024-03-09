@@ -80,7 +80,7 @@ const OilCleaners = ({ onChangeContent }) => {
       DayTime: dayTime,
       Frequency: frequency,
       MinAge: minAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: pregnant,
     };
 

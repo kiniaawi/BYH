@@ -109,7 +109,7 @@ const Exfoliants = ({ onChangeContent }) => {
     formData.append("file", image);
 
     axios
-      .post("/api/OilCleaners/SaveFileOils", formData)
+      .post("/api/Exfoliants/SaveFile", formData)
       .then((response) => {
         alert(response);
       })

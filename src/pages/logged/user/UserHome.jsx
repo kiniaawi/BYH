@@ -26,10 +26,10 @@ const UserHome = ({ onChangeContent }) => {
         <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
-            to="/def-suppl-issues"
+            to="/user-skincare"
             onClick={() => {
-              onChangeContent("def-suppl-issues");
-              navigate("/def-suppl-issues");
+              onChangeContent("user-skincare");
+              navigate("/user-skincare");
             }}
           >
             Pielęgnacja Skóry

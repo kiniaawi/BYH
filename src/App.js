@@ -627,6 +627,51 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/user-skincare"
+              element={
+                <Feed
+                  currentContent="user-skincare"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-face-skincare"
+              element={
+                <Feed
+                  currentContent="user-face-skincare"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-body-skincare"
+              element={
+                <Feed
+                  currentContent="user-body-skincare"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/face-skincare-advice"
+              element={
+                <Feed
+                  currentContent="face-skincare-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/history-skincare-face-advices"
+              element={
+                <Feed
+                  currentContent="history-skincare-face-advices"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
             <Route path="/" element={<Navigate to="/login" />} />
           </Routes>
         </ThemeProvider>

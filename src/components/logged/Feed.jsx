@@ -61,6 +61,11 @@ import FunctioningSupplAdvice from "../../pages/logged/user/Supplementation/Func
 import SkinSupplAdvice from "../../pages/logged/user/Supplementation/SkinSupplAdvice";
 import UserProfile from "../../pages/logged/user/profile/UserProfile";
 import HistorySupplAdvices from "../../pages/logged/user/profile/HistorySupplAdvices";
+import UserSkincare from "../../pages/logged/user/skincare/UserSkincare";
+import UserFaceSkincare from "../../pages/logged/user/skincare/UserFaceSkincare";
+import UserBodySkincare from "../../pages/logged/user/skincare/UserBodySkincare";
+import FaceSkincareAdvice from "../../pages/logged/user/skincare/FaceSkincareAdvice";
+import HistorySkincareFaceAdvice from "../../pages/logged/user/profile/HistorySkincareFaceAdvice";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -258,6 +263,21 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "history-supplementation-advices" && (
               <HistorySupplAdvices onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-skincare" && (
+              <UserSkincare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-face-skincare" && (
+              <UserFaceSkincare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-body-skincare" && (
+              <UserBodySkincare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "face-skincare-advice" && (
+              <FaceSkincareAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "history-skincare-face-advices" && (
+              <HistorySkincareFaceAdvice onChangeContent={onChangeContent} />
             )}
           </div>
         </Box>

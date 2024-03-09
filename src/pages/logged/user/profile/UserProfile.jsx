@@ -26,13 +26,23 @@ const UserProfile = ({ onChangeContent }) => {
         <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
+            to="/history-skincare-face-advices"
+            onClick={() => {
+              onChangeContent("history-skincare-face-advices");
+              navigate("/history-skincare-face-advices");
+            }}
+          >
+            Pielęgnacja Skóry - Twarz
+          </Button>
+          <Button
+            component={Link}
             to="/history-skin-advices"
             onClick={() => {
               onChangeContent("history-skin-advices");
               navigate("/history-skin-advices");
             }}
           >
-            Pielęgnacja Skóry
+            Pielęgnacja Skóry - Ciało
           </Button>
           <Button
             component={Link}
@@ -44,6 +54,8 @@ const UserProfile = ({ onChangeContent }) => {
           >
             Pielęgnacja Włosów
           </Button>
+        </Stack>
+        <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
             to="/history-supplementation-advices"

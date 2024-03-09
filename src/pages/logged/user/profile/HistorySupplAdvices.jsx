@@ -29,7 +29,9 @@ const HistorySupplAdvices = ({ onChangeContent }) => {
   ]);
   const username = cookies.nameCookie;
   const userId = cookies.userIdCookie;
-  setCookie("currentPageCookie", "user-profile", { path: "/" });
+  setCookie("currentPageCookie", "history-supplementation-advices", {
+    path: "/",
+  });
   const navigate = useNavigate();
   const [allSupplAdvices, setAllSupplAdvices] = useState([]);
   const [detailsSupplAdvice, setDetailsSupplAdvice] = useState([]);

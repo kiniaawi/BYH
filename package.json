@@ -1,6 +1,6 @@
 {
   "name": "byh",
-  "proxy": "https://localhost:44313/",
+  "proxy": "https://localhost:44313",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -141,6 +141,7 @@ const Serums = ({ onChangeContent }) => {
     setMinAge("");
     setPregnant("");
     setImageName("");
+    setApplication("");
   };
 
   return (
