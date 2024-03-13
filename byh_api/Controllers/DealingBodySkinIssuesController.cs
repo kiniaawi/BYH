@@ -1,26 +1,21 @@
 ﻿using byh_api.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
-using System.IO;
 using System;
 
 namespace byh_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BodyMoisturizersController : ControllerBase
+    public class DealingBodySkinIssuesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _env;
-
-        public BodyMoisturizersController(IConfiguration configuration, IWebHostEnvironment env)
+        public DealingBodySkinIssuesController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _env = env;
         }
 
         [HttpGet]
@@ -30,7 +25,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT * from dbo.BodyMoisturizers";
+                string query = @"SELECT Id, SkinIssue, Solution, Description, IsDeleted from dbo.DealingBodySkinIssues";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -65,17 +60,13 @@ namespace byh_api.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(BodyMoisturizers prod)
+        public JsonResult Post(DealingBodySkinIssues dealIssue)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"INSERT INTO dbo.BodyMoisturizers (ProductName, ProductTypeId, ProductType, SkinTypeId, SkinType,
-                                Frequency, MinAge, ImageURL, ForPregnant, IsDeleted) VALUES(@ProductName, @ProductTypeId, 
-                                (SELECT Solution FROM dbo.DealingBodySkinIssues WHERE Id = @ProductTypeId), @SkinTypeId, 
-                                (SELECT SkinType FROM dbo.BodycareSteps WHERE Id = @SkinTypeId),
-                                @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
+                string query = @"INSERT INTO dbo.DealingBodySkinIssues VALUES(@SkinIssue, @Solution, @Description, 0)";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -85,13 +76,9 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@ProductName", prod.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductTypeId", prod.ProductTypeId);
-                        myCommand.Parameters.AddWithValue("@SkinTypeId", prod.SkinTypeId);
-                        myCommand.Parameters.AddWithValue("@Frequency", prod.Frequency);
-                        myCommand.Parameters.AddWithValue("@MinAge", prod.MinAge);
-                        myCommand.Parameters.AddWithValue("@ImageURL", prod.ImageURL);
-                        myCommand.Parameters.AddWithValue("@ForPregnant", prod.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", dealIssue.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@Solution", dealIssue.Solution);
+                        myCommand.Parameters.AddWithValue("@Description", dealIssue.Description);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -116,18 +103,16 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("Update/{Id}")]
-        public JsonResult Update(BodyMoisturizers prod, int Id)
+        [HttpPut("UpdateDealIssue/{Id}")]
+        public JsonResult Put(DealingBodySkinIssues dealIssue, int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.BodyMoisturizers SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
-                            ProductType = (SELECT Solution FROM dbo.DealingBodySkinIssues WHERE Id = @ProductTypeId), 
-                            SkinTypeId = @SkinTypeId, SkinType = (SELECT SkinType FROM dbo.BodycareSteps WHERE Id = @SkinTypeId), 
-                            Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
-                            WHERE Id = @Id";
+                string query = @"UPDATE dbo.DealingBodySkinIssues SET SkinIssue = @SkinIssue, Solution = @Solution, 
+                                Description = @Description, IsDeleted = @IsDeleted 
+                                WHERE Id = @Id";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -137,14 +122,11 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", prod.Id);
-                        myCommand.Parameters.AddWithValue("@ProductName", prod.ProductName);
-                        myCommand.Parameters.AddWithValue("@ProductTypeId", prod.ProductTypeId);
-                        myCommand.Parameters.AddWithValue("@SkinTypeId", prod.SkinTypeId);
-                        myCommand.Parameters.AddWithValue("@Frequency", prod.Frequency);
-                        myCommand.Parameters.AddWithValue("@MinAge", prod.MinAge);
-                        myCommand.Parameters.AddWithValue("@ImageURL", prod.ImageURL);
-                        myCommand.Parameters.AddWithValue("@ForPregnant", prod.ForPregnant);
+                        myCommand.Parameters.AddWithValue("@Id", dealIssue.Id);
+                        myCommand.Parameters.AddWithValue("@SkinIssue", dealIssue.SkinIssue);
+                        myCommand.Parameters.AddWithValue("@Solution", dealIssue.Solution);
+                        myCommand.Parameters.AddWithValue("@Description", dealIssue.Description);
+                        myCommand.Parameters.AddWithValue("@IsDeleted", dealIssue.IsDeleted);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -169,14 +151,15 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("Delete{Id}")]
-        public JsonResult Delete(int Id)
+        // [Route("DelIssue")]
+        [HttpPut("DelDealIssue/{Id}")]
+        public JsonResult DelIssue(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.BodyMoisturizers SET IsDeleted = 1
+                string query = @"UPDATE dbo.DealingBodySkinIssues SET IsDeleted = 1
                             WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -195,7 +178,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Essence Deleted Successfully";
+                    response.StatusMessage = "Issue Deleted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -205,21 +188,21 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Delete Essence";
+                response.StatusMessage = "Failed to Delete Issue";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [HttpPut("Revert{Id}")]
-        public JsonResult Revert(int Id)
+        [HttpPut("RevDealIssue/{Id}")]
+        public JsonResult RevIssue(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.BodyMoisturizers SET IsDeleted = 0
+                string query = @"UPDATE dbo.DealingBodySkinIssues SET IsDeleted = 0
                             WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
@@ -238,7 +221,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Essence Reverted Successfully";
+                    response.StatusMessage = "Issue Deleted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -248,56 +231,11 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Revert Essence";
+                response.StatusMessage = "Failed to Delete Issue";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
-        }
-
-        [Route("SaveFile")]
-        [HttpPost]
-        public JsonResult SaveFile()
-        {
-            Response response = new Response();
-
-            try
-            {
-                var httpRequest = Request.Form;
-                var postedFile = httpRequest.Files[0];
-
-                if (postedFile != null && postedFile.Length > 0)
-                {
-                    string filename = Path.GetFileName(postedFile.FileName);
-                    var physicalPath = Path.Combine(_env.ContentRootPath, "Photos/BodyMoisturizers", filename);
-
-                    using (var stream = new FileStream(physicalPath, FileMode.Create))
-                    {
-                        postedFile.CopyTo(stream);
-                    }
-
-                    response.StatusCode = 200;
-                    response.StatusMessage = "Photo Saved Successfully";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(filename);
-                }
-                else
-                {
-                    response.StatusCode = 100;
-                    response.StatusMessage = "No file provided.";
-                    HttpContext.Response.StatusCode = response.StatusCode;
-                    return new JsonResult(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                response.StatusCode = 100;
-                response.StatusMessage = "Failed to Save Photo";
-                HttpContext.Response.StatusCode = 500;
-                return new JsonResult(response);
-            }
         }
     }
 }

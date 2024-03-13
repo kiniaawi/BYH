@@ -210,7 +210,7 @@ namespace byh_api.Controllers
                                                     )
                                                     THEN
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType 
                                                             AND ProductType IN (
@@ -222,7 +222,7 @@ namespace byh_api.Controllers
                                                         )
                                                     ELSE
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType AND DayTime = 'Rano'
                                                         )
@@ -306,7 +306,7 @@ namespace byh_api.Controllers
                                                     )
                                                     THEN
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType 
                                                             AND ProductType IN (
@@ -318,7 +318,7 @@ namespace byh_api.Controllers
                                                         )
                                                     ELSE
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType AND DayTime = 'Rano'
                                                         )
@@ -499,7 +499,7 @@ namespace byh_api.Controllers
                                                     )
                                                     THEN
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType 
                                                             AND ProductType IN (
@@ -511,7 +511,7 @@ namespace byh_api.Controllers
                                                         )
                                                     ELSE
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType AND DayTime = 'Wieczór'
                                                         )
@@ -541,7 +541,7 @@ namespace byh_api.Controllers
                                                     )
                                                     THEN
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType 
                                                             AND ProductType IN (
@@ -553,7 +553,7 @@ namespace byh_api.Controllers
                                                         )
                                                     ELSE
                                                         (
-                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency), '; ')
+                                                            SELECT STRING_AGG(CONCAT('Serum: ', ProductName, ' - ', Frequency, '-', ApplicationWay), '; ')
                                                             FROM dbo.Serums 
                                                             WHERE SkinType = @SkinType AND DayTime = 'Wieczór'
                                                         )

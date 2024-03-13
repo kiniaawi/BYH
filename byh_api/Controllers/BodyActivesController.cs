@@ -72,7 +72,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.BodyActives VALUES(@ProductName, @ProductTypeId, 
-                                (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), @SkinTypeId, 
+                                (SELECT Solution FROM dbo.DealingBodySkinIssues WHERE Id = @ProductTypeId), @SkinTypeId, 
                                 (SELECT SkinType FROM dbo.BodycareSteps WHERE Id = @SkinTypeId),
                                 @Frequency, @MinAge, @ImageURL, @ForPregnant, 0)";
 
@@ -123,7 +123,7 @@ namespace byh_api.Controllers
             try
             {
                 string query = @"UPDATE dbo.BodyActives SET ProductName = @ProductName, ProductTypeId = @ProductTypeId, 
-                            ProductType = (SELECT Solution FROM dbo.DealingSkinIssues WHERE Id = @ProductTypeId), 
+                            ProductType = (SELECT Solution FROM dbo.DealingBodySkinIssues WHERE Id = @ProductTypeId), 
                             SkinTypeId = @SkinTypeId, SkinType = (SELECT SkinType FROM dbo.BodycareSteps WHERE Id = @SkinTypeId), 
                             Frequency = @Frequency, MinAge = @MinAge, ImageURL = @ImageURL, ForPregnant = @ForPregnant
                             WHERE Id = @Id";
