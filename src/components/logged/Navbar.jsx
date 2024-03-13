@@ -94,9 +94,11 @@ const Navbar = ({ setLang, onSidebarToggle }) => {
       const currentUser = userData.find((user) => user.Email === userEmail);
 
       if (currentUser) {
-        if (currentUser.isAdmin) {
+        if (currentUser.IsAdmin) {
+          console.log(currentUser.IsAdmin);
           setAdminChecking(true);
         } else {
+          console.log(currentUser.IsAdmin);
           setAdminChecking(false);
         }
       } else {

@@ -66,7 +66,7 @@ const BodyMoisturizersTable = () => {
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
@@ -161,15 +161,12 @@ const BodyMoisturizersTable = () => {
       SkinTypeId: editProduct.SkinTypeId,
       Frequency: editProduct.Frequency,
       MinAge: editProduct.MinAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: editProduct.ForPregnant,
     };
 
     axios
-      .put(
-        `/api/BodyMoisturizers/UpdateBodyMoisturizer/${editProduct.Id}`,
-        data
-      )
+      .put(`/api/BodyMoisturizers/Update/${editProduct.Id}`, data)
       .then((response) => {
         fetchProducts();
         console.log("Product has been edited", response.data);
@@ -193,7 +190,7 @@ const BodyMoisturizersTable = () => {
   const handleRevert = () => {
     console.log(selectedProduct);
     axios
-      .put(`/api/BodyMoisturizers/RevBodyMoisturizer/${selectedProduct.Id}`)
+      .put(`/api/BodyMoisturizers/Revert/${selectedProduct.Id}`)
       .then((response) => {
         console.log(selectedProduct);
         fetchProducts();
@@ -220,7 +217,7 @@ const BodyMoisturizersTable = () => {
   const handleDelete = () => {
     console.log(selectedProduct);
     axios
-      .put(`/api/BodyMoisturizers/DelBodyMoisturizer/${selectedProduct.Id}`)
+      .put(`/api/BodyMoisturizers/Delete/${selectedProduct.Id}`)
       .then((response) => {
         console.log(selectedProduct);
         fetchProducts();
@@ -263,7 +260,7 @@ const BodyMoisturizersTable = () => {
     {
       field: "SkinTypeId",
       headerName: "Id Typu Skóry",
-      width: 100,
+      width: 50,
     },
     {
       field: "Frequency",
@@ -689,7 +686,7 @@ const BodyMoisturizersTable = () => {
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Tabela Produktów Nawilżająych</b>
+                  <b>Tabela Produktów Nawilżających</b>
                 </Typography>
               </Box>
               <div style={{ height: "80vh" }}>

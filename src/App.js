@@ -130,6 +130,16 @@ function App() {
               }
             />
             <Route
+              path="/dealing-body-skinissues"
+              element={
+                <Feed
+                  currentContent="dealing-body-skinissues"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/oil-cleaners"
               element={
                 <Feed
@@ -664,10 +674,28 @@ function App() {
               }
             />
             <Route
+              path="/body-skincare-advice"
+              element={
+                <Feed
+                  currentContent="body-skincare-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
               path="/history-skincare-face-advices"
               element={
                 <Feed
                   currentContent="history-skincare-face-advices"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/history-skincare-body-advices"
+              element={
+                <Feed
+                  currentContent="history-skincare-body-advices"
                   onChangeContent={handleChangeContent}
                 />
               }

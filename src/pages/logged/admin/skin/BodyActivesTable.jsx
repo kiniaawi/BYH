@@ -66,7 +66,7 @@ const BodyActivesTable = () => {
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
@@ -137,7 +137,7 @@ const BodyActivesTable = () => {
       SkinType: prod.SkinType,
       Frequency: prod.Frequency,
       MinAge: prod.MinAge,
-      ImageURL: prod.ImageURL,
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: prod.ForPregnant,
     });
 

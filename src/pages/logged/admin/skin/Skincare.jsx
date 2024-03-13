@@ -79,6 +79,11 @@ const Skincare = ({ onChangeContent }) => {
           >
             Typy Skóry
           </Button>
+        </Stack>
+        <Typography variant="h6">
+          <b>Twarz</b>
+        </Typography>
+        <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
             to="/dealing-skinissues"
@@ -89,11 +94,6 @@ const Skincare = ({ onChangeContent }) => {
           >
             Rozwiązania Problemów Skórnych
           </Button>
-        </Stack>
-        <Typography variant="h6">
-          <b>Twarz</b>
-        </Typography>
-        <Stack direction="row" justifyContent={"space-evenly"}>
           <Button
             component={Link}
             to="/skincare-steps"
@@ -215,6 +215,16 @@ const Skincare = ({ onChangeContent }) => {
           <b>Ciało</b>
         </Typography>
         <Stack direction="row" justifyContent={"space-evenly"}>
+          <Button
+            component={Link}
+            to="/dealing-body-skinissues"
+            onClick={() => {
+              onChangeContent("dealing-body-skinissues");
+              navigate("/dealing-body-skinissues");
+            }}
+          >
+            Rozwiązania Problemów Skórnych
+          </Button>
           <Button
             component={Link}
             to="/steps-bodycare"

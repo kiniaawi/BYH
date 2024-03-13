@@ -66,7 +66,7 @@ const BodyOilsTable = () => {
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
@@ -161,7 +161,7 @@ const BodyOilsTable = () => {
       SkinTypeId: editProduct.SkinTypeId,
       Frequency: editProduct.Frequency,
       MinAge: editProduct.MinAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: editProduct.ForPregnant,
     };
 
@@ -260,7 +260,7 @@ const BodyOilsTable = () => {
     {
       field: "SkinTypeId",
       headerName: "Id Typu Skóry",
-      width: 100,
+      width: 50,
     },
     {
       field: "Frequency",

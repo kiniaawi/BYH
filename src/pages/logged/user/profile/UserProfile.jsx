@@ -36,20 +36,20 @@ const UserProfile = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
-            to="/history-skin-advices"
+            to="/history-skincare-body-advices"
             onClick={() => {
-              onChangeContent("history-skin-advices");
-              navigate("/history-skin-advices");
+              onChangeContent("history-skincare-body-advices");
+              navigate("/history-skincare-body-advices");
             }}
           >
             Pielęgnacja Skóry - Ciało
           </Button>
           <Button
             component={Link}
-            to="/history-hair-nails-advices"
+            to="/history-haircare-advices"
             onClick={() => {
-              onChangeContent("history-hair-nails-advices");
-              navigate("/history-hair-nails-advices");
+              onChangeContent("history-haircare-advices");
+              navigate("/history-haircare-advices");
             }}
           >
             Pielęgnacja Włosów

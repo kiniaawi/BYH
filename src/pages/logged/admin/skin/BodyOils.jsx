@@ -47,7 +47,7 @@ const BodyOils = ({ onChangeContent }) => {
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);

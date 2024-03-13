@@ -363,7 +363,7 @@ const FaceSkincareAdvice = ({ onChangeContent }) => {
                   {solution}
                 </Typography>
               ))}
-            {morningSkincareStepsData && (
+            {eveningSkincareStepsData && (
               <Typography
                 variant="h6"
                 sx={{ marginLeft: 4, marginBottom: 2, marginTop: 5 }}
@@ -551,6 +551,12 @@ const FaceSkincareAdvice = ({ onChangeContent }) => {
                   {solution}
                 </Typography>
               ))}
+            {eveningSkincareStepsData &&
+              eveningSkincareStepsData.PregnantOrFeeding === "Tak" && (
+                <Typography sx={{ marginLeft: 4, marginTop: 5 }} color="red">
+                  Podczas okresu ciąży nie używaj żadnej postaci RETINOIDÓW!
+                </Typography>
+              )}
           </Card>
         </Box>
       ) : (

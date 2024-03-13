@@ -47,7 +47,7 @@ const BodyMoisturizers = ({ onChangeContent }) => {
 
   const fetchProductTypes = () => {
     axios
-      .get("/api/DealingSkinIssues")
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
@@ -78,7 +78,7 @@ const BodyMoisturizers = ({ onChangeContent }) => {
       SkinTypeId: skinType,
       Frequency: frequency,
       MinAge: minAge,
-      ImageURL: imageName && imageName.lenght !== 0 ? imageName : "none.png",
+      ImageURL: imageName && imageName.length !== 0 ? imageName : "none.png",
       ForPregnant: pregnant,
     };
 

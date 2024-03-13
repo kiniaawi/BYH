@@ -120,7 +120,7 @@ const SkinIssues = () => {
                         Plecy
                       </MenuItem>
                       <MenuItem key="Ramiona" value="Ramiona">
-                        Arms
+                        Ramiona
                       </MenuItem>
                       <MenuItem key="Nogi" value="Nogi">
                         Nogi

@@ -3,7 +3,9 @@ import {
   Button,
   Card,
   CardContent,
+  FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -18,195 +20,177 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const StepsBodycareTable = () => {
-  const [stepsData, setStepsData] = useState([]);
+const DealingBodySkinIssuesTable = ({ handleSkinIssueClick }) => {
+  const [solutionsData, setSolutionsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedStep, setSelectedStep] = useState(null);
-  const [editStep, setEditStep] = useState({
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [skinIssuesData, setSkinIssuesData] = useState([]);
+  const [editSolution, setEditSolution] = useState({
     Id: 0,
-    SkinType: "",
-    Step1: "",
-    Step2: "",
-    Step3: "",
-    Step4: "",
-    Step5: "",
+    SkinIssue: "",
+    Solution: "",
+    Description: "",
   });
-  const [skinTypesData, setSkinTypesData] = useState([]);
-  const [selectedSkinType, setSelectedSkinType] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   useEffect(() => {
-    fetchSteps();
-    fetchSkinTypes();
+    fetchSolutions();
+    fetchSkinIssues();
   }, []);
 
-  const fetchSteps = () => {
+  const fetchSkinIssues = () => {
     axios
-      .get("/api/BodycareSteps")
+      .get("/api/SkinIssues")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0].SkinIssue);
+        const skinIssuesArray = response.data.Data.filter(
+          (item) => item.Placement !== "Twarz"
+        ).map((item) => item.SkinIssue);
+        console.log(skinIssuesArray);
+        setSkinIssuesData(skinIssuesArray);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchSolutions = () => {
+    axios
+      .get("/api/DealingBodySkinIssues")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data);
-        setStepsData(response.data.Data);
+        setSolutionsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const fetchSkinTypes = () => {
-    axios
-      .get("api/SkinTypesTable/GetOnlyTypes")
-      .then((response) => {
-        setSkinTypesData(response.data.Data);
-        console.log("Skin Types: ", response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleEditModalOpen = (step) => {
-    setSelectedStep(step);
-    console.log(step);
+  const handleEditModalOpen = (sol) => {
+    setSelectedIssue(sol);
+    console.log(sol);
     setEditModalOpen(true);
 
-    setEditStep({
-      Id: step.Id,
-      SkinType: step.SkinType,
-      Step1: step.Step1,
-      Step2: step.Step2,
-      Step3: step.Step3,
-      Step4: step.Step4,
-      Step5: step.Step5,
+    setEditSolution({
+      Id: sol.Id,
+      SkinIssue: sol.SkinIssue,
+      Solution: sol.Solution,
+      Description: sol.Description,
     });
 
-    console.log(editStep.Id);
+    console.log(editSolution.Id);
   };
 
   const handleEditModalClose = () => {
-    setSelectedStep(null);
+    setSelectedIssue(null);
     console.log("handleEditmodalClose");
     setEditModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log("id", editStep.Id);
-    console.log("editStep: ", editStep);
+    console.log("id", editSolution.Id);
+    console.log("editSolution: ", editSolution);
 
     const data = {
-      Id: editStep.Id,
-      SkinType: editStep.SkinType,
-      DayTime: editStep.DayTime,
-      Step1: editStep.Step1,
-      Step2: editStep.Step2,
-      Step3: editStep.Step3,
-      Step4: editStep.Step4,
-      Step5: editStep.Step5,
+      Id: editSolution.Id,
+      SkinIssue: editSolution.SkinIssue,
+      Solution: editSolution.Solution,
+      Description: editSolution.Description,
     };
 
     axios
-      .put(`/api/BodycareSteps/UpdateBodycareStep/${editStep.Id}`, data)
+      .put(
+        `/api/DealingBodySkinIssues/UpdateDealIssue/${editSolution.Id}`,
+        data
+      )
       .then((response) => {
-        fetchSteps();
-        console.log("Step has been edited", response.data);
+        fetchSolutions();
+        console.log("Data has been edited", response.data);
         handleEditModalClose();
       })
       .catch((error) => {
-        console.error("Error during editing step", error);
+        console.error("Error during editing issue", error);
       });
   };
 
-  const handleRevertModalOpen = (step) => {
-    setSelectedStep(step);
+  const handleRevertModalOpen = (sol) => {
+    setSelectedIssue(sol);
     setRevertModalOpen(true);
   };
 
   const handleRevertModalClose = () => {
-    setSelectedStep(null);
+    setSelectedIssue(null);
     setRevertModalOpen(false);
   };
 
   const handleRevert = () => {
-    console.log(selectedStep);
+    console.log(selectedIssue);
     axios
-      .put(`/api/BodycareSteps/RevBodycareStep/${selectedStep.Id}`)
+      .put(`/api/DealingBodySkinIssues/RevDealIssue/${selectedIssue.Id}`)
       .then((response) => {
-        console.log(selectedStep.Id);
-        fetchSteps();
+        console.log(selectedIssue);
+        fetchSolutions();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedStep(null);
+    setSelectedIssue(null);
     setRevertModalOpen(false);
   };
 
-  const handleDeleteModalOpen = (step) => {
-    setSelectedStep(step);
+  const handleDeleteModalOpen = (sol) => {
+    setSelectedIssue(sol);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
-    setSelectedStep(null);
+    setSelectedIssue(null);
     setDeleteModalOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(selectedStep);
+    console.log(selectedIssue);
     axios
-      .put(`/api/BodycareSteps/DelBodycareStep/${selectedStep.Id}`)
+      .put(`/api/DealingBodySkinIssues/DelDealIssue/${selectedIssue.Id}`)
       .then((response) => {
-        console.log(selectedStep);
-        fetchSteps();
+        console.log(selectedIssue);
+        fetchSolutions();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setSelectedStep(null);
+    setSelectedIssue(null);
     setDeleteModalOpen(false);
   };
 
-  const StepsColumns = [
+  const SolutionsColumns = [
     {
       field: "Id",
       headerName: "ID",
       width: 50,
     },
     {
-      field: "SkinType",
-      headerName: "Typ Skóry",
+      field: "SkinIssue",
+      headerName: "Problem Skórny",
+      width: 190,
+    },
+    {
+      field: "Solution",
+      headerName: "Rozwiązanie",
       width: 150,
     },
     {
-      field: "Step1",
-      headerName: "Krok 1",
-      width: 100,
-    },
-    {
-      field: "Step2",
-      headerName: "Krok 2",
-      width: 100,
-    },
-    {
-      field: "Step3",
-      headerName: "Krok 3",
-      width: 100,
-    },
-    {
-      field: "Step4",
-      headerName: "Krok 4",
-      width: 100,
-    },
-    {
-      field: "Step5",
-      headerName: "Krok 5",
+      field: "Description",
+      headerName: "Wyjaśnienie",
       width: 100,
     },
     {
@@ -218,7 +202,7 @@ const StepsBodycareTable = () => {
       field: "action-edit",
       headerName: "Edytuj",
       sortable: false,
-      width: 150,
+      width: 100,
       renderCell: (params) => {
         return (
           <Button
@@ -233,7 +217,7 @@ const StepsBodycareTable = () => {
     },
     {
       field: "action-delete",
-      headerName: "Usuń / Przywróć",
+      headerName: "Usuń / Przywróc",
       sortable: false,
       width: 150,
       renderCell: (params) => {
@@ -245,7 +229,6 @@ const StepsBodycareTable = () => {
             size="small"
             onClick={() => {
               console.log("Clicked issue:", params.row.Id);
-              console.log("Deleted:", params.row.IsDeleted);
               if (isDeleted) {
                 handleRevertModalOpen(params.row);
               } else {
@@ -264,7 +247,7 @@ const StepsBodycareTable = () => {
     <Box flex={12} p={2}>
       {/* Edit Issue Modal */}
       <Modal
-        style={{
+        sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -290,108 +273,88 @@ const StepsBodycareTable = () => {
           padding={3}
         >
           <Grid container spacing={2}>
-            <Card sx={{ width: "80vw", maxWidth: "800px" }}>
+            <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Rutynę Pielęgnacyjną Ciała</b>
+                <b>Edytuj Rozwiązanie Problemu Skórnego</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
-                  <Stack
-                    direction="row"
-                    sx={{ justifyContent: "space-between" }}
-                  >
-                    <Typography>
-                      <b>Typ Skóry</b>
-                    </Typography>
-                    <Select
-                      label="Typ Skóry"
-                      value={editStep.SkinType}
-                      onChange={(e) =>
-                        setEditStep({ ...editStep, SkinType: e.target.value })
-                      }
-                      required
-                      sx={{ width: "25%" }}
-                    >
-                      {skinTypesData.map((skinTypeSel) => (
-                        <MenuItem
-                          key={skinTypeSel.Id}
-                          value={skinTypeSel.SkinType}
+                  <Grid container spacing={1} margin="auto">
+                    <Grid item xs={12} margin={2}>
+                      <Stack
+                        direction="row"
+                        sx={{ justifyContent: "space-between" }}
+                      >
+                        <Typography sx={{ marginRight: 3 }}>
+                          Problem Skórny
+                        </Typography>
+                        <Select
+                          label="Problem Skórny"
+                          value={editSolution.SkinIssue}
+                          onChange={(e) =>
+                            setEditSolution({
+                              ...editSolution,
+                              SkinIssue: e.target.value,
+                            })
+                          }
+                          required
+                          sx={{ width: "80%" }}
                         >
-                          {skinTypeSel.SkinType}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <Typography>Krok 1</Typography>
-                    <TextField
-                      type="text"
-                      label="Krok 1"
-                      value={editStep.Step1}
-                      onChange={(e) =>
-                        setEditStep({
-                          ...editStep,
-                          Step1: e.target.value,
-                        })
-                      }
-                    />
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    sx={{ justifyContent: "space-between", marginTop: 4 }}
-                  >
-                    <Typography>Krok 2</Typography>
-                    <TextField
-                      type="text"
-                      label="Krok 2"
-                      value={editStep.Step2}
-                      onChange={(e) =>
-                        setEditStep({
-                          ...editStep,
-                          Step2: e.target.value,
-                        })
-                      }
-                    />
-                    <Typography>Krok 3</Typography>
-                    <TextField
-                      type="text"
-                      label="Krok 3"
-                      value={editStep.Step3}
-                      onChange={(e) =>
-                        setEditStep({
-                          ...editStep,
-                          Step3: e.target.value,
-                        })
-                      }
-                    />
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    sx={{ justifyContent: "space-between", marginTop: 2 }}
-                  >
-                    <Typography>Krok 4</Typography>
-                    <TextField
-                      type="text"
-                      label="Krok 4"
-                      value={editStep.Step4}
-                      onChange={(e) =>
-                        setEditStep({
-                          ...editStep,
-                          Step4: e.target.value,
-                        })
-                      }
-                    />
-                    <Typography>Krok 5</Typography>
-                    <TextField
-                      type="text"
-                      label="Krok 5"
-                      value={editStep.Step5}
-                      onChange={(e) =>
-                        setEditStep({
-                          ...editStep,
-                          Step5: e.target.value,
-                        })
-                      }
-                    />
-                  </Stack>
+                          {skinIssuesData.map((skinTypeSel) => (
+                            <MenuItem key={skinTypeSel.Id} value={skinTypeSel}>
+                              {skinTypeSel}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12} margin={2}>
+                      <Stack
+                        direction="row"
+                        sx={{ justifyContent: "space-between" }}
+                      >
+                        <Typography sx={{ marginRight: 3 }}>
+                          Rozwiązanie
+                        </Typography>
+                        <TextField
+                          type="text"
+                          label="Rozwiązanie"
+                          value={editSolution.Solution}
+                          onChange={(e) =>
+                            setEditSolution({
+                              ...editSolution,
+                              Solution: e.target.value,
+                            })
+                          }
+                          required
+                          sx={{ width: "80%" }}
+                        />
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12} margin={2}>
+                      <Stack
+                        direction="row"
+                        sx={{ justifyContent: "space-between" }}
+                      >
+                        <Typography sx={{ marginRight: 3 }}>
+                          Rozwiązanie
+                        </Typography>
+                        <TextField
+                          type="text"
+                          label="Rozwiązanie"
+                          value={editSolution.Description}
+                          onChange={(e) =>
+                            setEditSolution({
+                              ...editSolution,
+                              Description: e.target.value,
+                            })
+                          }
+                          required
+                          sx={{ width: "80%" }}
+                        />
+                      </Stack>
+                    </Grid>
+                  </Grid>
                   <Grid item xs={12} sx={{ textAlign: "center", marginTop: 2 }}>
                     <Box
                       sx={{
@@ -472,17 +435,16 @@ const StepsBodycareTable = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedStep && selectedStep.length !== 0 ? (
-                  <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz ununąć rutynę pielęgnacyjną dla typu
-                    skóry: {selectedStep.SkinType}?
+                {selectedIssue && selectedIssue.length !== 0 ? (
+                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc Problem Skórny:{" "}
+                    {selectedIssue.SkinIssue}?
                   </Typography>
                 ) : (
-                  <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz unusąć tą rutynę pielęgnacyjną?
+                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz usunąc Problem Skórny?
                   </Typography>
                 )}
-
                 <Box
                   sx={{
                     textAlign: "center",
@@ -530,7 +492,7 @@ const StepsBodycareTable = () => {
         </Box>
       </Modal>
 
-      {/* Delete Issue Modal */}
+      {/* Revert Issue Modal */}
       <Modal
         sx={{
           display: "flex",
@@ -560,17 +522,16 @@ const StepsBodycareTable = () => {
           <Grid container spacing={2}>
             <Card>
               <CardContent>
-                {selectedStep && selectedStep.length !== 0 ? (
-                  <Typography>
-                    Czy na pewno chcesz przywrócić rutynę pielęgnacyjną dla typu
-                    skóry: {selectedStep.SkinType}?
+                {selectedIssue && selectedIssue.length !== 0 ? (
+                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić Problem Skórny:{" "}
+                    {selectedIssue.SkinIssue}?
                   </Typography>
                 ) : (
-                  <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić tą rutynę pielęgnacyjną?
+                  <Typography variant="h5" sx={{ textAlign: "center" }}>
+                    Czy na pewno chcesz przywrócić Problem Skórny?
                   </Typography>
                 )}
-
                 <Box
                   sx={{
                     textAlign: "center",
@@ -619,27 +580,24 @@ const StepsBodycareTable = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {stepsData && stepsData.length !== 0 ? (
-          <Card>
+        {solutionsData && solutionsData.length !== 0 ? (
+          <Card style={{ height: "80vh" }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={1}>
-                  <b>Rutyny Pielęgnacyjne</b>
+                  <b>Rozwiązanie Problemów Skórnych - Twarz</b>
                 </Typography>
               </Box>
-              <div style={{ height: "80vh" }}>
+              <div>
                 <DataGrid
-                  columns={StepsColumns}
-                  rows={stepsData.map((step, index) => ({
+                  columns={SolutionsColumns}
+                  rows={solutionsData.map((sol, index) => ({
                     id: index,
-                    Id: step.Id,
-                    SkinType: step.SkinType,
-                    Step1: step.Step1,
-                    Step2: step.Step2,
-                    Step3: step.Step3,
-                    Step4: step.Step4,
-                    Step5: step.Step5,
-                    IsDeleted: step.IsDeleted,
+                    Id: sol.Id,
+                    SkinIssue: sol.SkinIssue,
+                    Solution: sol.Solution,
+                    Description: sol.Description,
+                    IsDeleted: sol.IsDeleted,
                   }))}
                   initialState={{
                     pagination: {
@@ -655,7 +613,7 @@ const StepsBodycareTable = () => {
         ) : (
           <Box textAlign={"center"} marginTop={2}>
             <Typography>
-              Nie zneleziono żadnych Rutyn Pielęgnacyjnych w Bazie Dancyh
+              Nie znaleziono żadnych Rozwiązań Problemów Skórnych w Bazie Danych
             </Typography>
           </Box>
         )}
@@ -664,4 +622,4 @@ const StepsBodycareTable = () => {
   );
 };
 
-export default StepsBodycareTable;
+export default DealingBodySkinIssuesTable;

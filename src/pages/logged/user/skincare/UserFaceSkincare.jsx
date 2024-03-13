@@ -133,18 +133,18 @@ const UserFaceSkincare = ({ onChangeContent }) => {
     <Box p={2} sx={{ height: "300vh" }}>
       <Button
         component={Link}
-        to="/user-supplementation"
+        to="/user-skincare"
         onClick={() => {
-          onChangeContent("user-supplementation");
-          navigate("/user-supplementation");
+          onChangeContent("user-skincare");
+          navigate("/user-skincare");
         }}
         size="small"
       >
         <ArrowBackIcon />
-        Panel Suplementacji
+        Panel Pielęgnacji
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 5 }}>
-        <b>Panel Suplementacji - Skóra</b>
+        <b>Panel Pielęgnacji - Twarz</b>
       </Typography>
       <Card>
         <CardHeader

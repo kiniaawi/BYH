@@ -19,7 +19,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { format } from "date-fns";
-const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
+
+const HistorySkincareBodyAdvice = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
@@ -28,41 +29,26 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
   ]);
   const username = cookies.nameCookie;
   const userId = cookies.userIdCookie;
-  setCookie("currentPageCookie", "history-skincare-face-advices", {
+  setCookie("currentPageCookie", "history-skincare-body-advices", {
     path: "/",
   });
   const navigate = useNavigate();
-  const [allMorningAdvices, setAllMorningAdvices] = useState([]);
-  const [allEveningAdvices, setAllEveningAdvices] = useState([]);
+  const [allAdvices, setAllAdvices] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAdvice, setSelectedAdvice] = useState(null);
 
   useEffect(() => {
-    fetchAllMorningAdvices();
-    fetchAllEveningAdvices();
+    fetchAllAdvices();
   }, []);
 
-  const fetchAllMorningAdvices = () => {
+  const fetchAllAdvices = () => {
     axios
-      .get(`/api/FaceSkincareAdvice/GetMorningFaceSkincareAdvice/${userId}`)
+      .get(`/api/BodySkincareAdvice/GetAdvice/${userId}`)
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setAllMorningAdvices(response.data.Data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchAllEveningAdvices = () => {
-    axios
-      .get(`/api/FaceSkincareAdvice/GetEveningFaceSkincareAdvice/${userId}`)
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.Data[0]);
-        setAllEveningAdvices(response.data.Data);
+        setAllAdvices(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -96,11 +82,10 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
   const handleDelete = () => {
     console.log(selectedAdvice);
     axios
-      .put(`/api/FaceSkincareAdvice/Delete/${selectedAdvice.Id}`)
+      .put(`/api/BodySkincareAdvice/Delete/${selectedAdvice.Id}`)
       .then((response) => {
         console.log(selectedAdvice);
-        fetchAllMorningAdvices();
-        fetchAllEveningAdvices();
+        fetchAllAdvices();
       })
       .catch((error) => {
         console.log(error);
@@ -124,7 +109,7 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
     {
       field: "UserGender",
       headerName: "Płeć",
-      width: 50,
+      width: 90,
     },
     {
       field: "UserAge",
@@ -144,22 +129,12 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
     {
       field: "MainIssue",
       headerName: "Głowny Problem",
-      width: 100,
-    },
-    {
-      field: "SecondIssue",
-      headerName: "Drugi Problem",
-      width: 100,
+      width: 150,
     },
     {
       field: "MainSolution",
       headerName: "Główne Rozwiązanie",
-      width: 100,
-    },
-    {
-      field: "SecondSolution",
-      headerName: "Drugie Rozwiązanie",
-      width: 100,
+      width: 150,
     },
     {
       field: "Step1",
@@ -184,31 +159,6 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
     {
       field: "Step5",
       headerName: "Krok 5",
-      width: 100,
-    },
-    {
-      field: "Step6",
-      headerName: "Krok 6",
-      width: 100,
-    },
-    {
-      field: "Step7",
-      headerName: "Krok 7",
-      width: 100,
-    },
-    {
-      field: "Step8",
-      headerName: "Krok 8",
-      width: 100,
-    },
-    {
-      field: "Step9",
-      headerName: "Krok 9",
-      width: 100,
-    },
-    {
-      field: "Step10",
-      headerName: "Krok 10",
       width: 100,
     },
     {
@@ -292,10 +242,8 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
               <CardContent>
                 {selectedAdvice && selectedAdvice.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć poradę dla problemów{" "}
-                    {selectedAdvice.MainIssue} oraz {selectedAdvice.SecondIssue}{" "}
-                    z dnia {selectedAdvice.DiagnDate}? W ten sposób usuniesz
-                    poradę pielęgnacyjną poranną oraz wieczorną.
+                    Czy na pewno chcesz usunąć poradę dla problemu{" "}
+                    {selectedAdvice.MainIssue}z dnia {selectedAdvice.DiagnDate}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
@@ -391,7 +339,7 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
                   variant="h5"
                   sx={{ textAlign: "center", marginTop: 5, marginBottom: 4 }}
                 >
-                  <b>Twoje Rutyny Pielęgnacyjne:</b>
+                  <b>Twoja Rutyna Pielęgnacyjna:</b>
                 </Typography>
                 {selectedAdvice && selectedAdvice.MainIssue && (
                   <Typography
@@ -404,30 +352,6 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
                 {selectedAdvice &&
                   selectedAdvice.MainSolution &&
                   selectedAdvice.MainSolution.split(",").map(
-                    (solution, index) => (
-                      <>
-                        <Typography
-                          variant="h6"
-                          sx={{ marginLeft: 4, marginBottom: 2 }}
-                          key={index}
-                        >
-                          <NavigateNextIcon />
-                          {solution}
-                        </Typography>
-                      </>
-                    )
-                  )}
-                {selectedAdvice && selectedAdvice.SecondIssue && (
-                  <Typography
-                    variant="h6"
-                    sx={{ marginLeft: 4, marginBottom: 2, marginTop: 5 }}
-                  >
-                    {selectedAdvice.SecondIssue}:
-                  </Typography>
-                )}
-                {selectedAdvice &&
-                  selectedAdvice.SecondSolution &&
-                  selectedAdvice.SecondSolution.split(",").map(
                     (solution, index) => (
                       <>
                         <Typography
@@ -529,88 +453,6 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
                       {solution}
                     </Typography>
                   ))}
-                {selectedAdvice &&
-                  selectedAdvice.Step6 &&
-                  [
-                    ...new Set(
-                      selectedAdvice.Step6.split(";").map((item) => item.trim())
-                    ),
-                  ].map((solution, index) => (
-                    <Typography
-                      variant="h6"
-                      sx={{ marginLeft: 4, marginBottom: 2 }}
-                      key={index}
-                    >
-                      <NavigateNextIcon />
-                      {solution}
-                    </Typography>
-                  ))}
-                {selectedAdvice &&
-                  selectedAdvice.Step7 &&
-                  [
-                    ...new Set(
-                      selectedAdvice.Step7.split(";").map((item) => item.trim())
-                    ),
-                  ].map((solution, index) => (
-                    <Typography
-                      variant="h6"
-                      sx={{ marginLeft: 4, marginBottom: 2 }}
-                      key={index}
-                    >
-                      <NavigateNextIcon />
-                      {solution}
-                    </Typography>
-                  ))}
-                {selectedAdvice &&
-                  selectedAdvice.Step8 &&
-                  [
-                    ...new Set(
-                      selectedAdvice.Step8.split(";").map((item) => item.trim())
-                    ),
-                  ].map((solution, index) => (
-                    <Typography
-                      variant="h6"
-                      sx={{ marginLeft: 4, marginBottom: 2 }}
-                      key={index}
-                    >
-                      <NavigateNextIcon />
-                      {solution}
-                    </Typography>
-                  ))}
-                {selectedAdvice &&
-                  selectedAdvice.Step9 &&
-                  [
-                    ...new Set(
-                      selectedAdvice.Step9.split(";").map((item) => item.trim())
-                    ),
-                  ].map((solution, index) => (
-                    <Typography
-                      variant="h6"
-                      sx={{ marginLeft: 4, marginBottom: 2 }}
-                      key={index}
-                    >
-                      <NavigateNextIcon />
-                      {solution}
-                    </Typography>
-                  ))}
-                {selectedAdvice &&
-                  selectedAdvice.Step10 &&
-                  [
-                    ...new Set(
-                      selectedAdvice.Step10.split(";").map((item) =>
-                        item.trim()
-                      )
-                    ),
-                  ].map((solution, index) => (
-                    <Typography
-                      variant="h6"
-                      sx={{ marginLeft: 4, marginBottom: 2 }}
-                      key={index}
-                    >
-                      <NavigateNextIcon />
-                      {solution}
-                    </Typography>
-                  ))}
                 <Box sx={{ textAlign: "center" }}>
                   <Button
                     variant="contained"
@@ -646,11 +488,11 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
         variant="h4"
         sx={{ textAlign: "center", marginBottom: 3, marginTop: 2 }}
       >
-        <b>Historia porad pielęgnacyjnych twarzy {username}</b>
+        <b>Historia porad pielęgnacyjnych ciała {username}</b>
       </Typography>
       <Box>
         <div style={{ overflow: "auto" }}>
-          {allMorningAdvices && allMorningAdvices.length !== 0 ? (
+          {allAdvices && allAdvices.length !== 0 ? (
             <Card sx={{ marginBottom: 5 }}>
               <CardContent>
                 <Box>
@@ -659,13 +501,13 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
                     textAlign={"center"}
                     marginBottom={2}
                   >
-                    <b>Rutyny Poranne</b>
+                    <b>Rutyny Pielęgnacyjne</b>
                   </Typography>
                 </Box>
                 <div>
                   <DataGrid
                     columns={SkincareAdvicesColumns}
-                    rows={allMorningAdvices.map((prod, index) => ({
+                    rows={allAdvices.map((prod, index) => ({
                       id: index,
                       Id: prod.Id,
                       UserId: prod.UserId,
@@ -674,83 +516,12 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
                       PregnantOrFeeding: prod.PregnantOrFeeding,
                       SkinType: prod.SkinType,
                       MainIssue: prod.MainIssue,
-                      SecondIssue: prod.SecondIssue,
                       MainSolution: prod.MainSolution,
-                      SecondSolution: prod.SecondSolution,
                       Step1: prod.Step1,
                       Step2: prod.Step2,
                       Step3: prod.Step3,
                       Step4: prod.Step4,
                       Step5: prod.Step5,
-                      Step6: prod.Step6,
-                      Step7: prod.Step7,
-                      Step8: prod.Step8,
-                      Step9: prod.Step9,
-                      Step10: prod.Step10,
-                      DiagnDate: prod.DiagnDate
-                        ? format(new Date(prod.DiagnDate), "dd.MM.yyyy")
-                        : "",
-                      IsDeleted: prod.IsDeleted,
-                    }))}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { pageSize: 10 },
-                      },
-                    }}
-                    pageSizeOptions={[10, 20, 50]}
-                    slots={{ toolbar: GridToolbar }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Box textAlign={"center"} marginTop={2}>
-              <Typography>
-                Nie znaleziono Porannych Porad Pielęgnacyjncy w Bazie danych
-              </Typography>
-            </Box>
-          )}
-        </div>
-      </Box>
-      <Box>
-        <div style={{ overflow: "auto" }}>
-          {allEveningAdvices && allEveningAdvices.length !== 0 ? (
-            <Card sx={{ marginBottom: 5 }}>
-              <CardContent>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    textAlign={"center"}
-                    marginBottom={2}
-                  >
-                    <b>Rutyny Wieczorne</b>
-                  </Typography>
-                </Box>
-                <div>
-                  <DataGrid
-                    columns={SkincareAdvicesColumns}
-                    rows={allEveningAdvices.map((prod, index) => ({
-                      id: index,
-                      Id: prod.Id,
-                      UserId: prod.UserId,
-                      UserGender: prod.UserGender,
-                      UserAge: prod.UserAge,
-                      PregnantOrFeeding: prod.PregnantOrFeeding,
-                      SkinType: prod.SkinType,
-                      MainIssue: prod.MainIssue,
-                      SecondIssue: prod.SecondIssue,
-                      MainSolution: prod.MainSolution,
-                      SecondSolution: prod.SecondSolution,
-                      Step1: prod.Step1,
-                      Step2: prod.Step2,
-                      Step3: prod.Step3,
-                      Step4: prod.Step4,
-                      Step5: prod.Step5,
-                      Step6: prod.Step6,
-                      Step7: prod.Step7,
-                      Step8: prod.Step8,
-                      Step9: prod.Step9,
-                      Step10: prod.Step10,
                       DiagnDate: prod.DiagnDate
                         ? format(new Date(prod.DiagnDate), "dd.MM.yyyy")
                         : "",
@@ -780,4 +551,4 @@ const HistorySkincareFaceAdvice = ({ onChangeContent }) => {
   );
 };
 
-export default HistorySkincareFaceAdvice;
+export default HistorySkincareBodyAdvice;

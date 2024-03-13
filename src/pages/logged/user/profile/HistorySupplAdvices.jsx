@@ -207,10 +207,7 @@ const HistorySupplAdvices = ({ onChangeContent }) => {
                   <Typography sx={{ textAlign: "center" }}>
                     Czy na pewno chcesz usunąć poradę dla kategorii:{" "}
                     {selectedAdvice.IssueCategory} z dnia{" "}
-                    {selectedAdvice.DiagnDate
-                      ? format(new Date(selectedAdvice.DiagnDate), "dd.MM.yyyy")
-                      : ""}
-                    ?
+                    {selectedAdvice.DiagnDate}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
@@ -299,9 +296,7 @@ const HistorySupplAdvices = ({ onChangeContent }) => {
               <CardContent>
                 {selectedAdvice && selectedAdvice.DiagnDate && (
                   <Typography p={1}>
-                    <b>
-                      {format(new Date(selectedAdvice.DiagnDate), "dd.MM.yyyy")}{" "}
-                    </b>
+                    <b>{selectedAdvice.DiagnDate} </b>
                   </Typography>
                 )}
                 <Typography
