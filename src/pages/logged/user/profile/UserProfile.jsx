@@ -46,10 +46,10 @@ const UserProfile = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
-            to="/history-haircare-advices"
+            to="/history-haircare-advice"
             onClick={() => {
-              onChangeContent("history-haircare-advices");
-              navigate("/history-haircare-advices");
+              onChangeContent("history-haircare-advice");
+              navigate("/history-haircare-advice");
             }}
           >
             Pielęgnacja Włosów

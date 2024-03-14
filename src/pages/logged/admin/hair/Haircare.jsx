@@ -169,6 +169,16 @@ const Haircare = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
+            to="/hair-creams"
+            onClick={() => {
+              onChangeContent("hair-creams");
+              navigate("/hair-creams");
+            }}
+          >
+            Kremy
+          </Button>
+          <Button
+            component={Link}
             to="/hair-oils-protection"
             onClick={() => {
               onChangeContent("hair-oils-protection");

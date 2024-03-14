@@ -69,6 +69,10 @@ import HistorySkincareFaceAdvice from "../../pages/logged/user/profile/HistorySk
 import DealingBodySkinIssues from "../../pages/logged/admin/skin/DealingBodySkinIssues";
 import BodySkincareAdvice from "../../pages/logged/user/skincare/BodySkincareAdvice";
 import HistorySkincareBodyAdvice from "../../pages/logged/user/profile/HistorySkincareBodyAdvice";
+import HairCreams from "../../pages/logged/admin/hair/HairCreams";
+import UserHaircare from "../../pages/logged/user/haircare/UserHaircare";
+import UserHaircareAdvice from "../../pages/logged/user/haircare/UserHaircareAdvice";
+import HistoryHaircareAdvice from "../../pages/logged/user/profile/HistoryHaircareAdvice";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -201,6 +205,9 @@ const Feed = ({ currentContent, onChangeContent }) => {
             {currentContent === "hair-serums" && (
               <HairSerums onChangeContent={onChangeContent} />
             )}
+            {currentContent === "hair-creams" && (
+              <HairCreams onChangeContent={onChangeContent} />
+            )}
             {currentContent === "admin-prevention" && (
               <Prevention onChangeContent={onChangeContent} />
             )}
@@ -290,6 +297,15 @@ const Feed = ({ currentContent, onChangeContent }) => {
             )}
             {currentContent === "history-skincare-body-advices" && (
               <HistorySkincareBodyAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "user-haircare" && (
+              <UserHaircare onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "haircare-advice" && (
+              <UserHaircareAdvice onChangeContent={onChangeContent} />
+            )}
+            {currentContent === "history-haircare-advice" && (
+              <HistoryHaircareAdvice onChangeContent={onChangeContent} />
             )}
           </div>
         </Box>

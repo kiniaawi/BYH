@@ -36,10 +36,10 @@ const UserHome = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
-            to="/def-suppl-tests"
+            to="/user-haircare"
             onClick={() => {
-              onChangeContent("def-suppl-tests");
-              navigate("/def-suppl-tests");
+              onChangeContent("user-haircare");
+              navigate("/user-haircare");
             }}
           >
             Pielęgnacja Włosów

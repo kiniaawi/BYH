@@ -420,6 +420,16 @@ function App() {
               }
             />
             <Route
+              path="/hair-creams"
+              element={
+                <Feed
+                  currentContent="hair-creams"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/admin-prevention"
               element={
                 <Feed
@@ -696,6 +706,33 @@ function App() {
               element={
                 <Feed
                   currentContent="history-skincare-body-advices"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-haircare"
+              element={
+                <Feed
+                  currentContent="user-haircare"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/haircare-advice"
+              element={
+                <Feed
+                  currentContent="haircare-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/history-haircare-advice"
+              element={
+                <Feed
+                  currentContent="history-haircare-advice"
                   onChangeContent={handleChangeContent}
                 />
               }
