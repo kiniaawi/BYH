@@ -480,6 +480,16 @@ function App() {
               }
             />
             <Route
+              path="/diseases-supplementation"
+              element={
+                <Feed
+                  currentContent="diseases-supplementation"
+                  onChangeContent={handleChangeContent}
+                  setCurrentContent={setCurrentContent}
+                />
+              }
+            />
+            <Route
               path="/diseases-prevention"
               element={
                 <Feed
@@ -733,6 +743,69 @@ function App() {
               element={
                 <Feed
                   currentContent="history-haircare-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-prevention"
+              element={
+                <Feed
+                  currentContent="user-prevention"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-diseases"
+              element={
+                <Feed
+                  currentContent="user-diseases"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-diseases-prevention"
+              element={
+                <Feed
+                  currentContent="user-diseases-prevention"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-diseases-advice"
+              element={
+                <Feed
+                  currentContent="user-diseases-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/user-diseases-prevention-advice"
+              element={
+                <Feed
+                  currentContent="user-diseases-prevention-advice"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/history-diseases"
+              element={
+                <Feed
+                  currentContent="history-diseases"
+                  onChangeContent={handleChangeContent}
+                />
+              }
+            />
+            <Route
+              path="/not-authorized"
+              element={
+                <Feed
+                  currentContent="not-authorized"
                   onChangeContent={handleChangeContent}
                 />
               }

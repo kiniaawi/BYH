@@ -18,9 +18,9 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableWorkouts = () => {
+const TableDiseasesSupplementation = () => {
   const [diseasesData, setDiseasesData] = useState([]);
-  const [workoutsData, setWorkoutsData] = useState([]);
+  const [supplementsData, setSupplementsData] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isRevertModalOpen, setRevertModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -28,9 +28,7 @@ const TableWorkouts = () => {
   const [editIssue, setEditIssue] = useState({
     Id: 0,
     DiseaseId: 0,
-    WorkoutName: "",
-    Dos: "",
-    Donts: "",
+    Supplement: "",
     Description: "",
   });
 
@@ -40,7 +38,7 @@ const TableWorkouts = () => {
 
   useEffect(() => {
     fetchDiseasesData();
-    fetchWorkoutsData();
+    fetchSupplementsData();
   }, []);
 
   const fetchDiseasesData = () => {
@@ -50,7 +48,7 @@ const TableWorkouts = () => {
         console.log(response.data);
         console.log(response.data.Data[0]);
         const filteredData = response.data.Data.filter(
-          (disease) => disease.Workout === "Tak"
+          (disease) => disease.Supplementation === "Tak"
         );
         console.log(filteredData);
         setDiseasesData(filteredData);
@@ -60,13 +58,13 @@ const TableWorkouts = () => {
       });
   };
 
-  const fetchWorkoutsData = () => {
+  const fetchSupplementsData = () => {
     axios
-      .get("/api/Workouts")
+      .get("/api/DiseasesSupplementation")
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setWorkoutsData(response.data.Data);
+        setSupplementsData(response.data.Data);
       })
       .catch((error) => {
         console.log(error);
@@ -81,9 +79,7 @@ const TableWorkouts = () => {
     setEditIssue({
       Id: prod.Id,
       DiseaseId: prod.DiseaseId,
-      WorkoutName: prod.WorkoutName,
-      Dos: prod.Dos,
-      Donts: prod.Donts,
+      Supplement: prod.Supplement,
       Description: prod.Description,
     });
 
@@ -103,16 +99,14 @@ const TableWorkouts = () => {
     const data = {
       Id: editIssue.Id,
       DiseaseId: editIssue.DiseaseId,
-      WorkoutName: editIssue.WorkoutName,
-      Dos: editIssue.Dos,
-      Donts: editIssue.Donts,
+      Supplement: editIssue.Supplement,
       Description: editIssue.Description,
     };
 
     axios
-      .put(`/api/Workouts/UpdateWorkout/${editIssue.Id}`, data)
+      .put(`/api/DiseasesSupplementation/Update/${editIssue.Id}`, data)
       .then((response) => {
-        fetchWorkoutsData();
+        fetchSupplementsData();
         console.log("Issue has been edited", response.data);
         handleEditModalClose();
       })
@@ -134,10 +128,10 @@ const TableWorkouts = () => {
   const handleRevert = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/Workouts/RevWorkout/${selectedIssue.Id}`)
+      .put(`/api/DiseasesSupplementation/Revert/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchWorkoutsData();
+        fetchSupplementsData();
       })
       .catch((error) => {
         console.log(error);
@@ -161,10 +155,10 @@ const TableWorkouts = () => {
   const handleDelete = () => {
     console.log(selectedIssue);
     axios
-      .put(`/api/Workouts/DelWorkout/${selectedIssue.Id}`)
+      .put(`/api/DiseasesSupplementation/Delete/${selectedIssue.Id}`)
       .then((response) => {
         console.log(selectedIssue);
-        fetchWorkoutsData();
+        fetchSupplementsData();
       })
       .catch((error) => {
         console.log(error);
@@ -174,7 +168,7 @@ const TableWorkouts = () => {
     setDeleteModalOpen(false);
   };
 
-  const WorkoutColumns = [
+  const SupplColumns = [
     {
       field: "Id",
       headerName: "ID",
@@ -191,19 +185,9 @@ const TableWorkouts = () => {
       width: 150,
     },
     {
-      field: "WorkoutName",
-      headerName: "Nazwa Ćwiczenia",
+      field: "Supplement",
+      headerName: "Suplement",
       width: 120,
-    },
-    {
-      field: "Dos",
-      headerName: "Wprowadzić",
-      width: 100,
-    },
-    {
-      field: "Donts",
-      headerName: "Unikać",
-      width: 100,
     },
     {
       field: "Description",
@@ -292,7 +276,7 @@ const TableWorkouts = () => {
           <Grid container spacing={2}>
             <Card>
               <Typography variant="h5" sx={{ textAlign: "center", p: 3 }}>
-                <b>Edytuj Ćwiczenie</b>
+                <b>Edytuj Suplementację</b>
               </Typography>
               <CardContent sx={{ maxHeight: "600px", overflow: "auto" }}>
                 <form onSubmit={handleSubmit}>
@@ -326,56 +310,16 @@ const TableWorkouts = () => {
                     sx={{ marginBottom: 3, justifyContent: "center" }}
                   >
                     <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Wprowadź nazwę ćwiczenia:{" "}
+                      Wprowadź nazwę suplementu:{" "}
                     </Typography>
                     <TextField
                       type="text"
                       label="Nazwa Diety"
-                      value={editIssue.WorkoutName}
+                      value={editIssue.Supplement}
                       onChange={(e) =>
                         setEditIssue({
                           ...editIssue,
-                          WorkoutName: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    sx={{ marginBottom: 3, justifyContent: "center" }}
-                  >
-                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Co należy wprowadzić:{" "}
-                    </Typography>
-                    <TextField
-                      type="text"
-                      label="Wprowadzić"
-                      value={editIssue.Dos}
-                      onChange={(e) =>
-                        setEditIssue({
-                          ...editIssue,
-                          Dos: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    sx={{ marginBottom: 3, justifyContent: "center" }}
-                  >
-                    <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                      Czego należy unikać:{" "}
-                    </Typography>
-                    <TextField
-                      type="text"
-                      label="Unikać"
-                      value={editIssue.Donts}
-                      onChange={(e) =>
-                        setEditIssue({
-                          ...editIssue,
-                          Donts: e.target.value,
+                          Supplement: e.target.value,
                         })
                       }
                       required
@@ -484,12 +428,12 @@ const TableWorkouts = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąć ćwiczenie:{" "}
-                    {selectedIssue.WorkoutName}?
+                    Czy na pewno chcesz usunąć suplementację dla:{" "}
+                    {selectedIssue.DiseaseName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz usunąc to ćwiczenie?
+                    Czy na pewno chcesz usunąc tą suplementację?
                   </Typography>
                 )}
 
@@ -572,12 +516,12 @@ const TableWorkouts = () => {
               <CardContent>
                 {selectedIssue && selectedIssue.length !== 0 ? (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić ćwiczenie:{" "}
-                    {selectedIssue.WorkoutName}?
+                    Czy na pewno chcesz przywrócić suplementację dla:{" "}
+                    {selectedIssue.DiseaseName}?
                   </Typography>
                 ) : (
                   <Typography sx={{ textAlign: "center" }}>
-                    Czy na pewno chcesz przywrócić to ćwiczenie?
+                    Czy na pewno chcesz przywrócić tą suplementację
                   </Typography>
                 )}
 
@@ -629,25 +573,23 @@ const TableWorkouts = () => {
       </Modal>
 
       <div style={{ overflow: "auto" }}>
-        {workoutsData && workoutsData.length !== 0 ? (
+        {supplementsData && supplementsData.length !== 0 ? (
           <Card sx={{ marginBottom: 5 }}>
             <CardContent>
               <Box>
                 <Typography variant="h6" textAlign={"center"} marginBottom={2}>
-                  <b>Tabela Ćwiczeń</b>
+                  <b>Tabela Suplementacji</b>
                 </Typography>
               </Box>
               <div>
                 <DataGrid
-                  columns={WorkoutColumns}
-                  rows={workoutsData.map((prod, index) => ({
+                  columns={SupplColumns}
+                  rows={supplementsData.map((prod, index) => ({
                     id: index,
                     Id: prod.Id,
                     DiseaseId: prod.DiseaseId,
                     DiseaseName: prod.DiseaseName,
-                    WorkoutName: prod.WorkoutName,
-                    Dos: prod.Dos,
-                    Donts: prod.Donts,
+                    Supplement: prod.Supplement,
                     Description: prod.Description,
                     IsDeleted: prod.IsDeleted,
                   }))}
@@ -664,7 +606,7 @@ const TableWorkouts = () => {
           </Card>
         ) : (
           <Box textAlign={"center"} marginTop={2}>
-            <Typography>Nie Znaleziono Ćwiczeń w Bazie Danych</Typography>
+            <Typography>Nie Znaleziono suplementacji w Bazie Danych</Typography>
           </Box>
         )}
       </div>
@@ -672,4 +614,4 @@ const TableWorkouts = () => {
   );
 };
 
-export default TableWorkouts;
+export default TableDiseasesSupplementation;

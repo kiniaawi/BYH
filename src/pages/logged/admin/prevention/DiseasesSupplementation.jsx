@@ -16,19 +16,17 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import TableWorkouts from "./TableWorkouts";
+import TableDiseasesSupplementation from "./TableDiseasesSupplementation";
 
-const Workouts = ({ onChangeContent }) => {
+const DiseasesSupplementation = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "emailCookie",
     "currentPageCookie",
   ]);
-  setCookie("currentPageCookie", "workouts", { path: "/" });
+  setCookie("currentPageCookie", "diseases-supplementation", { path: "/" });
   const navigate = useNavigate();
   const [diseaseId, setDiseaseId] = useState("");
-  const [workoutName, setWorkoutName] = useState("");
-  const [dos, setDos] = useState("");
-  const [donts, setDonts] = useState("");
+  const [supplement, setSupplement] = useState("");
   const [description, setDescription] = useState("");
   const [diseasesData, setDiseasesData] = useState([]);
 
@@ -47,7 +45,7 @@ const Workouts = ({ onChangeContent }) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
         const filteredData = response.data.Data.filter(
-          (disease) => disease.Workout === "Tak"
+          (disease) => disease.Supplementation === "Tak"
         );
         console.log(filteredData);
         setDiseasesData(filteredData);
@@ -60,14 +58,12 @@ const Workouts = ({ onChangeContent }) => {
   const handleAdd = () => {
     const data = {
       DiseaseId: diseaseId,
-      WorkoutName: workoutName,
-      Dos: dos,
-      Donts: donts,
+      Supplement: supplement,
       Description: description,
     };
 
     axios
-      .post("/api/Workouts", data)
+      .post("api/DiseasesSupplementation", data)
       .then((response) => {
         alert(response.data.StatusMessage);
         clearTextArea();
@@ -79,9 +75,7 @@ const Workouts = ({ onChangeContent }) => {
 
   const clearTextArea = () => {
     setDiseaseId("");
-    setWorkoutName("");
-    setDos("");
-    setDonts("");
+    setSupplement("");
     setDescription("");
   };
 
@@ -100,13 +94,13 @@ const Workouts = ({ onChangeContent }) => {
         Panel Chorób i Zapobiegania
       </Button>
       <Typography variant="h5" sx={{ textAlign: "center", marginBottom: 3 }}>
-        <b>Panel Ćwiczeń</b>
+        <b>Panel Suplementacji</b>
       </Typography>
       <Card>
         <CardHeader
           title={
             <Typography variant="h6" textAlign={"center"}>
-              <b>Dodaj Ćwiczenia</b>
+              <b>Dodaj Suplementację</b>
             </Typography>
           }
         />
@@ -137,45 +131,13 @@ const Workouts = ({ onChangeContent }) => {
               sx={{ marginBottom: 3, justifyContent: "center" }}
             >
               <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                Wprowadź nazwę ćwiczenia:{" "}
+                Wprowadź suplementy:{" "}
               </Typography>
               <TextField
                 type="text"
-                label="Nazwa Ćwiczenia"
-                value={workoutName}
-                onChange={(e) => setWorkoutName(e.target.value)}
-                sx={{ width: "25%" }}
-                required
-              />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ marginBottom: 3, justifyContent: "center" }}
-            >
-              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                Co należy wprowadzić:{" "}
-              </Typography>
-              <TextField
-                type="text"
-                label="Wprowadzić"
-                value={dos}
-                onChange={(e) => setDos(e.target.value)}
-                sx={{ width: "25%" }}
-                required
-              />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ marginBottom: 3, justifyContent: "center" }}
-            >
-              <Typography sx={{ marginRight: 4, marginLeft: 4 }}>
-                Czego należy unikać:{" "}
-              </Typography>
-              <TextField
-                type="text"
-                label="Unikać"
-                value={donts}
-                onChange={(e) => setDonts(e.target.value)}
+                label="Suplementy"
+                value={supplement}
+                onChange={(e) => setSupplement(e.target.value)}
                 sx={{ width: "25%" }}
                 required
               />
@@ -211,10 +173,10 @@ const Workouts = ({ onChangeContent }) => {
         </CardContent>
       </Card>
       <Box>
-        <TableWorkouts />
+        <TableDiseasesSupplementation />
       </Box>
     </Box>
   );
 };
 
-export default Workouts;
+export default DiseasesSupplementation;

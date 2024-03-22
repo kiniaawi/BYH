@@ -45,7 +45,11 @@ const DiseasesPrevention = ({ onChangeContent }) => {
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDiseasesData(response.data.Data);
+        const filteredData = response.data.Data.filter(
+          (disease) => disease.Preventable === "Tak"
+        );
+        console.log(filteredData);
+        setDiseasesData(filteredData);
       })
       .catch((error) => {
         console.log(error);

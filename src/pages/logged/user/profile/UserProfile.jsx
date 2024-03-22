@@ -68,10 +68,10 @@ const UserProfile = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
-            to="/history-prevention-advices"
+            to="/history-diseases"
             onClick={() => {
-              onChangeContent("history-prevention-advices");
-              navigate("/history-prevention-advices");
+              onChangeContent("history-diseases");
+              navigate("/history-diseases");
             }}
           >
             Choroby i Ich Zapobieganie

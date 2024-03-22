@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
@@ -27,6 +28,7 @@
     "react-scripts": "5.0.1",
     "react-svg": "^16.1.22",
     "react-world-flags": "^1.5.1",
+    "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

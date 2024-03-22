@@ -57,12 +57,26 @@ const Login = ({ currentContent, setCurrentContent, onChangeContent }) => {
             navigate("/admin-home");
           } else {
             setIsAdmin(false);
-            console.log("IsAdminFalse: ", isAdmin);
-            setCookie("isAdminCookie", dt.Registration.IsAdmin, { path: "/" });
-            setCookie("nameCookie", dt.Registration.Name, { path: "/" });
-            setCookie("emailCookie", dt.Registration.Email, { path: "/" });
-            setCookie("userIdCookie", dt.Registration.Id, { path: "/" });
-            navigate("/homepage");
+            if (dt.Registration.IsDeleted) {
+              alert(
+                "Twoje konto zostało usunięte. Skontaktuj się z administracją: admin@byh.com"
+              );
+            } else {
+              if (dt.Registration.IsActive) {
+                alert(
+                  "Twoje konto nie jest już aktywne. Skontaktuj się z administracją: admin@byh.com"
+                );
+              } else {
+                console.log("IsAdminFalse: ", isAdmin);
+                setCookie("isAdminCookie", dt.Registration.IsAdmin, {
+                  path: "/",
+                });
+                setCookie("nameCookie", dt.Registration.Name, { path: "/" });
+                setCookie("emailCookie", dt.Registration.Email, { path: "/" });
+                setCookie("userIdCookie", dt.Registration.Id, { path: "/" });
+                navigate("/homepage");
+              }
+            }
           }
         } else {
           alert(dt.StatusMessage);

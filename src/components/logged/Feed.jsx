@@ -1,5 +1,6 @@
 import { Box, Stack } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import UserHome from "../../pages/logged/user/UserHome";
 import AdminHome from "../../pages/logged/admin/skin/AdminHome";
 import Skincare from "../../pages/logged/admin/skin/Skincare";
@@ -73,13 +74,75 @@ import HairCreams from "../../pages/logged/admin/hair/HairCreams";
 import UserHaircare from "../../pages/logged/user/haircare/UserHaircare";
 import UserHaircareAdvice from "../../pages/logged/user/haircare/UserHaircareAdvice";
 import HistoryHaircareAdvice from "../../pages/logged/user/profile/HistoryHaircareAdvice";
+import DiseasesSupplementation from "../../pages/logged/admin/prevention/DiseasesSupplementation";
+import UserPrevention from "../../pages/logged/user/prevention/UserPrevention";
+import UserDiseases from "../../pages/logged/user/prevention/UserDiseases";
+import UserDiseasesPrevention from "../../pages/logged/user/prevention/UserDiseasesPrevention";
+import UserDiseasesAdvice from "../../pages/logged/user/prevention/UserDiseasesAdvice";
+import HistoryDiseases from "../../pages/logged/user/profile/HistoryDiseases";
+import UserDiseasesPreventionAdvice from "../../pages/logged/user/prevention/UserDiseasesPreventionAdvice";
+import { useCookies } from "react-cookie";
+import NotAuthorized from "./NotAuthorized";
 
 const Feed = ({ currentContent, onChangeContent }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "emailCookie",
+    "currentPageContent",
+    "nameCookie",
+    "isAdminCookie",
+  ]);
+
+  const isAdmin = cookies.isAdminCookie;
+  const userEmail = cookies.emailCookie;
+
+  const [userData, setUserData] = useState([]);
+  const [adminChecking, setAdminChecking] = useState("");
+
+  console.log("IsAdminCookieNavbar: ", isAdmin);
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  useEffect(() => {
+    fetchUserData();
+    CheckIfIsAdmin();
+  }, []);
+
+  const fetchUserData = () => {
+    axios
+      .get("/api/Registration")
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.Data[0]);
+        setUserData(response.data.Data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const CheckIfIsAdmin = () => {
+    if (userData.length > 0) {
+      const currentUser = userData.find((user) => user.Email === userEmail);
+
+      if (currentUser) {
+        if (currentUser.IsAdmin) {
+          console.log(currentUser.IsAdmin);
+          setAdminChecking(true);
+        } else {
+          console.log(currentUser.IsAdmin);
+          setAdminChecking(false);
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Box
       bgcolor={"background.default"}
@@ -100,212 +163,395 @@ const Feed = ({ currentContent, onChangeContent }) => {
         <BlankBar />
         <Box flex={8} p={1} justifyContent={"center"} overflow={"auto"}>
           <div>
-            {currentContent === "homepage" && (
-              <UserHome onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "admin-home" && (
-              <AdminHome onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "admin-skincare" && (
-              <Skincare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "skincare-steps" && (
-              <StepsSkincare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "dealing-skinissues" && (
-              <DealingSkinIssues onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "dealing-body-skinissues" && (
-              <DealingBodySkinIssues onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "skin-types" && (
-              <SkinTypes onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "oil-cleaners" && (
-              <OilCleaners onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "foam-cleansers" && (
-              <FoamCleansers onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "exfoliants" && (
-              <Exfoliants onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "toners" && (
-              <Toners onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "essences" && (
-              <Essences onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "serums" && (
-              <Serums onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "masks" && (
-              <Masks onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "eye-creams" && (
-              <EyeCreams onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "moisturizers" && (
-              <Moisturizers onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "spf" && (
-              <SPF onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "steps-bodycare" && (
-              <StepsBodycare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "shower-gels" && (
-              <ShowerGels onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "body-oils" && (
-              <BodyOils onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "body-exfoliants" && (
-              <BodyExfoliants onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "body-moisturizers" && (
-              <BodyMoisturizers onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "body-actives" && (
-              <BodyActives onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "admin-haircare" && (
-              <Haircare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-types" && (
-              <HairTypes onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "dealing-hairproblems" && (
-              <DealingHairProblems onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "haircare-steps" && (
-              <StepsHaircare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-peelings" && (
-              <HairPeelings onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "shampoos" && (
-              <Shampoos onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-masks" && (
-              <HairMasks onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-conditioners" && (
-              <HairConditioners onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-oils" && (
-              <HairOils onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "heat-protection" && (
-              <HeatProtection onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-oils-protection" && (
-              <HairOilsProtection onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-serums" && (
-              <HairSerums onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-creams" && (
-              <HairCreams onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "admin-prevention" && (
-              <Prevention onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "diseases" && (
-              <Diseases onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "diets" && (
-              <Diets onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "workouts" && (
-              <Workouts onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "diseases-symptoms" && (
-              <DiseasesSymptoms onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "diseases-prevention" && (
-              <DiseasesPrevention onChangeContent={onChangeContent} />
-            )}
-            {/* {currentContent === "admin-skinissues" && <SkinIssuesFace />} */}
-            {currentContent === "admin-supplementation" && (
-              <Supplementation onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "def-suppl-issues" && (
-              <DefSupplIssues onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "def-suppl-tests" && (
-              <DefSupplBloodTests onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "suppl-dosage" && (
-              <SupplDosage onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "dealing-def-suppl" && (
-              <DefSupplDealing onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-supplementation" && (
-              <UserSupplementation onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "skin-supplementation" && (
-              <SkinSupplementation onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-nails-supplementation" && (
-              <HairNailsSupplementation onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "digestive-system-supplementation" && (
-              <DigestiveSystemSupplementation
-                onChangeContent={onChangeContent}
-              />
-            )}
-            {currentContent === "skin-suppl-advice" && (
-              <SkinSupplAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "hair-nails-suppl-advice" && (
-              <HairNailsSupplAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "digestive-system-suppl-advice" && (
-              <DigestiveSystemSupplAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "functioning-supplementation" && (
-              <FunctioningSupplementation onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "functioning-suppl-advice" && (
-              <FunctioningSupplAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-profile" && (
-              <UserProfile onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "history-supplementation-advices" && (
-              <HistorySupplAdvices onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-skincare" && (
-              <UserSkincare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-face-skincare" && (
-              <UserFaceSkincare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-body-skincare" && (
-              <UserBodySkincare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "face-skincare-advice" && (
-              <FaceSkincareAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "body-skincare-advice" && (
-              <BodySkincareAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "history-skincare-face-advices" && (
-              <HistorySkincareFaceAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "history-skincare-body-advices" && (
-              <HistorySkincareBodyAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "user-haircare" && (
-              <UserHaircare onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "haircare-advice" && (
-              <UserHaircareAdvice onChangeContent={onChangeContent} />
-            )}
-            {currentContent === "history-haircare-advice" && (
-              <HistoryHaircareAdvice onChangeContent={onChangeContent} />
+            {adminChecking ? (
+              <>
+                {currentContent === "admin-home" && (
+                  <AdminHome onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-skincare" && (
+                  <Skincare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "skincare-steps" && (
+                  <StepsSkincare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-skinissues" && (
+                  <DealingSkinIssues onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-body-skinissues" && (
+                  <DealingBodySkinIssues onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "skin-types" && (
+                  <SkinTypes onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "oil-cleaners" && (
+                  <OilCleaners onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "foam-cleansers" && (
+                  <FoamCleansers onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "exfoliants" && (
+                  <Exfoliants onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "toners" && (
+                  <Toners onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "essences" && (
+                  <Essences onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "serums" && (
+                  <Serums onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "masks" && (
+                  <Masks onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "eye-creams" && (
+                  <EyeCreams onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "moisturizers" && (
+                  <Moisturizers onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "spf" && (
+                  <SPF onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "steps-bodycare" && (
+                  <StepsBodycare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "shower-gels" && (
+                  <ShowerGels onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-oils" && (
+                  <BodyOils onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-exfoliants" && (
+                  <BodyExfoliants onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-moisturizers" && (
+                  <BodyMoisturizers onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-actives" && (
+                  <BodyActives onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-haircare" && (
+                  <Haircare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-types" && (
+                  <HairTypes onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-hairproblems" && (
+                  <DealingHairProblems onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "haircare-steps" && (
+                  <StepsHaircare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-peelings" && (
+                  <HairPeelings onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "shampoos" && (
+                  <Shampoos onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-masks" && (
+                  <HairMasks onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-conditioners" && (
+                  <HairConditioners onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-oils" && (
+                  <HairOils onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "heat-protection" && (
+                  <HeatProtection onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-oils-protection" && (
+                  <HairOilsProtection onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-serums" && (
+                  <HairSerums onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-creams" && (
+                  <HairCreams onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-prevention" && (
+                  <Prevention onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases" && (
+                  <Diseases onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diets" && (
+                  <Diets onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "workouts" && (
+                  <Workouts onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-symptoms" && (
+                  <DiseasesSymptoms onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-supplementation" && (
+                  <DiseasesSupplementation onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-prevention" && (
+                  <DiseasesPrevention onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-supplementation" && (
+                  <Supplementation onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "def-suppl-issues" && (
+                  <DefSupplIssues onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "def-suppl-tests" && (
+                  <DefSupplBloodTests onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "suppl-dosage" && (
+                  <SupplDosage onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-def-suppl" && (
+                  <DefSupplDealing onChangeContent={onChangeContent} />
+                )}
+              </>
+            ) : (
+              <>
+                {currentContent === "admin-home" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-skincare" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "skincare-steps" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-skinissues" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-body-skinissues" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "skin-types" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "oil-cleaners" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "foam-cleansers" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "exfoliants" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "toners" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "essences" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "serums" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "masks" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "eye-creams" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "moisturizers" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "spf" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "steps-bodycare" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "shower-gels" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-oils" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-exfoliants" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-moisturizers" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-actives" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-haircare" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-types" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-hairproblems" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "haircare-steps" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-peelings" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "shampoos" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-masks" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-conditioners" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-oils" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "heat-protection" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-oils-protection" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-serums" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-creams" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-prevention" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diets" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "workouts" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-symptoms" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-supplementation" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "diseases-prevention" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "admin-supplementation" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "def-suppl-issues" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "def-suppl-tests" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "suppl-dosage" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "dealing-def-suppl" && (
+                  <NotAuthorized onChangeContent={onChangeContent} />
+                )}
+              </>
+            )}
+
+            {adminChecking !== true && (
+              <>
+                {currentContent === "homepage" && (
+                  <UserHome onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-supplementation" && (
+                  <UserSupplementation onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "skin-supplementation" && (
+                  <SkinSupplementation onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-nails-supplementation" && (
+                  <HairNailsSupplementation onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "digestive-system-supplementation" && (
+                  <DigestiveSystemSupplementation
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "skin-suppl-advice" && (
+                  <SkinSupplAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "hair-nails-suppl-advice" && (
+                  <HairNailsSupplAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "digestive-system-suppl-advice" && (
+                  <DigestiveSystemSupplAdvice
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "functioning-supplementation" && (
+                  <FunctioningSupplementation
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "functioning-suppl-advice" && (
+                  <FunctioningSupplAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-profile" && (
+                  <UserProfile onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "history-supplementation-advices" && (
+                  <HistorySupplAdvices onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-skincare" && (
+                  <UserSkincare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-face-skincare" && (
+                  <UserFaceSkincare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-body-skincare" && (
+                  <UserBodySkincare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "face-skincare-advice" && (
+                  <FaceSkincareAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "body-skincare-advice" && (
+                  <BodySkincareAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "history-skincare-face-advices" && (
+                  <HistorySkincareFaceAdvice
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "history-skincare-body-advices" && (
+                  <HistorySkincareBodyAdvice
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "user-haircare" && (
+                  <UserHaircare onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "haircare-advice" && (
+                  <UserHaircareAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "history-haircare-advice" && (
+                  <HistoryHaircareAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-prevention" && (
+                  <UserPrevention onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-diseases" && (
+                  <UserDiseases onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-diseases-prevention" && (
+                  <UserDiseasesPrevention onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-diseases-advice" && (
+                  <UserDiseasesAdvice onChangeContent={onChangeContent} />
+                )}
+                {currentContent === "user-diseases-prevention-advice" && (
+                  <UserDiseasesPreventionAdvice
+                    onChangeContent={onChangeContent}
+                  />
+                )}
+                {currentContent === "history-diseases" && (
+                  <HistoryDiseases onChangeContent={onChangeContent} />
+                )}
+              </>
             )}
           </div>
         </Box>

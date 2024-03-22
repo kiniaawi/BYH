@@ -46,7 +46,11 @@ const Diets = ({ onChangeContent }) => {
       .then((response) => {
         console.log(response.data);
         console.log(response.data.Data[0]);
-        setDiseasesData(response.data.Data);
+        const filteredData = response.data.Data.filter(
+          (disease) => disease.Diet === "Tak"
+        );
+        console.log(filteredData);
+        setDiseasesData(filteredData);
       })
       .catch((error) => {
         console.log(error);

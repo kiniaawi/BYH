@@ -3,6 +3,7 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ContactForm from "../../../components/logged/ContactForm";
 
 const UserHome = ({ onChangeContent }) => {
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -56,17 +57,19 @@ const UserHome = ({ onChangeContent }) => {
           </Button>
           <Button
             component={Link}
-            to="/dealing-def-suppl"
+            to="/user-prevention"
             onClick={() => {
-              onChangeContent("dealing-def-suppl");
-              navigate("/dealing-def-suppl");
+              onChangeContent("user-prevention");
+              navigate("/user-prevention");
             }}
           >
             Choroby i Ich Zapobieganie
           </Button>
         </Stack>
       </Box>
-      <Box sx={{ marginTop: 4 }}>{/* Formularz kontaktowy */}</Box>
+      <Box sx={{ marginTop: 8 }}>
+        <ContactForm />
+      </Box>
     </Box>
   );
 };

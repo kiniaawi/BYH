@@ -75,6 +75,16 @@ const Prevention = ({ onChangeContent }) => {
           >
             Ćwiczenia
           </Button>
+          <Button
+            component={Link}
+            to="/diseases-supplementation"
+            onClick={() => {
+              onChangeContent("diseases-supplementation");
+              navigate("/diseases-supplementation");
+            }}
+          >
+            Suplementacja
+          </Button>
         </Stack>
       </Box>
       <Box sx={{ marginTop: 4 }}>

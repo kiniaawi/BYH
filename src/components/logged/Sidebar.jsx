@@ -122,7 +122,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/user-supplementation">
+            <ListItemButton component={Link} to="/user-skincare">
               <ListItemText
                 primary="Pielęgnacja Skóry"
                 primaryTypographyProps={{ className: "icon-text" }}
@@ -130,7 +130,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/user-supplementation">
+            <ListItemButton component={Link} to="/user-haircare">
               <ListItemText
                 primary="Pielęgnacja Włosów"
                 primaryTypographyProps={{ className: "icon-text" }}
@@ -146,7 +146,7 @@ const Sidebar = ({ isOpen, onChangeContent }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/user-supplementation">
+            <ListItemButton component={Link} to="/user-prevention">
               <ListItemText
                 primary="Choroby I Ich Zapobieganie"
                 primaryTypographyProps={{ className: "icon-text" }}
