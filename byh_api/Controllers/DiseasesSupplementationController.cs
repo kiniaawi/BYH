@@ -10,11 +10,11 @@ namespace byh_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkoutsController : ControllerBase
+    public class DiseasesSupplementationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        public WorkoutsController(IConfiguration configuration)
+        public DiseasesSupplementationController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -26,7 +26,7 @@ namespace byh_api.Controllers
 
             try
             {
-                string query = @"SELECT * from dbo.Workouts";
+                string query = @"SELECT * from dbo.DiseasesSupplementation";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -61,15 +61,15 @@ namespace byh_api.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Workouts workout)
+        public JsonResult Post(DiseasesSupplementation suppl)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"INSERT INTO dbo.Workouts (DiseaseId, DiseaseName, WorkoutName, Dos, Donts, Description, IsDeleted)
+                string query = @"INSERT INTO dbo.DiseasesSupplementation (DiseaseId, DiseaseName, Supplement, Description, IsDeleted)
                                  VALUES (@DiseaseId, (SELECT DiseaseName FROM dbo.Diseases WHERE Id = @DiseaseId), 
-                                 @WorkoutName, @Dos, @Donts, @Description, 0);";
+                                 @Supplement, @Description, 0);";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = _configuration.GetConnectionString("BYHCon");
@@ -79,11 +79,9 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@DiseaseId", workout.DiseaseId);
-                        myCommand.Parameters.AddWithValue("@WorkoutName", workout.WorkoutName);
-                        myCommand.Parameters.AddWithValue("@Dos", workout.Dos);
-                        myCommand.Parameters.AddWithValue("@Donts", workout.Donts);
-                        myCommand.Parameters.AddWithValue("@Description", workout.Description);
+                        myCommand.Parameters.AddWithValue("@DiseaseId", suppl.DiseaseId);
+                        myCommand.Parameters.AddWithValue("@Supplement", suppl.Supplement);
+                        myCommand.Parameters.AddWithValue("@Description", suppl.Description);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -108,16 +106,16 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("UpdateWorkout/{Id}")]
-        public JsonResult UpdateWorkout(Workouts workout, int Id)
+        [HttpPut("Update/{Id}")]
+        public JsonResult Update(DiseasesSupplementation suppl, int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Workouts SET DiseaseId = @DiseaseId, 
+                string query = @"UPDATE dbo.DiseasesSupplementation SET DiseaseId = @DiseaseId, 
                                 DiseaseName = (SELECT DiseaseName FROM dbo.Diseases WHERE Id = @DiseaseId), 
-                                WorkoutName = @WorkoutName, Dos = @Dos, Donts = @Donts, Description = @Description
+                                Supplement = @Supplement, Description = @Description
                                 WHERE Id = @Id";
 
                 DataTable table = new DataTable();
@@ -128,12 +126,10 @@ namespace byh_api.Controllers
                     myConn.Open();
                     using (SqlCommand myCommand = new SqlCommand(query, myConn))
                     {
-                        myCommand.Parameters.AddWithValue("@Id", workout.Id);
-                        myCommand.Parameters.AddWithValue("@DiseaseId", workout.DiseaseId);
-                        myCommand.Parameters.AddWithValue("@WorkoutName", workout.WorkoutName);
-                        myCommand.Parameters.AddWithValue("@Dos", workout.Dos);
-                        myCommand.Parameters.AddWithValue("@Donts", workout.Donts);
-                        myCommand.Parameters.AddWithValue("@Description", workout.Description);
+                        myCommand.Parameters.AddWithValue("@Id", suppl.Id);
+                        myCommand.Parameters.AddWithValue("@DiseaseId", suppl.DiseaseId);
+                        myCommand.Parameters.AddWithValue("@Supplement", suppl.Supplement);
+                        myCommand.Parameters.AddWithValue("@Description", suppl.Description);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -158,14 +154,14 @@ namespace byh_api.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPut("DelWorkout/{Id}")]
-        public JsonResult DelWorkout(int Id)
+        [HttpPut("Delete/{Id}")]
+        public JsonResult Delete(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Workouts SET IsDeleted = 1
+                string query = @"UPDATE dbo.DiseasesSupplementation SET IsDeleted = 1
                             WHERE Id = @Id AND IsDeleted = 0";
 
                 DataTable table = new DataTable();
@@ -184,7 +180,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Workout Deleted Successfully";
+                    response.StatusMessage = "DiseasesSymptom Deleted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -194,21 +190,21 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Delete Workout";
+                response.StatusMessage = "Failed to Delete DiseasesSymptom";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
             return new JsonResult(response);
         }
 
-        [HttpPut("RevWorkout/{Id}")]
-        public JsonResult RevWorkout(int Id)
+        [HttpPut("Revert/{Id}")]
+        public JsonResult Revert(int Id)
         {
             Response response = new Response();
 
             try
             {
-                string query = @"UPDATE dbo.Workouts SET IsDeleted = 0
+                string query = @"UPDATE dbo.DiseasesSupplementation SET IsDeleted = 0
                             WHERE Id = @Id AND IsDeleted = 1";
 
                 DataTable table = new DataTable();
@@ -227,7 +223,7 @@ namespace byh_api.Controllers
                     }
 
                     response.StatusCode = 200;
-                    response.StatusMessage = "Workout Reverted Successfully";
+                    response.StatusMessage = "DiseasesSymptom Reverted Successfully";
                     HttpContext.Response.StatusCode = response.StatusCode;
                     response.Data = table;
                 }
@@ -237,7 +233,7 @@ namespace byh_api.Controllers
                 Console.WriteLine($"Error: {ex.Message}");
 
                 response.StatusCode = 100;
-                response.StatusMessage = "Failed to Revert Workout";
+                response.StatusMessage = "Failed to Revert DiseasesSymptom";
                 HttpContext.Response.StatusCode = response.StatusCode;
             }
 
